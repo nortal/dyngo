@@ -29,7 +29,7 @@ var sourceFiles = [
   // Then add all JavaScript files
   path.join(sourceDirectory, '/**/*.js'),
 
-  path.join(rootDirectory, './dist/templates/*.js')
+  path.join(rootDirectory, './tmp/templates/*.js')
 ];
 
 gulp.task('html2js', function () {
@@ -38,10 +38,10 @@ gulp.task('html2js', function () {
       moduleName: 'dyngo.components',
       prefix: 'templates/'
     }))
-    .pipe(gulp.dest('./dist/templates'));
+    .pipe(gulp.dest('./tmp/templates'));
 });
 
-gulp.task('build', function () {
+gulp.task('build', ['html2js'], function () {
   gulp.src(sourceFiles)
     .pipe(plumber())
     .pipe(concat('dyngo.js'))
