@@ -1,0 +1,20 @@
+<div class="form-group">
+
+  <label class="col-sm-4 control-label"
+         ng-class="{required : constraints.required}">{{label}}</label>
+
+  <div class="col-sm-4">
+    <div class="radio" ng-repeat="option in options track by option.code">
+      <label>
+        <input type="radio" name="{{id}}" id="{{id+'_'+$index}}" ng-model="data[id]"
+               value="{{option.code}}"
+               ng-disabled="constraints.disabled" ng-required="constraints.required">{{option.text}}
+      </label>
+    </div>
+
+    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">
+      <div ng-message="required">{{localize("error.no_item_selected")}}</div>
+    </div>
+  </div>
+
+</div>

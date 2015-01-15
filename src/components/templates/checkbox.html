@@ -1,0 +1,21 @@
+<div class="form-group">
+
+  <label for="{{id+'_'+$index}}" class="col-sm-4 control-label"
+         ng-class="{required : constraints.required}">{{label}}</label>
+
+  <div class="col-sm-4">
+    <div class="checkbox" ng-repeat="option in options track by option.code">
+      <label>
+        <input type="checkbox" id="{{id+'_'+$index}}" name="{id}" checklist-model="data[id]"
+               checklist-value="option.code" value="{{option.code}}" ng-disabled="constraints.disabled"
+               ng-required="constraints.required && (!data[id] || data[id].length == 0)">{{option.text}}
+      </label>
+    </div>
+
+    <div ng-messages="formModel[id].$error" class="message-invalid"
+         ng-if="formModel.submitPressed && constraints.required && (!data[id] || data[id].length == 0)">
+      <div ng-message="required">{{localize("error.no_item_selected")}}</div>
+    </div>
+  </div>
+
+</div>
