@@ -10,6 +10,8 @@ var jshint = require('gulp-jshint');
 var ngHtml2Js = require("gulp-ng-html2js");
 var header = require('gulp-header');
 var fs = require('fs');
+var ngAnnotate = require('gulp-ng-annotate');
+
 
 /**
  * File patterns
@@ -29,25 +31,28 @@ var sourceFiles = [
   // Then add all JavaScript files
   path.join(sourceDirectory, '/**/*.js'),
 
-  path.join(rootDirectory, './tmp/templates/*.js')
+  path.join(rootDirectory, './tmp/templates.js')
 ];
 
 gulp.task('html2js', function () {
   gulp.src('src/components/templates/*.html')
+    .pipe(plumber())
     .pipe(ngHtml2Js({
       moduleName: 'dyngo.components',
       prefix: 'templates/'
     }))
-    .pipe(gulp.dest('./tmp/templates'));
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest('./tmp'));
 });
 
 gulp.task('build', ['html2js'], function () {
   gulp.src(sourceFiles)
     .pipe(plumber())
+    .pipe(ngAnnotate())
     .pipe(concat('dyngo.js'))
     .pipe(gulp.dest('./dist/'))
     .pipe(uglify())
-    .pipe(header(fs.readFileSync('LICENSE_HEADER', 'utf8') ))
+    .pipe(header(fs.readFileSync('LICENSE_HEADER', 'utf8')))
     .pipe(rename('dyngo.min.js'))
     .pipe(gulp.dest('./dist'))
 });

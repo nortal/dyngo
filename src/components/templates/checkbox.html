@@ -6,7 +6,7 @@
   <div class="col-sm-4">
     <div class="checkbox" ng-repeat="option in options track by option.code">
       <label>
-        <input type="checkbox" id="{{id+'_'+$index}}" name="{id}" checklist-model="data[id]"
+        <input type="checkbox" id="{{id+'_'+$index}}" name="{{id}}" checklist-model="data[id]"
                checklist-value="option.code" value="{{option.code}}" ng-disabled="constraints.disabled"
                ng-required="constraints.required && (!data[id] || data[id].length == 0)">{{option.text}}
       </label>

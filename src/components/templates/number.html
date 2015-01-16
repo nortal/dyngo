@@ -25,7 +25,6 @@
              min="{{min()}}" max="{{max()}}"
              ng-disabled="constraints.disabled" ng-required="constraints.required"/>
     </div>
-
     <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">
       <div ng-message="required">{{localize("error.required_field")}}</div>
       <div ng-message="max">{{localize("error.value_is_gt_max")}}</div>

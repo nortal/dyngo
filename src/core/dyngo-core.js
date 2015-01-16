@@ -1,19 +1,44 @@
 angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
-  .directive('dgForm', function ($parse) {
+  .provider('dyngo', function () {
+    var instance = {forms: {}};
+
+    instance.registerForm = function (name, structure, options) {
+      var form = {name: name, structure: structure, options: options};
+      instance.forms.name = form;
+    };
+
+    instance.getForm = function (name) {
+      return instance.forms.name;
+    };
+
+    return {
+      $get: function () {
+        return instance;
+      }
+    };
+  })
+
+  .directive('dgForm', function (dyngo) {
     return {
       restrict: 'A',
       require: 'ngModel',
       scope: {
         formName: '@dgForm',
+        formModel: '=dgForm',
+        lang: "@dgLang",
         data: '=ngModel'
       },
-      template: '<div dg-container="form" ng-model="data"></div>',
+      template: '<div dg-container="form.structure" ng-model="data"></div>',
       link: function (scope, element, attrs) {
-        var lang = 'et'; // FIXME: let it be passed as directive attribute
-        scope.form = $parse(scope.formName)(scope.$parent);
-        angular.forEach(scope.form.components, function (rootComponent) {
-            rootComponent.translations = scope.form.translations[lang];
+        scope.form = dyngo.getForm(scope.formName);
+        if (_.isUndefined(scope.form)) {
+          console.log('undefined!');
+          return;
+        }
+        var structure = scope.form.structure;
+        angular.forEach(structure.components, function (rootComponent) {
+            rootComponent.translations = structure.translations[scope.lang];
           }
         );
       }
@@ -57,8 +82,8 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       template: '<div class="fb-form-object" ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
       controller: 'ContainerController',
       link: function (scope, element, attrs) {
-        scope.formName = scope.$parent.formName;
-        scope.formModel = scope.$parent.$parent[scope.formName];
+        scope.formModel = scope.$parent.formModel;
+        //scope.formModel = scope.$parent.$parent[scope.formName];
       }
     };
   })

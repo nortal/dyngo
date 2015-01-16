@@ -1,0 +1,5 @@
+{
+  "api": "",
+  "formUrl": "api/v1/forms/samples",
+  "submitUrl": "api/v1/forms"
+}

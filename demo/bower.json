@@ -1,0 +1,29 @@
+{
+  "name": "dyngo-demo",
+  "version": "0.1.1",
+  "dependencies": {
+    "dyngo": "0.1.1",
+    "angular-resource": ">=1.3.4",
+    "angular-route": ">=1.3.4"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.3.4",
+    "angular-scenario": "1.3.4"
+  },
+  "homepage": "https://github.com/nortal/dyngo",
+  "authors": [
+    "Vassili Jakovlev <vassili.jakovlev@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "angular": "1.3.4"
+  }
+}

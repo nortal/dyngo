@@ -19,3 +19,7 @@ bower
 
 # Temporary build files
 tmp
+
+# Demo
+demo/app/bower_components
+demo/dist

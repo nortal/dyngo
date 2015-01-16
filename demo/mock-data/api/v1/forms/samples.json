@@ -1,0 +1,298 @@
+{
+  "components": [
+    {
+      "id": "textInputs",
+      "type": "header",
+      "label": "header.text_inputs"
+    },
+    {
+      "id": "simpleText",
+      "type": "textInput",
+      "label": "Simple text",
+      "placeholder": "abracadabra (from 5 to 15 characters)",
+      "constraints": {
+        "min": 5,
+        "max": 15
+      }
+    },
+    {
+      "id": "simpleTextUtf",
+      "type": "textInput",
+      "label": "Simple text, UTF8 test: öäõüžš",
+      "placeholder": "öäõüžš"
+    },
+    {
+      "id": "simpleTextWoLabel",
+      "type": "textInput",
+      "placeholder": "I have no label!"
+    },
+    {
+      "id": "simpleTextRequired",
+      "type": "textInput",
+      "label": "Simple text (required)",
+      "placeholder": "abracadabra (up to 15 characters)",
+      "constraints": {
+        "max": 15,
+        "required": true
+      }
+    },
+    {
+      "id": "simpleTextDisabled",
+      "type": "textInput",
+      "label": "Simple text (disabled)",
+      "constraints": {
+        "disabled": true
+      }
+    },
+    {
+      "id": "simpleTextWithHelp",
+      "type": "textInput",
+      "label": "Simple text with help",
+      "placeholder": "abracadabra (up to 15 characters)",
+      "description": {
+        "title": "Some title",
+        "content": "Some help content for this field"
+      }
+    },
+    {
+      "id": "numberInputs",
+      "type": "header",
+      "label": "Number inputs"
+    },
+    {
+      "id": "positiveNumber",
+      "type": "numberInput",
+      "label": "Positive number",
+      "placeholder": "Number in range 0...999",
+      "constraints": {
+        "min": 0,
+        "max": 999
+      }
+    },
+    {
+      "id": "negativeNumber",
+      "type": "numberInput",
+      "label": "Negative number",
+      "placeholder": "Number in range -999...-1",
+      "constraints": {
+        "min": -999,
+        "max": -1
+      }
+    },
+    {
+      "id": "sum",
+      "type": "textInput",
+      "label": "Sum of positive & negative",
+      "functions": [
+        "setData(!positiveNumber ? undefined : positiveNumber >= 1 && positiveNumber < 58 ? '1TA - ÜHE' : positiveNumber < 69 ? '1TA - MITME' : positiveNumber < 112 ? 'Mittest.' : undefined)",
+        "setData(positiveNumber + negativeNumber)"
+      ]
+    },
+    {
+      "id": "numberInputRequired",
+      "type": "numberInput",
+      "label": "Number input (required)",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "id": "numberInputDisabled",
+      "type": "numberInput",
+      "label": "Number input (disabled)",
+      "constraints": {
+        "disabled": true
+      },
+      "description": {
+        "content": "Some help content for required numeric without title."
+      }
+    },
+    {
+      "id": "numberInputWithHelp",
+      "type": "numberInput",
+      "label": "Number input with help",
+      "description": {
+        "title": "Some title",
+        "content": "Some help content for numeric field"
+      }
+    },
+    {
+      "id": "selectControls",
+      "type": "header",
+      "label": "Select controls"
+    },
+    {
+      "id": "select1",
+      "type": "select",
+      "label": "Simple select",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "value": "Option 1",
+          "weight": 100500
+        },
+        {
+          "code": "option_2",
+          "value": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "value": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "value": "Option 4"
+        },
+        {
+          "code": "option_4",
+          "value": "Option 4"
+        }
+      ]
+    },
+    {
+      "id": "selectWithHelp",
+      "type": "select",
+      "label": "Simple select with help",
+      "options": [
+        {
+          "code": "option_1",
+          "value": "Option 1",
+          "weight": 100500
+        },
+        {
+          "code": "option_2",
+          "value": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "value": "Option 3"
+        }
+      ],
+      "description": {
+        "title": "Some title",
+        "content": "Some help content for select."
+      }
+    },
+    {
+      "id": "radio1",
+      "type": "radio",
+      "label": "Radiobutton",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ]
+    },
+    {
+      "id": "checkbox1",
+      "type": "checkbox",
+      "label": "Checkbox",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ]
+    },
+    {
+      "id": "container1",
+      "type": "panel",
+      "label": "Container",
+      "components": [
+        {
+          "id": "initiallyHiddenNumber",
+          "type": "numberInput",
+          "label": "Initially hidden",
+          "constraints": {
+            "visible": "radio1 == 'option_2' && select1 == 'option_1'"
+          }
+        }
+      ]
+    },
+    {
+      "id": "staticComponents",
+      "type": "header",
+      "label": "header.static_components"
+    },
+    {
+      "id": "staticText",
+      "type": "staticText",
+      "label": "static_text.sample"
+    },
+    {
+      "id": "hiddenComponents",
+      "type": "header",
+      "label": "header.hidden_components"
+    },
+    {
+      "id": "hiddenInput",
+      "type": "hidden",
+      "label": "hidden_input.sample",
+      "functions": ["setData(positiveNumber * 2)"]
+    }
+  ],
+  "translations": {
+    "en": {
+      "error.required_field": "You did not enter a field.",
+      "error.value_is_gt_max": "Value should not be greater than {{max()}}.",
+      "error.value_is_lt_min": "Value should not be less than {{min()}}.",
+      "error.no_item_selected": "You did not select an item from list.",
+      "header.text_inputs": "Text inputs",
+      "header.static_components": "Static components",
+      "header.hidden_components": "Hidden components",
+      "static_text.sample": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    },
+    "et": {
+      "error.required_field": "Täitke väli.",
+      "error.value_is_gt_max": "Välja väärtus peab olema suurem kui {{max()}}",
+      "error.value_is_lt_min": "Välja väärtus peab olema väiksem kui {{min()}}",
+      "error.no_item_selected": "Valige loendist väärtus.",
+      "header.text_inputs": "Teksitlised väljad",
+      "header.static_components": "Staatilised komponendid",
+      "header.hidden_components": "Peidetud komponendid",
+      "static_text.sample": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    }
+  }
+}

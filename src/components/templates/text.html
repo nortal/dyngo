@@ -27,9 +27,8 @@
     </div>
 
     <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">
-      <div ng-message="required">You did not enter a field</div>
+      <div ng-message="required">{{localize("error.required_field")}}</div>
     </div>
-
   </div>
 
 </div>

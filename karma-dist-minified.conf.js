@@ -27,7 +27,7 @@ module.exports = function(config) {
       'bower/angular/angular.js',
       'bower/angular-sanitize/angular-sanitize.js',
       'bower/angular-mocks/angular-mocks.js',
-      'dist/dyngo.min.js',
+      'dist/dyngo.js',
       'test/unit/**/*.js'
     ],
 

@@ -16,12 +16,15 @@
     "test",
     "node_modules",
     "bower",
+    "gulpfile.js",
+    "karma-*.js",
+    "LICENSE_HEADER",
     "**/.*"
   ],
   "dependencies": {
-    "angular": ">=1.3.4",
-    "angular-messages": ">=1.3.4",
-    "angular-sanitize": ">=1.3.4",
+    "angular": ">=1.3.9",
+    "angular-messages": ">=1.3.9",
+    "angular-sanitize": ">=1.3.9",
     "angular-strap": "~2.1.3",
     "underscore": "~1.7.0",
     "checklist-model": "~0.1.3"
