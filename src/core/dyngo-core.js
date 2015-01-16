@@ -1,7 +1,6 @@
 var assignTranslations = function (structure, translations) {
   angular.forEach(structure.components, function (parent) {
       parent.translations = translations;
-      console.log(parent.id, parent.components);
       if (!_.isUndefined(parent.components)) {
         assignTranslations(parent, translations);
       }
