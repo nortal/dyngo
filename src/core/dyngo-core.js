@@ -1,3 +1,14 @@
+var assignTranslations = function (structure, translations) {
+  angular.forEach(structure.components, function (parent) {
+      parent.translations = translations;
+      console.log(parent.id, parent.components);
+      if (!_.isUndefined(parent.components)) {
+        assignTranslations(parent, translations);
+      }
+    }
+  );
+};
+
 angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
   .provider('dyngo', function () {
@@ -33,14 +44,10 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       link: function (scope, element, attrs) {
         scope.form = dyngo.getForm(scope.formName);
         if (_.isUndefined(scope.form)) {
-          console.log('undefined!');
           return;
         }
         var structure = scope.form.structure;
-        angular.forEach(structure.components, function (rootComponent) {
-            rootComponent.translations = structure.translations[scope.lang];
-          }
-        );
+        this.assignTranslations(structure, structure.translations[scope.lang]);
       }
     };
   })
