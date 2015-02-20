@@ -143,7 +143,6 @@ angular.module('dyngo.components', ['dyngo.components.provider', 'dyngo.componen
 var assignTranslations = function (structure, translations) {
   angular.forEach(structure.components, function (parent) {
       parent.translations = translations;
-      console.log(parent.id, parent.components);
       if (!_.isUndefined(parent.components)) {
         assignTranslations(parent, translations);
       }
@@ -243,7 +242,7 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
     };
   }])
 
-  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", function ($compile, $parse, componentProvider, $functions) {
+  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", function ($compile, $parse, componentProvider, $functions, $log) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -254,7 +253,7 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
         var component = scope.component;
         scope.$component = componentProvider.components[component.type];
         if (_.isUndefined(scope.$component)) {
-          console.error('Unknown component type:', component.type);
+          $log.error('Unknown component type:', component.type);
           return;
         }
 
