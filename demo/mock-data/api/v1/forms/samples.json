@@ -286,8 +286,8 @@
     },
     "et": {
       "error.required_field": "Täitke väli.",
-      "error.value_is_gt_max": "Välja väärtus peab olema suurem kui {{max()}}",
-      "error.value_is_lt_min": "Välja väärtus peab olema väiksem kui {{min()}}",
+      "error.value_is_gt_max": "Välja väärtus peab olema väiksem kui {{max()}}",
+      "error.value_is_lt_min": "Välja väärtus peab olema suurem kui {{min()}}",
       "error.no_item_selected": "Valige loendist väärtus.",
       "header.text_inputs": "Teksitlised väljad",
       "header.static_components": "Staatilised komponendid",
