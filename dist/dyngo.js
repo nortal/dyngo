@@ -375,7 +375,7 @@ module.run(['$templateCache', function($templateCache) {
     '    <div class="checkbox" ng-repeat="option in options track by option.code">\n' +
     '      <label>\n' +
     '        <input type="checkbox" id="{{id+\'_\'+$index}}" name="{{id}}" checklist-model="data[id]"\n' +
-    '               checklist-value="option.code" value="{{option.code}}" ng-disabled="constraints.disabled"\n' +
+    '               checklist-value="option.code" ng-value="option.code" ng-disabled="constraints.disabled"\n' +
     '               ng-required="constraints.required && (!data[id] || data[id].length == 0)">{{option.text}}\n' +
     '      </label>\n' +
     '    </div>\n' +
