@@ -7,8 +7,8 @@
     <div class="radio" ng-repeat="option in options track by option.code">
       <label>
         <input type="radio" name="{{id}}" id="{{id+'_'+$index}}" ng-model="data[id]"
-               value="{{option.code}}"
-               ng-disabled="constraints.disabled" ng-required="constraints.required">{{option.text}}
+               ng-value="option.code"
+               ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}
       </label>
     </div>
 

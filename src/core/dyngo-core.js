@@ -36,7 +36,7 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       scope: {
         formName: '@dgForm',
         formModel: '=dgForm',
-        lang: "@dgLang",
+        lang: '@dgLang',
         data: '=ngModel'
       },
       template: '<div dg-container="form.structure" ng-model="data"></div>',

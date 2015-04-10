@@ -178,7 +178,7 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       scope: {
         formName: '@dgForm',
         formModel: '=dgForm',
-        lang: "@dgLang",
+        lang: '@dgLang',
         data: '=ngModel'
       },
       template: '<div dg-container="form.structure" ng-model="data"></div>',
@@ -509,8 +509,8 @@ module.run(['$templateCache', function($templateCache) {
     '    <div class="radio" ng-repeat="option in options track by option.code">\n' +
     '      <label>\n' +
     '        <input type="radio" name="{{id}}" id="{{id+\'_\'+$index}}" ng-model="data[id]"\n' +
-    '               value="{{option.code}}"\n' +
-    '               ng-disabled="constraints.disabled" ng-required="constraints.required">{{option.text}}\n' +
+    '               ng-value="option.code"\n' +
+    '               ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}\n' +
     '      </label>\n' +
     '    </div>\n' +
     '\n' +
