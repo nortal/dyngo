@@ -237,16 +237,16 @@
       ]
     },
     {
-      "id": "container1",
+      "id": "initiallyHiddenContainer",
       "type": "panel",
-      "label": "Container",
+      "label": "Initially hidden container",
       "components": [
         {
           "id": "initiallyHiddenNumber",
           "type": "numberInput",
-          "label": "Initially hidden",
+          "label": "Initially hidden number input",
           "constraints": {
-            "visible": "radio1 == 'option_2' && select1 == 'option_1'"
+            "visible": "radio1 == 'option_2' && checkbox1 == 'option_1'"
           }
         }
       ]
