@@ -26,10 +26,16 @@ module.exports = function(config) {
     files: [
       'bower/angular/angular.js',
       'bower/angular-sanitize/angular-sanitize.js',
+      'bower/angular-messages/angular-messages.js',
       'bower/angular-mocks/angular-mocks.js',
-      'src/**/*.module.js',
+      'bower/checklist-model/checklist-model.js',
+      'bower/angular-strap/dist/modules/popover.js',
+      'bower/angular-strap/dist/modules/tooltip.js',
+      'bower/angular-strap/dist/modules/dimensions.js',
+      'bower/underscore/underscore.js',
       'src/**/*.js',
-      'test/unit/**/*.js'
+      'test/unit/**/*.js',
+      'tmp/templates.js'
     ],
 
 
