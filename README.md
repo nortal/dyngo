@@ -1,5 +1,7 @@
 # dyngo
 
+[![Build Status](https://travis-ci.org/nortal/dyngo.svg?branch=master)](https://travis-ci.org/nortal/dyngo)
+
 Install Gulp
 npm install -g gulp
 
