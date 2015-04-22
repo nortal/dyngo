@@ -19,7 +19,8 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-jquery',
-      'karma-chai-jquery'
+      'karma-chai-jquery',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // list of files / patterns to load in the browser
@@ -35,7 +36,7 @@ module.exports = function(config) {
       'bower/underscore/underscore.js',
       'src/**/*.js',
       'test/unit/**/*.js',
-      'tmp/templates.js'
+      '**/*.html'
     ],
 
 
@@ -47,6 +48,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      '**/*.html': ['ng-html2js']
     },
 
 
@@ -80,6 +82,12 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false
+    singleRun: false,
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'src/components/',
+      moduleName: 'component-templates'
+    }
+
   });
 };

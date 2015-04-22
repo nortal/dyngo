@@ -88,7 +88,7 @@ gulp.task('jshint-src', function () {
 /**
  * Run test once and exit
  */
-gulp.task('test-src', ['html2js'], function (done) {
+gulp.task('test-src', function (done) {
   karma.start({
     configFile: __dirname + '/karma-src.conf.js',
     singleRun: true

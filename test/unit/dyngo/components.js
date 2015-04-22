@@ -18,6 +18,7 @@ describe('dyngo', function () {
   };
 
   beforeEach(module('dyngo'));
+  beforeEach(module('component-templates'));
 
   beforeEach(inject(function ($rootScope, _$compile_, _dyngo_) {
     $scope = $rootScope;
