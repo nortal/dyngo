@@ -1,8 +1,8 @@
 var assignTranslations = function (structure, translations) {
-  angular.forEach(structure.components, function (parent) {
-      parent.translations = translations;
-      if (!_.isUndefined(parent.components)) {
-        assignTranslations(parent, translations);
+  angular.forEach(structure.components, function (component) {
+      component.translations = translations;
+      if (!_.isUndefined(component.components)) {
+        assignTranslations(component, translations);
       }
     }
   );
@@ -14,12 +14,11 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
     var instance = {forms: {}};
 
     instance.registerForm = function (name, structure, options) {
-      var form = {name: name, structure: structure, options: options};
-      instance.forms.name = form;
+      instance.forms[name] = {name: name, structure: structure, options: options};
     };
 
     instance.getForm = function (name) {
-      return instance.forms.name;
+      return instance.forms[name];
     };
 
     return {
@@ -40,13 +39,15 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
         data: '=ngModel'
       },
       template: '<div dg-container="form.structure" ng-model="data"></div>',
-      link: function (scope, element, attrs) {
+      link: function (scope) {
         scope.form = dyngo.getForm(scope.formName);
-        if (_.isUndefined(scope.form)) {
+        if (angular.isUndefined(scope.form) || angular.isUndefined(scope.form.structure)) {
           return;
         }
         var structure = scope.form.structure;
-        this.assignTranslations(structure, structure.translations[scope.lang]);
+        if (angular.isDefined(structure.translations)) {
+          assignTranslations(structure, structure.translations[scope.lang]);
+        }
       }
     };
   })
@@ -87,9 +88,8 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       },
       template: '<div class="fb-form-object" ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
       controller: 'ContainerController',
-      link: function (scope, element, attrs) {
+      link: function (scope) {
         scope.formModel = scope.$parent.formModel;
-        //scope.formModel = scope.$parent.$parent[scope.formName];
       }
     };
   })
@@ -177,41 +177,5 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
         component: '=dgComponent'
       },
       controller: 'ComponentCtrl'
-    };
-  })
-
-  .provider('$functions', function () {
-    var instance = {functions: []};
-
-    instance.registerFunction = function (name, func) {
-      instance.functions.push(name);
-      instance[name] = func;
-    };
-
-    instance.get = function (name) {
-      return instance[name] || _.noop;
-    };
-
-    instance.executeFunctions = function (scope, component, data) {
-      angular.forEach(instance.functions, function (funcName) {
-        if (_.isUndefined(scope[funcName])) {
-          scope[funcName] = instance[funcName];
-        }
-      });
-      angular.forEach(component.functions, function (f) {
-        scope.$eval(f, data);
-      });
-    };
-
-    // Default functions
-    var round = function (value, precision) {
-      var p = Math.pow(10, precision || 2);
-      return Math.round(value * p) / p;
-    };
-    return {
-      $get: function init() {
-        instance.registerFunction('round', round);
-        return instance;
-      }
     };
   });
