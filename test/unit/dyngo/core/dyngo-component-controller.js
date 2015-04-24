@@ -93,4 +93,13 @@ describe('ComponentCtrl:', function () {
     expect($scope.data.foo).to.deep.equal(['abc', 'def']);
   });
 
+  it('setData() should do nothing if value object has not changed', function () {
+    $scope.id = 'foo';
+    var foo = {bar: 'baz', qux: {moo: true}};
+    $scope.setData(foo);
+    expect($scope.data.foo).to.equal(foo);
+    $scope.setData(angular.copy(foo));
+    expect($scope.data.foo).to.equal(foo);
+  });
+
 });

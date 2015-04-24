@@ -27,7 +27,7 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
     $scope.setData = function (value) {
       if (angular.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
         $scope.data[$scope.id] = undefined;
-      } else if (!_.isEqual($scope.data[$scope.id], value)) {
+      } else if (!angular.equals($scope.data[$scope.id], value)) {
         $scope.data[$scope.id] = value;
       }
     };
