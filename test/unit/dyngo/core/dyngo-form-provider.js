@@ -1,7 +1,7 @@
 describe('dyngo form provider', function () {
   var dyngo;
 
-  beforeEach(module('dyngo.core'));
+  beforeEach(module('dyngo.form'));
 
   beforeEach(inject(function (_dyngo_) {
     dyngo = _dyngo_;

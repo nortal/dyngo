@@ -1,8 +1,7 @@
 describe('dgForm directive', function () {
   var $scope, $compile, dyngo;
 
-  beforeEach(module('dyngo'));
-  beforeEach(module('component-templates'));
+  beforeEach(module('dyngo.form'));
 
   beforeEach(inject(function ($rootScope, _$compile_, _dyngo_) {
     $scope = $rootScope;

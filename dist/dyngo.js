@@ -12,7 +12,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-angular.module('dyngo', ['dyngo.core', 'dyngo.components']);
+angular.module('dyngo', ['dyngo.core', 'dyngo.form', 'dyngo.container', 'dyngo.components', 'dyngo.functions']);
 
 /*   Copyright 2015 Nortal AS
  *
@@ -140,65 +140,11 @@ angular.module('dyngo.components.provider', [])
  */
 angular.module('dyngo.components', ['dyngo.components.provider', 'dyngo.components.default']);
 
-var assignTranslations = function (structure, translations) {
-  angular.forEach(structure.components, function (parent) {
-      parent.translations = translations;
-      if (!_.isUndefined(parent.components)) {
-        assignTranslations(parent, translations);
-      }
-    }
-  );
-};
+angular.module('dyngo.container', [])
 
-angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
-
-  .provider('dyngo', function () {
-    var instance = {forms: {}};
-
-    instance.registerForm = function (name, structure, options) {
-      var form = {name: name, structure: structure, options: options};
-      instance.forms.name = form;
-    };
-
-    instance.getForm = function (name) {
-      return instance.forms.name;
-    };
-
-    return {
-      $get: function () {
-        return instance;
-      }
-    };
-  })
-
-  .directive('dgForm', ["dyngo", function (dyngo) {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      scope: {
-        formName: '@dgForm',
-        formModel: '=dgForm',
-        lang: '@dgLang',
-        data: '=ngModel'
-      },
-      template: '<div dg-container="form.structure" ng-model="data"></div>',
-      link: function (scope, element, attrs) {
-        scope.form = dyngo.getForm(scope.formName);
-        if (_.isUndefined(scope.form)) {
-          return;
-        }
-        var structure = scope.form.structure;
-        this.assignTranslations(structure, structure.translations[scope.lang]);
-      }
-    };
-  }])
-
-  .controller('ContainerController', ["$scope", function ($scope) {
+  .controller('ContainerCtrl', ["$scope", function ($scope) {
     $scope.visible = function (component) {
       var visible = true;
-      if (!_.isUndefined(component.parent)) {
-        visible = $scope.visible(component.parent);
-      }
 
       var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
       if (visible && !_.isUndefined(visibilityExpression)) {
@@ -227,30 +173,75 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
         container: '=dgContainer',
         data: '=ngModel'
       },
-      template: '<div class="fb-form-object" ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
-      controller: 'ContainerController',
-      link: function (scope, element, attrs) {
+      template: '<div ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
+      controller: 'ContainerCtrl',
+      link: function (scope) {
         scope.formModel = scope.$parent.formModel;
-        //scope.formModel = scope.$parent.$parent[scope.formName];
       }
     };
-  })
+  });
+
+angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
   .controller('ComponentCtrl', ["$scope", function ($scope) {
-    $scope.visible = function () {
-      return true;
+    $scope.evaluateConstraint = function (name) {
+      if (angular.isUndefined($scope.constraints) || angular.isUndefined($scope.constraints[name])) {
+        return null;
+      }
+      var constraintExpression = $scope.constraints[name];
+      if (typeof constraintExpression === 'string') {
+        return $scope.$eval(constraintExpression, $scope.data);
+      } else if (typeof constraintExpression === 'number') {
+        return constraintExpression;
+      } else if (typeof constraintExpression === 'boolean') {
+        return constraintExpression;
+      }
+      return null;
     };
+
+    $scope.min = function () {
+      return $scope.evaluateConstraint('min');
+    };
+
+    $scope.max = function () {
+      return $scope.evaluateConstraint('max');
+    };
+
+    $scope.setData = function (value) {
+      if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+        $scope.data[$scope.id] = undefined;
+      } else if (!_.isEqual($scope.data[$scope.id], value)) {
+        $scope.data[$scope.id] = value;
+      }
+    };
+
+    $scope.localize = function (key) {
+      var translations = $scope.component.translations;
+      var localizedValue;
+      if (!_.isUndefined(translations)) {
+        localizedValue = translations[key];
+      }
+      return _.isUndefined(localizedValue) ? key : localizedValue.replace(/{{([^}]*)}}/, function (match, group) {
+        return $scope.$eval(group);
+      });
+    };
+
   }])
 
   .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", function ($compile, $parse, componentProvider, $functions, $log) {
     return {
       restrict: 'A',
       require: 'ngModel',
+      scope: {
+        data: '=ngModel',
+        component: '=dgComponent'
+      },
+      controller: 'ComponentCtrl',
       link: function (scope, element, attrs) {
         scope.formName = scope.$parent.formName;
         scope.formModel = scope.$parent.formModel;
-        scope.component = $parse(attrs.dgComponent)(scope);
-        var component = scope.component;
+        //scope.component = $parse(attrs.dgComponent)(scope);
+        var component = scope.component = $parse(attrs.dgComponent)(scope);
         scope.$component = componentProvider.components[component.type];
         if (_.isUndefined(scope.$component)) {
           $log.error('Unknown component type:', component.type);
@@ -269,23 +260,6 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
         scope.options = component.options || scope.$component.options;
         scope.constraints = component.constraints || scope.$component.constraints;
 
-        var evaluateConstraint = function (scope, name) {
-          if (!_.isUndefined(scope.constraints) && !_.isUndefined(scope.constraints[name])) {
-            var evaluated = scope.$eval(scope.constraints[name], scope.data);
-            evaluated = _.isUndefined(evaluated) ? scope.constraints[name] : evaluated;
-            return evaluated;
-          }
-          return null;
-        };
-
-        scope.min = function () {
-          return evaluateConstraint(scope, 'min');
-        };
-
-        scope.max = function () {
-          return evaluateConstraint(scope, 'max');
-        };
-
         scope.components = component.components;
 
         if (!_.isUndefined(component.functions)) {
@@ -294,33 +268,66 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
           }, true);
         }
 
-        scope.setData = function (value) {
-          if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
-            scope.data[scope.id] = undefined;
-          } else if (!_.isEqual(scope.data[scope.id], value)) {
-            scope.data[scope.id] = value;
-          }
-        };
-
-        scope.localize = function (key) {
-          var translations = scope.component.translations;
-          var localizedValue;
-          if (!_.isUndefined(translations)) {
-            localizedValue = translations[key];
-          }
-          return _.isUndefined(localizedValue) ? key : localizedValue.replace(/{{([^}]*)}}/, function (match, group) {
-            return scope.$eval(group);
-          });
-        };
-
-      },
-      scope: {
-        data: '=ngModel',
-        component: '=dgComponent'
-      },
-      controller: 'ComponentCtrl'
+      }
     };
-  }])
+  }]);
+
+angular.module('dyngo.form', [])
+
+  .provider('dyngo', function () {
+    var instance = {forms: {}};
+
+    instance.registerForm = function (name, structure, options) {
+      instance.forms[name] = {name: name, structure: structure, options: options};
+    };
+
+    instance.getForm = function (name) {
+      return instance.forms[name];
+    };
+
+    return {
+      $get: function () {
+        return instance;
+      }
+    };
+  })
+
+  .directive('dgForm', ["dyngo", function (dyngo) {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        formName: '@dgForm',
+        formModel: '=dgForm',
+        lang: '@dgLang',
+        data: '=ngModel'
+      },
+      template: '<div dg-container="form.structure" ng-model="data"></div>',
+      link: function (scope) {
+        scope.form = dyngo.getForm(scope.formName);
+        if (angular.isUndefined(scope.form) || angular.isUndefined(scope.form.structure)) {
+          return;
+        }
+        var structure = scope.form.structure;
+
+        var assignTranslations = function (structure, translations) {
+          angular.forEach(structure.components, function (component) {
+              component.translations = translations;
+              if (angular.isDefined(component.components)) {
+                assignTranslations(component, translations);
+              }
+            }
+          );
+        };
+
+        if (angular.isDefined(structure.translations)) {
+          assignTranslations(structure, structure.translations[scope.lang]);
+        }
+      }
+    };
+  }]);
+
+angular.module('dyngo.functions', [])
 
   .provider('$functions', function () {
     var instance = {functions: []};
@@ -331,15 +338,19 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
     };
 
     instance.get = function (name) {
-      return instance[name] || _.noop;
+      return instance[name] || angular.noop;
     };
 
-    instance.executeFunctions = function (scope, component, data) {
+    var attachFunctionsToScope = function (scope) {
       angular.forEach(instance.functions, function (funcName) {
-        if (_.isUndefined(scope[funcName])) {
+        if (angular.isUndefined(scope[funcName])) {
           scope[funcName] = instance[funcName];
         }
       });
+    };
+
+    instance.executeFunctions = function (scope, component, data) {
+      attachFunctionsToScope(scope);
       angular.forEach(component.functions, function (f) {
         scope.$eval(f, data);
       });
@@ -347,9 +358,10 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
 
     // Default functions
     var round = function (value, precision) {
-      var p = Math.pow(10, precision || 2);
+      var p = Math.pow(10, angular.isDefined(precision) ? precision : 2);
       return Math.round(value * p) / p;
     };
+
     return {
       $get: function init() {
         instance.registerFunction('round', round);
@@ -357,3 +369,285 @@ angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSa
       }
     };
   });
+
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/checkbox.html',
+    '<div class="form-group">\n' +
+    '\n' +
+    '  <label for="{{id+\'_\'+$index}}" class="col-sm-4 control-label"\n' +
+    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
+    '\n' +
+    '  <div class="col-sm-4">\n' +
+    '    <div class="checkbox" ng-repeat="option in options track by option.code">\n' +
+    '      <label>\n' +
+    '        <input type="checkbox" id="{{id+\'_\'+$index}}" name="{{id}}" checklist-model="data[id]"\n' +
+    '               checklist-value="option.code" ng-value="option.code" ng-disabled="constraints.disabled"\n' +
+    '               ng-required="constraints.required && (!data[id] || data[id].length == 0)">{{option.text}}\n' +
+    '      </label>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid"\n' +
+    '         ng-if="formModel.submitPressed && constraints.required && (!data[id] || data[id].length == 0)">\n' +
+    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '    </div>\n' +
+    '  </div>\n' +
+    '\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/header.html',
+    '<div class="page-header">\n' +
+    '  <h2>{{label}}</h2>\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/hidden.html',
+    '<div class="form-group">\n' +
+    '\n' +
+    '  <div class="col-sm-4"></div>\n' +
+    '\n' +
+    '  <div class="col-sm-4">\n' +
+    '    <input type="hidden" ng-model="data[id]">\n' +
+    '  </div>\n' +
+    '\n' +
+    '</div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/number.html',
+    '<div class="form-group">\n' +
+    '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
+    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
+    '\n' +
+    '  <div class="col-sm-4" ng-switch on="description !== undefined">\n' +
+    '\n' +
+    '    <div class="input-group" ng-switch-when="true">\n' +
+    '\n' +
+    '      <input type="number" id="{{id}}" name="{{id}}" ng-model="data[id]" class="form-control"\n' +
+    '             placeholder="{{placeholder}}"\n' +
+    '             min="{{min()}}" max="{{max()}}"\n' +
+    '             ng-disabled="constraints.disabled" ng-required="constraints.required"/>\n' +
+    '       <span class="input-group-btn">\n' +
+    '         <button type="button" class="btn btn-default"\n' +
+    '                 data-placement="right" title="{{description.title}}" data-content="{{description.content}}"\n' +
+    '                 data-trigger="click" bs-popover>\n' +
+    '           <span class="glyphicon glyphicon-question-sign"></span>\n' +
+    '         </button>\n' +
+    '      </span>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-switch-default>\n' +
+    '      <input type="number" id="{{id}}" name="{{id}}" ng-model="data[id]" class="form-control"\n' +
+    '             placeholder="{{placeholder}}"\n' +
+    '             min="{{min()}}" max="{{max()}}"\n' +
+    '             ng-disabled="constraints.disabled" ng-required="constraints.required"/>\n' +
+    '    </div>\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
+    '      <div ng-message="required">{{localize("error.required_field")}}</div>\n' +
+    '      <div ng-message="max">{{localize("error.value_is_gt_max")}}</div>\n' +
+    '      <div ng-message="min">{{localize("error.value_is_lt_min")}}</div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '  </div>\n' +
+    '\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/panel.html',
+    '<div class="panel panel-default">\n' +
+    '  <div class="panel-heading" ng-if="label">\n' +
+    '    <h3 class="panel-title">{{label}}</h3>\n' +
+    '  </div>\n' +
+    '  <div class="panel-body">\n' +
+    '    <div dg-container="component" ng-model="data" dg-data="data"></div>\n' +
+    '  </div>\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/radio.html',
+    '<div class="form-group">\n' +
+    '\n' +
+    '  <label class="col-sm-4 control-label"\n' +
+    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
+    '\n' +
+    '  <div class="col-sm-4">\n' +
+    '    <div class="radio" ng-repeat="option in options track by option.code">\n' +
+    '      <label>\n' +
+    '        <input type="radio" name="{{id}}" id="{{id+\'_\'+$index}}" ng-model="data[id]"\n' +
+    '               ng-value="option.code"\n' +
+    '               ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}\n' +
+    '      </label>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
+    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '    </div>\n' +
+    '  </div>\n' +
+    '\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/select.html',
+    '<div class="form-group">\n' +
+    '\n' +
+    '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
+    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
+    '\n' +
+    '  <div class="col-sm-4" ng-switch on="description !== undefined">\n' +
+    '\n' +
+    '    <div class="input-group" ng-switch-when="true">\n' +
+    '\n' +
+    '      <select id="{{id}}" name="{{id}}" class="form-control"\n' +
+    '              ng-options="option.code as option.value for option in options"\n' +
+    '              ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">\n' +
+    '        <option></option>\n' +
+    '      </select>\n' +
+    '       <span class="input-group-btn">\n' +
+    '         <button type="button" class="btn btn-default"\n' +
+    '                 data-placement="right" title="{{description.title}}" data-content="{{description.content}}"\n' +
+    '                 data-trigger="click" bs-popover>\n' +
+    '           <span class="glyphicon glyphicon-question-sign"></span>\n' +
+    '         </button>\n' +
+    '      </span>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-switch-default>\n' +
+    '      <div class="select">\n' +
+    '        <select id="{{id}}" name="{{id}}" class="form-control"\n' +
+    '                ng-options="option.code as option.value for option in options"\n' +
+    '                ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">\n' +
+    '          <option></option>\n' +
+    '        </select>\n' +
+    '      </div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
+    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '    </div>\n' +
+    '\n' +
+    '  </div>\n' +
+    '\n' +
+    '\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/static-text.html',
+    '<div class="form-group">\n' +
+    '  <p ng-bind-html="label"></p>\n' +
+    '</div>\n' +
+    '');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('dyngo.components');
+} catch (e) {
+  module = angular.module('dyngo.components', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('templates/text.html',
+    '<div class="form-group">\n' +
+    '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
+    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
+    '\n' +
+    '  <div class="col-sm-4" ng-switch on="description !== undefined">\n' +
+    '\n' +
+    '    <div class="input-group" ng-switch-when="true">\n' +
+    '\n' +
+    '      <input type="text" id="{{id}}" name="{{id}}" ng-model="data[id]" class="form-control"\n' +
+    '             placeholder="{{placeholder}}"\n' +
+    '             ng-minlength="constraints.min" ng-maxlength="constraints.max" ng-disabled="constraints.disabled"\n' +
+    '             ng-required="constraints.required"/>\n' +
+    '       <span class="input-group-btn">\n' +
+    '         <button type="button" class="btn btn-default"\n' +
+    '                 data-placement="right" title="{{description.title}}" data-content="{{description.content}}"\n' +
+    '                 data-trigger="click" bs-popover>\n' +
+    '           <span class="glyphicon glyphicon-question-sign"></span>\n' +
+    '         </button>\n' +
+    '      </span>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-switch-default>\n' +
+    '      <input type="text" id="{{id}}" name="{{id}}" ng-model="data[id]" class="form-control"\n' +
+    '             placeholder="{{placeholder}}"\n' +
+    '             ng-minlength="constraints.min" ng-maxlength="constraints.max" ng-disabled="constraints.disabled"\n' +
+    '             ng-required="constraints.required"/>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
+    '      <div ng-message="required">{{localize("error.required_field")}}</div>\n' +
+    '    </div>\n' +
+    '  </div>\n' +
+    '\n' +
+    '</div>\n' +
+    '');
+}]);
+})();

@@ -35,7 +35,7 @@ var sourceFiles = [
 ];
 
 gulp.task('html2js', function () {
-  gulp.src('src/components/templates/*.html')
+  return gulp.src('src/components/templates/*.html')
     .pipe(plumber())
     .pipe(ngHtml2Js({
       moduleName: 'dyngo.components',
@@ -45,7 +45,7 @@ gulp.task('html2js', function () {
     .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('build', ['html2js'], function () {
+gulp.task('build-src', function () {
   gulp.src(sourceFiles)
     .pipe(plumber())
     .pipe(ngAnnotate())
@@ -54,7 +54,11 @@ gulp.task('build', ['html2js'], function () {
     .pipe(uglify())
     .pipe(header(fs.readFileSync('LICENSE_HEADER', 'utf8')))
     .pipe(rename('dyngo.min.js'))
-    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build', function () {
+  runSequence('html2js', 'build-src');
 });
 
 /**
