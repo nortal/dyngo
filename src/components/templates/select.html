@@ -6,7 +6,6 @@
   <div class="col-sm-4" ng-switch on="description !== undefined">
 
     <div class="input-group" ng-switch-when="true">
-
       <select id="{{id}}" name="{{id}}" class="form-control"
               ng-options="option.code as option.value for option in options"
               ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">

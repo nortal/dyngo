@@ -1,10 +1,14 @@
-angular.module('dyngo.form', [])
+angular.module('dyngo.form', ['dyngo.translator'])
 
   .provider('dyngo', function () {
     var instance = {forms: {}};
+    var self = this;
 
     instance.registerForm = function (name, structure, options) {
-      instance.forms[name] = {name: name, structure: structure, options: options};
+      if (angular.isDefined(name) && angular.isDefined(structure)) {
+        instance.forms[name] = {name: name, structure: structure, options: options};
+        self.dgTranslator.registerDictionary(name, structure.translations);
+      }
     };
 
     instance.getForm = function (name) {
@@ -12,13 +16,21 @@ angular.module('dyngo.form', [])
     };
 
     return {
-      $get: function () {
+      $get: function (dgTranslator) {
+        self.dgTranslator = dgTranslator;
         return instance;
       }
     };
   })
 
-  .directive('dgForm', function (dyngo) {
+  .controller('FormCtrl', function ($scope, dyngo, $log) {
+    $scope.form = dyngo.getForm($scope.formName);
+    if (angular.isUndefined($scope.form)) {
+      $log.error('Form "' + $scope.formName + '" is not registered.');
+    }
+  })
+
+  .directive('dgForm', function () {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -28,27 +40,7 @@ angular.module('dyngo.form', [])
         lang: '@dgLang',
         data: '=ngModel'
       },
-      template: '<div dg-container="form.structure" ng-model="data"></div>',
-      link: function (scope) {
-        scope.form = dyngo.getForm(scope.formName);
-        if (angular.isUndefined(scope.form) || angular.isUndefined(scope.form.structure)) {
-          return;
-        }
-        var structure = scope.form.structure;
-
-        var assignTranslations = function (structure, translations) {
-          angular.forEach(structure.components, function (component) {
-              component.translations = translations;
-              if (angular.isDefined(component.components)) {
-                assignTranslations(component, translations);
-              }
-            }
-          );
-        };
-
-        if (angular.isDefined(structure.translations)) {
-          assignTranslations(structure, structure.translations[scope.lang]);
-        }
-      }
+      controller: 'FormCtrl',
+      template: '<div dg-container="form.structure" ng-model="data" ng-if="form"></div>'
     };
   });

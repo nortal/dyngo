@@ -35,6 +35,8 @@ angular.module('dyngo.container', [])
       controller: 'ContainerCtrl',
       link: function (scope) {
         scope.formModel = scope.$parent.formModel;
+        scope.formName = scope.$parent.formName;
+        scope.lang = scope.$parent.lang;
       }
     };
   });

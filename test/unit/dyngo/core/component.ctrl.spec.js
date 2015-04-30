@@ -1,14 +1,15 @@
 describe('ComponentCtrl:', function () {
-  var $scope, $controller, component, componentCtrl;
+  var $scope, $controller, component, componentCtrl, dgTranslator;
 
-  beforeEach(module('dyngo.core'));
+  beforeEach(module('dyngo.component'));
 
-  beforeEach(inject(function ($rootScope, _$controller_) {
+  beforeEach(inject(function ($rootScope, _$controller_, _dgTranslator_) {
     $scope = $rootScope;
     $controller = _$controller_;
     $scope.data = {};
     componentCtrl = $controller('ComponentCtrl', {$scope: $scope});
     component = {};
+    dgTranslator = _dgTranslator_
   }));
 
   it('evaluateConstraint() should return null when no constraints are not defined', function () {
@@ -100,6 +101,16 @@ describe('ComponentCtrl:', function () {
     expect($scope.data.foo).to.equal(foo);
     $scope.setData(angular.copy(foo));
     expect($scope.data.foo).to.equal(foo);
+  });
+
+  it('localize() should return localized and evaluated value', function () {
+    $scope.formName = 'sampleForm';
+    $scope.lang = 'en';
+
+    dgTranslator.registerDictionary('sampleForm', {en: {some_key: '{{3+1}} known words: foo, bar, baz and {{quxWord}}!'}});
+    $scope.data.quxWord = 'qux';
+    //$scope.component = {translations: {bar: '{{3+1}} known words: foo, bar, baz and {{quxWord}}!'}};
+    expect($scope.localize('some_key')).to.equal('4 known words: foo, bar, baz and qux!');
   });
 
 });

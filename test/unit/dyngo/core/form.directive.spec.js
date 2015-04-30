@@ -11,7 +11,7 @@ describe('dgForm directive', function () {
 
   it('should render initial form div', function () {
     var form = {components: [], translations: {}};
-    dyngo.registerForm('sampleForm', form)
+    dyngo.registerForm('sampleForm', form);
     $scope.data = {};
     var element = $compile('<div dg-form="sampleForm" ng-model="data"></div>')($scope);
     $scope.$digest();
@@ -19,6 +19,12 @@ describe('dgForm directive', function () {
     expect(formRoot.attr('dg-container')).to.equal('form.structure');
     expect(formRoot.attr('ng-model')).to.equal('data');
     expect(formRoot.scope().form).not.to.be.undefined;
+  });
+
+  it('should do nothing if form is undefined', function () {
+    var element = $compile('<div dg-form="sampleForm" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect(element.children().length).to.equal(0);
   });
 
 });

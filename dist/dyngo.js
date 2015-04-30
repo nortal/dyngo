@@ -12,7 +12,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-angular.module('dyngo', ['dyngo.core', 'dyngo.form', 'dyngo.container', 'dyngo.components', 'dyngo.functions']);
+angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.components', 'dyngo.functions', 'dyngo.translator']);
 
 /*   Copyright 2015 Nortal AS
  *
@@ -90,38 +90,22 @@ angular.module('dyngo.components.default', ['dyngo.components.provider'])
 angular.module('dyngo.components.provider', [])
   .provider('componentProvider', function () {
     this.components = {};
-    var _$http;
-    var _$templateCache;
 
-    var loadTemplate = function (component, $http, $templateCache) {
-      if (component.template == null) {
-        $http.get(component.templateUrl, {
-          cache: $templateCache
-        }).success(function (template) {
-          component.template = template;
-        });
+    this.registerComponent = function (type, component) {
+      if (angular.isUndefined(component) || angular.isUndefined(type)) {
+        return;
+      }
+      if (angular.isUndefined(this.components[type])) {
+        this.components[type] = component;
       }
     };
-    this.registerComponent = function (name, component) {
-      if (component == null) {
-        component = {};
-      }
-      if (this.components[name] == null) {
-        this.components[name] = component;
-        loadTemplate(component, _$http, _$templateCache);
-      }
-    };
-    this.$get = ["$http", "$templateCache", function ($http, $templateCache) {
-      _$http = $http;
-      _$templateCache = $templateCache;
-      angular.forEach(this.components, function (component) {
-        loadTemplate(component, $http, $templateCache);
-      });
+
+    this.$get = function () {
       return {
         components: this.components,
         registerComponent: this.registerComponent
       };
-    }];
+    };
   });
 
 /*   Copyright 2015 Nortal AS
@@ -140,6 +124,113 @@ angular.module('dyngo.components.provider', [])
  */
 angular.module('dyngo.components', ['dyngo.components.provider', 'dyngo.components.default']);
 
+angular.module('dyngo.component', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages', 'dyngo.translator'])
+
+  .controller('ComponentCtrl', ["$scope", "dgTranslator", function ($scope, dgTranslator) {
+    $scope.evaluateConstraint = function (name) {
+      if (angular.isUndefined($scope.constraints) || angular.isUndefined($scope.constraints[name])) {
+        return null;
+      }
+      var constraintExpression = $scope.constraints[name];
+      if (typeof constraintExpression === 'string') {
+        return $scope.$eval(constraintExpression, $scope.data);
+      } else if (typeof constraintExpression === 'number') {
+        return constraintExpression;
+      } else if (typeof constraintExpression === 'boolean') {
+        return constraintExpression;
+      }
+      return null;
+    };
+
+    $scope.min = function () {
+      return $scope.evaluateConstraint('min');
+    };
+
+    $scope.max = function () {
+      return $scope.evaluateConstraint('max');
+    };
+
+    $scope.setData = function (value) {
+      if (angular.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+        $scope.data[$scope.id] = undefined;
+      } else if (!angular.equals($scope.data[$scope.id], value)) {
+        $scope.data[$scope.id] = value;
+      }
+    };
+
+    $scope.localize = function (key) {
+      if (angular.isUndefined(key)) {
+        return undefined;
+      }
+      var translatedValue = dgTranslator.translate($scope.formName, key, $scope.lang);
+      return translatedValue.replace(/{{([^}]*)}}/g, function (match, group) {
+        return $scope.$eval(group, $scope.data);
+      });
+    };
+
+  }])
+
+  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", "$http", "$templateCache", function ($compile, $parse, componentProvider, $functions, $log, $http, $templateCache) {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        data: '=ngModel',
+        component: '=dgComponent'
+      },
+      controller: 'ComponentCtrl',
+      link: function (scope, element, attrs) {
+        var component = scope.component = $parse(attrs.dgComponent)(scope);
+        scope.$component = componentProvider.components[component.type];
+        if (_.isUndefined(scope.$component)) {
+          var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
+          $log.error('Unknown component type:', component.type);
+          element.append($compile(unknownTypeTemplate)(scope));
+          return;
+        }
+
+        function initScopeValues() {
+          scope.formName = scope.$parent.formName;
+          scope.formModel = scope.$parent.formModel;
+          scope.lang = scope.$parent.lang;
+          scope.id = component.id;
+          scope.label = scope.localize(component.label);
+          scope.description = component.description;
+          scope.placeholder = component.placeholder;
+          scope.options = component.options || scope.$component.options || [];
+          // TODO: replace with angular.merge after upgrade to angular 1.4+
+          scope.constraints = angular.extend({}, scope.$component.constraints, component.constraints);
+        }
+
+        function attachComponentHtml() {
+          var children = $compile(scope.$component.template)(scope);
+          element.append(children);
+        }
+
+        initScopeValues();
+
+        if (angular.isUndefined(scope.$component.template)) {
+          $http.get(scope.$component.templateUrl, {
+            cache: $templateCache
+          }).success(function (template) {
+            scope.$component.template = template;
+            attachComponentHtml();
+          });
+        } else {
+          attachComponentHtml();
+        }
+
+
+        if (angular.isDefined(component.functions)) {
+          scope.$watch('data', function () {
+            $functions.executeFunctions(scope, scope.component, scope.data);
+          }, true);
+        }
+
+      }
+    };
+  }]);
+
 angular.module('dyngo.container', [])
 
   .controller('ContainerCtrl', ["$scope", function ($scope) {
@@ -147,7 +238,7 @@ angular.module('dyngo.container', [])
       var visible = true;
 
       var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
-      if (visible && !_.isUndefined(visibilityExpression)) {
+      if (visible && angular.isDefined(visibilityExpression)) {
         visible = $scope.$eval(visibilityExpression, $scope.data);
       }
       if (!visible) {
@@ -177,108 +268,23 @@ angular.module('dyngo.container', [])
       controller: 'ContainerCtrl',
       link: function (scope) {
         scope.formModel = scope.$parent.formModel;
+        scope.formName = scope.$parent.formName;
+        scope.lang = scope.$parent.lang;
       }
     };
   });
 
-angular.module('dyngo.core', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
-
-  .controller('ComponentCtrl', ["$scope", function ($scope) {
-    $scope.evaluateConstraint = function (name) {
-      if (angular.isUndefined($scope.constraints) || angular.isUndefined($scope.constraints[name])) {
-        return null;
-      }
-      var constraintExpression = $scope.constraints[name];
-      if (typeof constraintExpression === 'string') {
-        return $scope.$eval(constraintExpression, $scope.data);
-      } else if (typeof constraintExpression === 'number') {
-        return constraintExpression;
-      } else if (typeof constraintExpression === 'boolean') {
-        return constraintExpression;
-      }
-      return null;
-    };
-
-    $scope.min = function () {
-      return $scope.evaluateConstraint('min');
-    };
-
-    $scope.max = function () {
-      return $scope.evaluateConstraint('max');
-    };
-
-    $scope.setData = function (value) {
-      if (_.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
-        $scope.data[$scope.id] = undefined;
-      } else if (!_.isEqual($scope.data[$scope.id], value)) {
-        $scope.data[$scope.id] = value;
-      }
-    };
-
-    $scope.localize = function (key) {
-      var translations = $scope.component.translations;
-      var localizedValue;
-      if (!_.isUndefined(translations)) {
-        localizedValue = translations[key];
-      }
-      return _.isUndefined(localizedValue) ? key : localizedValue.replace(/{{([^}]*)}}/, function (match, group) {
-        return $scope.$eval(group);
-      });
-    };
-
-  }])
-
-  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", function ($compile, $parse, componentProvider, $functions, $log) {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      scope: {
-        data: '=ngModel',
-        component: '=dgComponent'
-      },
-      controller: 'ComponentCtrl',
-      link: function (scope, element, attrs) {
-        scope.formName = scope.$parent.formName;
-        scope.formModel = scope.$parent.formModel;
-        //scope.component = $parse(attrs.dgComponent)(scope);
-        var component = scope.component = $parse(attrs.dgComponent)(scope);
-        scope.$component = componentProvider.components[component.type];
-        if (_.isUndefined(scope.$component)) {
-          $log.error('Unknown component type:', component.type);
-          return;
-        }
-
-        var children = $compile(scope.$component.template)(scope);
-        element.append(children);
-
-        // shorthand values
-        scope.id = component.id;
-        scope.label = (component.translations && component.translations[component.label]) || component.label; // || scope.$component.label;
-        scope.description = component.description;
-
-        scope.placeholder = component.placeholder; // || scope.$component.placeholder;
-        scope.options = component.options || scope.$component.options;
-        scope.constraints = component.constraints || scope.$component.constraints;
-
-        scope.components = component.components;
-
-        if (!_.isUndefined(component.functions)) {
-          scope.$watch('data', function () {
-            $functions.executeFunctions(scope, scope.component, scope.data);
-          }, true);
-        }
-
-      }
-    };
-  }]);
-
-angular.module('dyngo.form', [])
+angular.module('dyngo.form', ['dyngo.translator'])
 
   .provider('dyngo', function () {
     var instance = {forms: {}};
+    var self = this;
 
     instance.registerForm = function (name, structure, options) {
-      instance.forms[name] = {name: name, structure: structure, options: options};
+      if (angular.isDefined(name) && angular.isDefined(structure)) {
+        instance.forms[name] = {name: name, structure: structure, options: options};
+        self.dgTranslator.registerDictionary(name, structure.translations);
+      }
     };
 
     instance.getForm = function (name) {
@@ -286,13 +292,21 @@ angular.module('dyngo.form', [])
     };
 
     return {
-      $get: function () {
+      $get: ["dgTranslator", function (dgTranslator) {
+        self.dgTranslator = dgTranslator;
         return instance;
-      }
+      }]
     };
   })
 
-  .directive('dgForm', ["dyngo", function (dyngo) {
+  .controller('FormCtrl', ["$scope", "dyngo", "$log", function ($scope, dyngo, $log) {
+    $scope.form = dyngo.getForm($scope.formName);
+    if (angular.isUndefined($scope.form)) {
+      $log.error('Form "' + $scope.formName + '" is not registered.');
+    }
+  }])
+
+  .directive('dgForm', function () {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -302,30 +316,10 @@ angular.module('dyngo.form', [])
         lang: '@dgLang',
         data: '=ngModel'
       },
-      template: '<div dg-container="form.structure" ng-model="data"></div>',
-      link: function (scope) {
-        scope.form = dyngo.getForm(scope.formName);
-        if (angular.isUndefined(scope.form) || angular.isUndefined(scope.form.structure)) {
-          return;
-        }
-        var structure = scope.form.structure;
-
-        var assignTranslations = function (structure, translations) {
-          angular.forEach(structure.components, function (component) {
-              component.translations = translations;
-              if (angular.isDefined(component.components)) {
-                assignTranslations(component, translations);
-              }
-            }
-          );
-        };
-
-        if (angular.isDefined(structure.translations)) {
-          assignTranslations(structure, structure.translations[scope.lang]);
-        }
-      }
+      controller: 'FormCtrl',
+      template: '<div dg-container="form.structure" ng-model="data" ng-if="form"></div>'
     };
-  }]);
+  });
 
 angular.module('dyngo.functions', [])
 
@@ -370,6 +364,30 @@ angular.module('dyngo.functions', [])
     };
   });
 
+
+angular.module('dyngo.translator', [])
+
+  .value('dgDictionary', {})
+
+  .service('dgTranslator', ["dgDictionary", function (dgDictionary) {
+
+    this.registerDictionary = function (formName, dictionary) {
+      dgDictionary[formName] = dictionary || {};
+    };
+
+    this.translate = function (formName, key, lang) {
+      var translatedValue;
+      var dictionary = dgDictionary[formName];
+      if (angular.isDefined(dictionary) && angular.isDefined(dictionary[lang])) {
+        translatedValue = dictionary[lang][key];
+      }
+      if (angular.isUndefined(translatedValue)) {
+        translatedValue = key;
+      }
+      return translatedValue;
+    };
+
+  }]);
 
 (function(module) {
 try {
@@ -554,7 +572,6 @@ module.run(['$templateCache', function($templateCache) {
     '  <div class="col-sm-4" ng-switch on="description !== undefined">\n' +
     '\n' +
     '    <div class="input-group" ng-switch-when="true">\n' +
-    '\n' +
     '      <select id="{{id}}" name="{{id}}" class="form-control"\n' +
     '              ng-options="option.code as option.value for option in options"\n' +
     '              ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">\n' +

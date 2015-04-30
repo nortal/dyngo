@@ -15,33 +15,17 @@
 angular.module('dyngo.components.provider', [])
   .provider('componentProvider', function () {
     this.components = {};
-    var _$http;
-    var _$templateCache;
 
-    var loadTemplate = function (component, $http, $templateCache) {
-      if (component.template == null) {
-        $http.get(component.templateUrl, {
-          cache: $templateCache
-        }).success(function (template) {
-          component.template = template;
-        });
+    this.registerComponent = function (type, component) {
+      if (angular.isUndefined(component) || angular.isUndefined(type)) {
+        return;
+      }
+      if (angular.isUndefined(this.components[type])) {
+        this.components[type] = component;
       }
     };
-    this.registerComponent = function (name, component) {
-      if (component == null) {
-        component = {};
-      }
-      if (this.components[name] == null) {
-        this.components[name] = component;
-        loadTemplate(component, _$http, _$templateCache);
-      }
-    };
-    this.$get = function ($http, $templateCache) {
-      _$http = $http;
-      _$templateCache = $templateCache;
-      angular.forEach(this.components, function (component) {
-        loadTemplate(component, $http, $templateCache);
-      });
+
+    this.$get = function () {
       return {
         components: this.components,
         registerComponent: this.registerComponent

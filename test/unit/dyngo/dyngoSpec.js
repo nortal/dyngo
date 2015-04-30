@@ -18,7 +18,7 @@ describe('', function() {
   });
 
   it('should load config module', function() {
-    expect(hasModule('dyngo.core')).to.be.ok;
+    expect(hasModule('dyngo.component')).to.be.ok;
     //expect(hasModule('dyngo.core')).to.be.ok;
     //expect(hasModule('dyngo.components')).to.be.ok;
   });

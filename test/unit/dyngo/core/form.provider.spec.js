@@ -11,9 +11,13 @@ describe('dyngo form provider', function () {
     expect(Object.keys(dyngo.forms).length).to.equal(0);
   });
 
+  it('should return undefined for non-existing form', function () {
+    expect(dyngo.forms['sampleForm']).to.be.undefined;
+  });
+
   it('should register form', function () {
     expect(dyngo.forms['sampleForm']).to.be.undefined;
-    var form = {"components": [], "translations": {}};
+    var form = {components: [], translations: {}};
     dyngo.registerForm('sampleForm', form);
 
     expect(dyngo.forms['sampleForm']).not.to.be.undefined;
@@ -21,7 +25,7 @@ describe('dyngo form provider', function () {
 
   it('should return registered form', function () {
     expect(dyngo.forms['sampleForm']).to.be.undefined;
-    var form = {"components": [], "translations": {}};
+    var form = {components: [], translations: {}};
     var options = {};
     dyngo.registerForm('sampleForm', form, options);
 
@@ -30,6 +34,17 @@ describe('dyngo form provider', function () {
     expect(returnedForm.name).not.to.be.undefined;
     expect(returnedForm.options).not.to.be.undefined;
     expect(returnedForm.structure).to.equal(form);
+  });
+
+  it('should not register empty form', function () {
+    expect(dyngo.forms['sampleForm']).to.be.undefined;
+    dyngo.registerForm('sampleForm', undefined);
+    expect(dyngo.forms['sampleForm']).to.be.undefined;
+  });
+
+  it('should not register form without name', function () {
+    dyngo.registerForm(undefined, {});
+    expect(Object.keys(dyngo.forms).length).to.equal(0);
   });
 
 });
