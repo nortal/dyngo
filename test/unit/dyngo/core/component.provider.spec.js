@@ -1,7 +1,7 @@
 describe('dyngo component provider', function () {
   var componentProvider;
 
-  beforeEach(module('dyngo.components.provider'));
+  beforeEach(module('dyngo.component.provider'));
 
   beforeEach(inject(function (_componentProvider_) {
     componentProvider = _componentProvider_;

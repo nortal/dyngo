@@ -35,10 +35,10 @@ var sourceFiles = [
 ];
 
 gulp.task('html2js', function () {
-  return gulp.src('src/components/templates/*.html')
+  return gulp.src('src/component/templates/*.html')
     .pipe(plumber())
     .pipe(ngHtml2Js({
-      moduleName: 'dyngo.components',
+      moduleName: 'dyngo.component.templates',
       prefix: 'templates/'
     }))
     .pipe(concat('templates.js'))

@@ -12,119 +12,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.components', 'dyngo.functions', 'dyngo.translator']);
+angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.component.provider', 'dyngo.component.defaults', 'dyngo.functions', 'dyngo.translator']);
 
-/*   Copyright 2015 Nortal AS
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-angular.module('dyngo.components.default', ['dyngo.components.provider'])
-  .run(["componentProvider", function (componentProvider) {
-    componentProvider.registerComponent('textInput', {
-      group: 'Default',
-      label: 'Text Input',
-      templateUrl: 'templates/text.html'
-    });
-    componentProvider.registerComponent('numberInput', {
-      group: 'Default',
-      label: 'Text Input',
-      templateUrl: 'templates/number.html'
-    });
-    componentProvider.registerComponent('checkbox', {
-      group: 'Default',
-      label: 'Checkbox',
-      templateUrl: 'templates/checkbox.html'
-    });
-    componentProvider.registerComponent('radio', {
-      group: 'Default',
-      label: 'Radio',
-      templateUrl: 'templates/radio.html'
-    });
-    componentProvider.registerComponent('select', {
-      group: 'Default',
-      label: 'Select',
-      templateUrl: 'templates/select.html'
-    });
-    componentProvider.registerComponent('header', {
-      group: 'static-controls',
-      templateUrl: 'templates/header.html'
-    });
-    componentProvider.registerComponent('panel', {
-      group: 'containers',
-      templateUrl: 'templates/panel.html'
-    });
-    componentProvider.registerComponent('staticText', {
-      group: 'static-controls',
-      templateUrl: 'templates/static-text.html'
-    });
-    componentProvider.registerComponent('hidden', {
-      group: 'Default',
-      templateUrl: 'templates/hidden.html'
-    });
-  }]);
-
-/*   Copyright 2015 Nortal AS
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-angular.module('dyngo.components.provider', [])
-  .provider('componentProvider', function () {
-    this.components = {};
-
-    this.registerComponent = function (type, component) {
-      if (angular.isUndefined(component) || angular.isUndefined(type)) {
-        return;
-      }
-      if (angular.isUndefined(this.components[type])) {
-        this.components[type] = component;
-      }
-    };
-
-    this.$get = function () {
-      return {
-        components: this.components,
-        registerComponent: this.registerComponent
-      };
-    };
-  });
-
-/*   Copyright 2015 Nortal AS
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- */
-angular.module('dyngo.components', ['dyngo.components.provider', 'dyngo.components.default']);
-
-angular.module('dyngo.component', ['checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages', 'dyngo.translator'])
+angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider', 'dyngo.component.templates',
+  'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
   .controller('ComponentCtrl', ["$scope", "dgTranslator", function ($scope, dgTranslator) {
     $scope.evaluateConstraint = function (name) {
@@ -141,6 +32,8 @@ angular.module('dyngo.component', ['checklist-model', 'mgcrea.ngStrap.popover', 
       }
       return null;
     };
+
+    console.log('ctrl:', $scope.$id);
 
     $scope.min = function () {
       return $scope.evaluateConstraint('min');
@@ -180,6 +73,7 @@ angular.module('dyngo.component', ['checklist-model', 'mgcrea.ngStrap.popover', 
       },
       controller: 'ComponentCtrl',
       link: function (scope, element, attrs) {
+        console.log('dir:', scope.$id);
         var component = scope.component = $parse(attrs.dgComponent)(scope);
         scope.$component = componentProvider.components[component.type];
         if (_.isUndefined(scope.$component)) {
@@ -230,6 +124,103 @@ angular.module('dyngo.component', ['checklist-model', 'mgcrea.ngStrap.popover', 
       }
     };
   }]);
+
+
+/*   Copyright 2015 Nortal AS
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
+  .run(["componentProvider", function (componentProvider) {
+    componentProvider.registerComponent('textInput', {
+      group: 'Default',
+      label: 'Text Input',
+      templateUrl: 'templates/text.html'
+    });
+    componentProvider.registerComponent('numberInput', {
+      group: 'Default',
+      label: 'Text Input',
+      templateUrl: 'templates/number.html'
+    });
+    componentProvider.registerComponent('checkbox', {
+      group: 'Default',
+      label: 'Checkbox',
+      templateUrl: 'templates/checkbox.html'
+    });
+    componentProvider.registerComponent('radio', {
+      group: 'Default',
+      label: 'Radio',
+      templateUrl: 'templates/radio.html'
+    });
+    componentProvider.registerComponent('select', {
+      group: 'Default',
+      label: 'Select',
+      templateUrl: 'templates/select.html'
+    });
+    componentProvider.registerComponent('header', {
+      group: 'static-controls',
+      templateUrl: 'templates/header.html'
+    });
+    componentProvider.registerComponent('panel', {
+      group: 'containers',
+      templateUrl: 'templates/panel.html'
+    });
+    componentProvider.registerComponent('staticText', {
+      group: 'static-controls',
+      templateUrl: 'templates/static-text.html'
+    });
+    componentProvider.registerComponent('hidden', {
+      group: 'Default',
+      templateUrl: 'templates/hidden.html'
+    });
+  }]);
+
+angular.module('dyngo.component');
+
+/*   Copyright 2015 Nortal AS
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+angular.module('dyngo.component.provider', [])
+  .provider('componentProvider', function () {
+    this.components = {};
+
+    this.registerComponent = function (type, component) {
+      if (angular.isUndefined(component) || angular.isUndefined(type)) {
+        return;
+      }
+      if (angular.isUndefined(this.components[type])) {
+        this.components[type] = component;
+      }
+    };
+
+    this.$get = function () {
+      return {
+        components: this.components,
+        registerComponent: this.registerComponent
+      };
+    };
+  });
 
 angular.module('dyngo.container', [])
 
@@ -391,9 +382,9 @@ angular.module('dyngo.translator', [])
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/checkbox.html',
@@ -424,9 +415,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/header.html',
@@ -438,9 +429,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/hidden.html',
@@ -458,9 +449,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/number.html',
@@ -506,9 +497,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/panel.html',
@@ -526,9 +517,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/radio.html',
@@ -558,9 +549,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/select.html',
@@ -610,9 +601,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/static-text.html',
@@ -625,9 +616,9 @@ module.run(['$templateCache', function($templateCache) {
 
 (function(module) {
 try {
-  module = angular.module('dyngo.components');
+  module = angular.module('dyngo.component.templates');
 } catch (e) {
-  module = angular.module('dyngo.components', []);
+  module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/text.html',

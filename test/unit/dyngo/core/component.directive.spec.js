@@ -2,13 +2,12 @@ describe('dgComponent directive', function () {
   var $scope, $compile, componentProvider, $templateCache;
 
   beforeEach(module('dyngo.component'));
-  beforeEach(module('dyngo.components'));
   beforeEach(module('dyngo.functions'));
   beforeEach(module('dyngo.translator'));
-  beforeEach(module('component-templates'));
+  beforeEach(module('dyngo.component.templates'));
 
   beforeEach(inject(function ($rootScope, _$compile_, _componentProvider_, _$templateCache_) {
-    $scope = $rootScope.$new();
+    $scope = $rootScope.$new(); // dgComponent can't be a root scope - it needs a parent to ask data from
     $compile = _$compile_;
     componentProvider = _componentProvider_;
     $templateCache = _$templateCache_;
@@ -91,13 +90,25 @@ describe('dgComponent directive', function () {
     expect(componentScope.constraints).to.deep.equal({min: 5, max: 10});
   });
 
+  it('should have at least setData() function defined in scope', function () {
+    componentProvider.registerComponent('inputComponent', {template: '< type="text">'});
+    $scope.component = {
+      type: 'inputComponent'
+    };
+    var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect(element.isolateScope().setData).not.to.be.undefined;
+  });
+
   it('should execute functions when form data changes', function () {
+    componentProvider.registerComponent('inputComponent', {template: '< type="text">'});
     $scope.component = {
       id: 'calculatedElement',
-      type: 'textInput',
+      type: 'inputComponent',
       functions: ['setData(foo * 2 + 10)']
     };
     $scope.data = {};
+    $scope.foo = 'moo';
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
     $scope.$digest();
     $scope.$apply(function () {

@@ -87,8 +87,8 @@ module.exports = function(config) {
     singleRun: false,
 
     ngHtml2JsPreprocessor: {
-      stripPrefix: 'src/components/',
-      moduleName: 'component-templates'
+      stripPrefix: 'src/component/',
+      moduleName: 'dyngo.component.templates'
     }
 
   });
