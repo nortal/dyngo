@@ -12,7 +12,7 @@ angular.module('dyngo.component')
       link: function (scope, element, attrs) {
         var component = scope.component = $parse(attrs.dgComponent)(scope);
         scope.$component = componentProvider.components[component.type];
-        if (_.isUndefined(scope.$component)) {
+        if (angular.isUndefined(scope.$component)) {
           var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
           $log.error('Unknown component type:', component.type);
           element.append($compile(unknownTypeTemplate)(scope));

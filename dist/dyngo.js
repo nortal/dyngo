@@ -33,8 +33,6 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       return null;
     };
 
-    console.log('ctrl:', $scope.$id);
-
     $scope.min = function () {
       return $scope.evaluateConstraint('min');
     };
@@ -44,7 +42,7 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
     };
 
     $scope.setData = function (value) {
-      if (angular.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+      if (angular.isUndefined(value) || value === null || (angular.isNumber(value) && isNaN(value))) {
         $scope.data[$scope.id] = undefined;
       } else if (!angular.equals($scope.data[$scope.id], value)) {
         $scope.data[$scope.id] = value;
@@ -61,70 +59,7 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       });
     };
 
-  }])
-
-  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", "$http", "$templateCache", function ($compile, $parse, componentProvider, $functions, $log, $http, $templateCache) {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      scope: {
-        data: '=ngModel',
-        component: '=dgComponent'
-      },
-      controller: 'ComponentCtrl',
-      link: function (scope, element, attrs) {
-        console.log('dir:', scope.$id);
-        var component = scope.component = $parse(attrs.dgComponent)(scope);
-        scope.$component = componentProvider.components[component.type];
-        if (_.isUndefined(scope.$component)) {
-          var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
-          $log.error('Unknown component type:', component.type);
-          element.append($compile(unknownTypeTemplate)(scope));
-          return;
-        }
-
-        function initScopeValues() {
-          scope.formName = scope.$parent.formName;
-          scope.formModel = scope.$parent.formModel;
-          scope.lang = scope.$parent.lang;
-          scope.id = component.id;
-          scope.label = scope.localize(component.label);
-          scope.description = component.description;
-          scope.placeholder = component.placeholder;
-          scope.options = component.options || scope.$component.options || [];
-          // TODO: replace with angular.merge after upgrade to angular 1.4+
-          scope.constraints = angular.extend({}, scope.$component.constraints, component.constraints);
-        }
-
-        function attachComponentHtml() {
-          var children = $compile(scope.$component.template)(scope);
-          element.append(children);
-        }
-
-        initScopeValues();
-
-        if (angular.isUndefined(scope.$component.template)) {
-          $http.get(scope.$component.templateUrl, {
-            cache: $templateCache
-          }).success(function (template) {
-            scope.$component.template = template;
-            attachComponentHtml();
-          });
-        } else {
-          attachComponentHtml();
-        }
-
-
-        if (angular.isDefined(component.functions)) {
-          scope.$watch('data', function () {
-            $functions.executeFunctions(scope, scope.component, scope.data);
-          }, true);
-        }
-
-      }
-    };
   }]);
-
 
 /*   Copyright 2015 Nortal AS
  *
@@ -185,7 +120,67 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
     });
   }]);
 
-angular.module('dyngo.component');
+angular.module('dyngo.component')
+
+  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "$functions", "$log", "$http", "$templateCache", function ($compile, $parse, componentProvider, $functions, $log, $http, $templateCache) {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        data: '=ngModel',
+        component: '=dgComponent'
+      },
+      controller: 'ComponentCtrl',
+      link: function (scope, element, attrs) {
+        var component = scope.component = $parse(attrs.dgComponent)(scope);
+        scope.$component = componentProvider.components[component.type];
+        if (angular.isUndefined(scope.$component)) {
+          var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
+          $log.error('Unknown component type:', component.type);
+          element.append($compile(unknownTypeTemplate)(scope));
+          return;
+        }
+
+        function initScopeValues() {
+          scope.formName = scope.$parent.formName;
+          scope.formModel = scope.$parent.formModel;
+          scope.lang = scope.$parent.lang;
+          scope.id = component.id;
+          scope.label = scope.localize(component.label);
+          scope.description = component.description;
+          scope.placeholder = component.placeholder;
+          scope.options = component.options || scope.$component.options || [];
+          // TODO: replace with angular.merge after upgrade to angular 1.4+
+          scope.constraints = angular.extend({}, scope.$component.constraints, component.constraints);
+        }
+
+        function attachComponentHtml() {
+          var children = $compile(scope.$component.template)(scope);
+          element.append(children);
+        }
+
+        initScopeValues();
+
+        if (angular.isUndefined(scope.$component.template)) {
+          $http.get(scope.$component.templateUrl, {
+            cache: $templateCache
+          }).success(function (template) {
+            scope.$component.template = template;
+            attachComponentHtml();
+          });
+        } else {
+          attachComponentHtml();
+        }
+
+        if (angular.isDefined(component.functions)) {
+          scope.$watch('data', function () {
+            $functions.executeFunctions(scope, scope.component, scope.data);
+          }, true);
+        }
+
+      }
+    };
+  }]);
 
 /*   Copyright 2015 Nortal AS
  *

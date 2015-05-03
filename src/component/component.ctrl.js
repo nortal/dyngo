@@ -26,7 +26,7 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
     };
 
     $scope.setData = function (value) {
-      if (angular.isUndefined(value) || _.isNull(value) || _.isNaN(value)) {
+      if (angular.isUndefined(value) || value === null || (angular.isNumber(value) && isNaN(value))) {
         $scope.data[$scope.id] = undefined;
       } else if (!angular.equals($scope.data[$scope.id], value)) {
         $scope.data[$scope.id] = value;
