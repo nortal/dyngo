@@ -1,6 +1,6 @@
 angular.module('dyngo.component')
 
-  .directive('dgComponent', function ($compile, $parse, componentProvider, $functions, $log, $http, $templateCache) {
+  .directive('dgComponent', function ($compile, $parse, componentProvider, dgFunctionProvider, $log, $http, $templateCache) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -52,7 +52,7 @@ angular.module('dyngo.component')
 
         if (angular.isDefined(component.functions)) {
           scope.$watch('data', function () {
-            $functions.executeFunctions(scope, scope.component, scope.data);
+            dgFunctionProvider.executeFunctions(scope, scope.component, scope.data);
           }, true);
         }
 

@@ -1,6 +1,6 @@
 angular.module('dyngo.functions', [])
 
-  .provider('$functions', function () {
+  .provider('dgFunctionProvider', function () {
     var instance = {functions: []};
 
     instance.registerFunction = function (name, func) {

@@ -34,7 +34,6 @@ module.exports = function(config) {
       'bower/angular-strap/dist/modules/popover.js',
       'bower/angular-strap/dist/modules/tooltip.js',
       'bower/angular-strap/dist/modules/dimensions.js',
-      'bower/underscore/underscore.js',
       'src/**/*.js',
       'test/unit/**/*.js',
       '**/*.html'
