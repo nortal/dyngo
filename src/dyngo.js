@@ -12,4 +12,5 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.component.provider', 'dyngo.component.defaults', 'dyngo.functions', 'dyngo.translator']);
+angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.component.provider',
+  'dyngo.component.defaults', 'dyngo.functions', 'dyngo.translator']);
