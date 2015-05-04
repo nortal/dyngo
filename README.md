@@ -1,6 +1,6 @@
 # dyngo [![Build Status](https://travis-ci.org/nortal/dyngo.svg?branch=master)](https://travis-ci.org/nortal/dyngo)
 
-Provides a functionality for building forms in AngularJS from structure described in JSON.
+Provides a functionality for building forms in AngularJS according to structure and rules described in JSON format.
 
 ## License
 Apache License, Version 2.0
@@ -28,9 +28,30 @@ Apache License, Version 2.0
   * Navigate to [http://localhost:9001](http://localhost:9001) in your browser
   
 ## Installation
-The project is published in bower registry.
-
+1. Attach dyngo to your project. As Dyngo is published in bower registry, then the easiest way is to use bower:
 `bower install --save dyngo`
+2. Add dyngo as a dependency to your Angular module:
+```js
+angular.module('myApp', ['dyngo'])
+```
+3. Obtain a form definition object and the initial data (either load it using $http/$resource, compose it manually in runtime or hard-code it in the source - it's up to you):
+```js
+var formStructure = ...;
+$scope.data = ... ;
+```
+4. Register your form using *dyngo* service:
+```js
+myApp.controller('MyFormController', function ($scope, dyngo) {
+  var formStructure = {};
+  $scope.data = {};
+  dyngo.registerForm('sampleForm', formStructure);
+```
+5. Append this code to your HTML:
+```html
+<form class="form-horizontal" name="sampleForm">
+  <div dg-form="sampleForm" dg-lang="en" ng-model="data"></div>
+</form>
+```
 
 ## Features (long version):
 ### Structure of form definition JSON
