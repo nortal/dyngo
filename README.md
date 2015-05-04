@@ -10,7 +10,8 @@ Apache License, Version 2.0
 * Possibility to add custom input types
 * Defining constraints
   * Supported constraints: min, max, required, enabled, visible
-  * Constraints evaluated in runtime and they may depend on form data
+  * Constraints are evaluated in runtime and they may depend on form data
+  * Ability to define custom constraints
 * Functions support
 * Translations
 
@@ -34,7 +35,7 @@ Apache License, Version 2.0
 ```js
 angular.module('myApp', ['dyngo'])
 ```
-3. Obtain a form definition object and the initial data (either load it using $http/$resource, compose it manually in runtime or hard-code it in the source - it's up to you):
+3. Obtain form definition object and initial data (either load it using $http/$resource, compose it manually in runtime or hard-code it in the source - it's up to you):
 ```js
 var formStructure = {components: [{id: "firstName", type: "textInput"}], translations: {}};
 $scope.data = {firstName: "John Doe"};
@@ -63,7 +64,7 @@ Form definition object consists of two parts: array of *components* and key-obje
   "translations": {}
 }
 ```
-This is a valid form structure but, no surprise, it will render an empty form.
+This is a valid form structure but, no surprise, it will render an empty form. So, we have to add component definition objects to *components* array.
 #### Defining components
 Component definition object is straightforward and a minimal definition consists of *id* and *type* attributes only:
 ```json
@@ -72,11 +73,11 @@ Component definition object is straightforward and a minimal definition consists
   "type": "textInput"
 }
 ```
-Full table of supported attributes:
+Table showing all supported attributes (note, that *options* and *placeholder* attributes do not apply to all component types):
 
 | Attribute     | Type       | Description   | Required | Sample value                        |
 | ------------- | ---------- | ------------- | -------- | -------------------------------
-| id            | String     | Unique component ID  | yes| `"firstName"`
+| id            | String     | Unique component ID  | yes | `"firstName"`
 | type          | String     | Component type  | yes | `"textInput"`
 | label         | String     | Label for component | no | `"Fist name"`
 | placeholder   | String     | Placeholder text | no | `"Enter first name"`
@@ -85,8 +86,29 @@ Full table of supported attributes:
 | constraints   | Object     | Key-value pairs describing constraints  | no | ` {"max": 15, "required": true}`
 | functions     | String[]   | List of expressions to be evaluated on data change  | no | `['setData(round(annualSalary / 12.0))']`
 
-### Supported input types
-### Custom input types
+### Supported component types
+* Text input
+* Textarea
+* Number input
+* Checkbox
+* Radio
+* Select
+* Header
+* Static text
+* Hidden input
+* Panel
+
+### Custom components
+One can easily add custom components by injecting *dyngoComponentProvider* and calling its *registerComponent(type, componentDefinition)* method, where type is string and componentDefintion is an object describing custom component. Below is a table of supported properties for component definition object:
+
+| Property     | Type       | Description   | Required | Sample value                        |
+| ------------- | ---------- | ------------- | -------- | ------------------------------- |
+| group | String | Specifies a group where this component belongs to | no | `'Text inputs'` or `'Containers'`
+| label | String | Specifies human-readable name for this component type | no | `'Number input'` or `'Static text'`
+| templateUrl | String | Path to HTML file containing template for rendering component | yes, if template is undefined | `'html/templates/myCustomComponent.html'`
+| template | String | Specifies HTML template used for rendering component | yes, if templateUrl is undfined | `'<input type="text" ng-model="data[id]>"'`
+
+
 ### Constraints
 ### Functions
 ### Translations
@@ -104,10 +126,3 @@ Translations are defined at the root of form definition object as a key-object p
 }
 ```
 Translated values can contain expressions (*{{expression}}*) that are evaluated in runtime.
-
-* Supports most common HTML input types
-* Possibility to add custom input types
-* Defining constraints
-  * Supported constraints: min, max, required, enabled, visible
-  * Constraints evaluated in runtime and they may depend on form data
-* Functions support
