@@ -36,14 +36,15 @@ angular.module('myApp', ['dyngo'])
 ```
 3. Obtain a form definition object and the initial data (either load it using $http/$resource, compose it manually in runtime or hard-code it in the source - it's up to you):
 ```js
-var formStructure = ...;
-$scope.data = ... ;
+var formStructure = {components: [{id: "firstName", type: "textInput"}], translations: {}};
+$scope.data = {firstName: "John Doe"};
 ```
 4. Register your form using *dyngo* service:
 ```js
 myApp.controller('MyFormController', function ($scope, dyngo) {
-  var formStructure = {};
-  $scope.data = {};
+  var formStructure = {components: [{id: "firstName", type: "textInput"}], translations: {}};
+  $scope.data = {firstName: "John Doe"};
+  
   dyngo.registerForm('sampleForm', formStructure);
 ```
 5. Append this code to your HTML:
@@ -55,7 +56,7 @@ myApp.controller('MyFormController', function ($scope, dyngo) {
 
 ## Features (long version):
 ### Structure of form definition JSON
-Form definition object consists of two parts: array of *components* and key-object map of *translations*:
+Form definition object consists of two parts: array of *components* and key-object pairs of *translations*:
 ```json
 {
   "components": [],
@@ -88,6 +89,22 @@ Full table of supported attributes:
 ### Custom input types
 ### Constraints
 ### Functions
+### Translations
+Translations are defined at the root of form definition object as a key-object pair for each supported language. Key is language code and object is a map of translation keys and translated values:
+```json
+"translations": {
+    "en": {
+      "error.required_field": "You did not enter a field.",
+      "error.value_is_gt_max": "Value should not be greater than {{max()}}.",
+    },
+    "et": {
+      "error.required_field": "Täitke väli.",
+      "error.value_is_gt_max": "Välja väärtus peab olema väiksem kui {{max()}}",
+    }
+}
+```
+Translated values can contain expressions (*{{expression}}*) that are evaluated in runtime.
+
 * Supports most common HTML input types
 * Possibility to add custom input types
 * Defining constraints
