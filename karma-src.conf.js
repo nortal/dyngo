@@ -31,6 +31,7 @@ module.exports = function(config) {
       'bower/angular-messages/angular-messages.js',
       'bower/angular-mocks/angular-mocks.js',
       'bower/checklist-model/checklist-model.js',
+      'bower/angular-strap/dist/angular-strap.compat.js',
       'bower/angular-strap/dist/modules/popover.js',
       'bower/angular-strap/dist/modules/tooltip.js',
       'bower/angular-strap/dist/modules/dimensions.js',

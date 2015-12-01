@@ -92,7 +92,7 @@ describe('dyngo', function () {
       if (idx === 0) {
         $(options[idx]).attr('value').should.equal('');
       } else {
-        $(options[idx]).attr('value').should.equal((idx - 1).toString());
+        $(options[idx]).attr('value').should.equal('string:' + expectedOptions[idx - 1].code);
         $(options[idx]).attr('label').should.equal(expectedOptions[idx - 1].value);
       }
     }

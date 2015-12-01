@@ -2,7 +2,7 @@
 .~lock.*
 .buildpath
 .DS_Store
-.idea
+.idea/
 .project
 .settings
 
@@ -11,15 +11,21 @@ node_modules/
 npm-debug.log
 libpeerconnection.log
 
-# OS-specific
-.DS_Store
-
 # Bower components
-bower
+bower/
 
 # Temporary build files
-tmp
+tmp/
+
+#Coverage reports
+coverage/
 
 # Demo
-demo/app/bower_components
-demo/dist
+demo/bower_components/
+demo/node_modules/
+demo/coverage/
+demo/.sass-cache/
+demo/.idea/
+demo/.tmp/
+demo/dist/
+
