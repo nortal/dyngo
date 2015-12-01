@@ -4,6 +4,13 @@ angular.module('dyngo.container', [])
     $scope.visible = function (component) {
       var visible = true;
 
+      var unsetData = function (component) {
+        delete $scope.data[component.id];
+        angular.forEach(component.components, function (child) {
+          unsetData(child);
+        });
+      };
+
       var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
       if (visible && angular.isDefined(visibilityExpression)) {
         visible = $scope.$eval(visibilityExpression, $scope.data);
@@ -12,13 +19,6 @@ angular.module('dyngo.container', [])
         unsetData(component);
       }
       return visible;
-    };
-
-    var unsetData = function (component) {
-      delete $scope.data[component.id];
-      angular.forEach(component.components, function (child) {
-        unsetData(child);
-      });
     };
 
   })
