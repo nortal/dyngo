@@ -15,49 +15,6 @@
 angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.component.provider',
   'dyngo.component.defaults', 'dyngo.functions', 'dyngo.translator']);
 
-angular.module('dyngo.container', [])
-
-  .controller('ContainerCtrl', ["$scope", function ($scope) {
-    $scope.visible = function (component) {
-      var visible = true;
-
-      var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
-      if (visible && angular.isDefined(visibilityExpression)) {
-        visible = $scope.$eval(visibilityExpression, $scope.data);
-      }
-      if (!visible) {
-        unsetData(component);
-      }
-      return visible;
-    };
-
-    var unsetData = function (component) {
-      delete $scope.data[component.id];
-      angular.forEach(component.components, function (child) {
-        unsetData(child);
-      });
-    };
-
-  }])
-
-  .directive('dgContainer', function () {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      scope: {
-        container: '=dgContainer',
-        data: '=ngModel'
-      },
-      template: '<div ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
-      controller: 'ContainerCtrl',
-      link: function (scope) {
-        scope.formModel = scope.$parent.formModel;
-        scope.formName = scope.$parent.formName;
-        scope.lang = scope.$parent.lang;
-      }
-    };
-  });
-
 angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider', 'dyngo.component.templates',
   'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
@@ -120,7 +77,7 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
  *   limitations under the License.
  */
 angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
-  .run(["componentProvider", function (componentProvider) {
+  .run(["componentProvider", function(componentProvider) {
     componentProvider.registerComponent('textInput', {
       group: 'Default',
       label: 'Text Input',
@@ -150,10 +107,6 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
       group: 'static-controls',
       templateUrl: 'templates/header.html'
     });
-    componentProvider.registerComponent('panel', {
-      group: 'containers',
-      templateUrl: 'templates/panel.html'
-    });
     componentProvider.registerComponent('staticText', {
       group: 'static-controls',
       templateUrl: 'templates/static-text.html'
@@ -161,6 +114,11 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
     componentProvider.registerComponent('hidden', {
       group: 'Default',
       templateUrl: 'templates/hidden.html'
+    });
+
+    componentProvider.registerComponent('panel', {
+      group: 'containers',
+      templateUrl: 'templates/panel.html'
     });
   }]);
 
@@ -258,6 +216,49 @@ angular.module('dyngo.component.provider', [])
         components: this.components,
         registerComponent: this.registerComponent
       };
+    };
+  });
+
+angular.module('dyngo.container', [])
+
+  .controller('ContainerCtrl', ["$scope", function ($scope) {
+    $scope.visible = function (component) {
+      var visible = true;
+
+      var unsetData = function (component) {
+        delete $scope.data[component.id];
+        angular.forEach(component.components, function (child) {
+          unsetData(child);
+        });
+      };
+
+      var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
+      if (visible && angular.isDefined(visibilityExpression)) {
+        visible = $scope.$eval(visibilityExpression, $scope.data);
+      }
+      if (!visible) {
+        unsetData(component);
+      }
+      return visible;
+    };
+
+  }])
+
+  .directive('dgContainer', function () {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        container: '=dgContainer',
+        data: '=ngModel'
+      },
+      template: '<div ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
+      controller: 'ContainerCtrl',
+      link: function (scope) {
+        scope.formModel = scope.$parent.formModel;
+        scope.formName = scope.$parent.formName;
+        scope.lang = scope.$parent.lang;
+      }
     };
   });
 

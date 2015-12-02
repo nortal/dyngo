@@ -13,7 +13,7 @@
  *   limitations under the License.
  */
 angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
-  .run(function (componentProvider) {
+  .run(function(componentProvider) {
     componentProvider.registerComponent('textInput', {
       group: 'Default',
       label: 'Text Input',
@@ -43,10 +43,6 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
       group: 'static-controls',
       templateUrl: 'templates/header.html'
     });
-    componentProvider.registerComponent('panel', {
-      group: 'containers',
-      templateUrl: 'templates/panel.html'
-    });
     componentProvider.registerComponent('staticText', {
       group: 'static-controls',
       templateUrl: 'templates/static-text.html'
@@ -54,5 +50,10 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
     componentProvider.registerComponent('hidden', {
       group: 'Default',
       templateUrl: 'templates/hidden.html'
+    });
+
+    componentProvider.registerComponent('panel', {
+      group: 'containers',
+      templateUrl: 'templates/panel.html'
     });
   });

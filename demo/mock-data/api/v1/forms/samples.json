@@ -13,7 +13,10 @@
       "constraints": {
         "min": 5,
         "max": 15
-      }
+      },
+      "functions": [
+        "setData(replaceSpaces(simpleText, '_'))"
+      ]
     },
     {
       "id": "simpleTextUtf",
@@ -270,7 +273,14 @@
       "id": "hiddenInput",
       "type": "hidden",
       "label": "hidden_input.sample",
-      "functions": ["setData(positiveNumber * 2)"]
+      "functions": [
+        "setData(positiveNumber * 2)"
+      ]
+    },
+    {
+      "id": "timeInterval_1",
+      "type": "timeInterval",
+      "label": "Time interval"
     },
     {
       "id": "unknownInput",
