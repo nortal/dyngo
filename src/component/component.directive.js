@@ -1,6 +1,6 @@
 angular.module('dyngo.component')
 
-  .directive('dgComponent', function ($compile, $parse, componentProvider, dgFunctionProvider, $log, $http, $templateCache) {
+  .directive('dgComponent', function ($compile, $parse, dgComponentProvider, dgFunctionProvider, $log, $http, $templateCache) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -11,7 +11,7 @@ angular.module('dyngo.component')
       controller: 'ComponentCtrl',
       link: function (scope, element, attrs) {
         var component = scope.component = $parse(attrs.dgComponent)(scope);
-        scope.$component = componentProvider.components[component.type];
+        scope.$component = dgComponentProvider.components[component.type];
         if (angular.isUndefined(scope.$component)) {
           var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
           $log.error('Unknown component type:', component.type);

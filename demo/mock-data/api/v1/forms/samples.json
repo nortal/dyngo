@@ -13,10 +13,7 @@
       "constraints": {
         "min": 5,
         "max": 15
-      },
-      "functions": [
-        "setData(replaceSpaces(simpleText, '_'))"
-      ]
+      }
     },
     {
       "id": "simpleTextUtf",
@@ -81,15 +78,6 @@
         "min": -999,
         "max": -1
       }
-    },
-    {
-      "id": "sum",
-      "type": "textInput",
-      "label": "Sum of positive & negative",
-      "functions": [
-        "setData(!positiveNumber ? undefined : positiveNumber >= 1 && positiveNumber < 58 ? '1TA - ÜHE' : positiveNumber < 69 ? '1TA - MITME' : positiveNumber < 112 ? 'Mittest.' : undefined)",
-        "setData(positiveNumber + negativeNumber)"
-      ]
     },
     {
       "id": "numberInputRequired",
@@ -265,27 +253,88 @@
       "label": "static_text.sample"
     },
     {
+      "id": "functionComponents",
+      "type": "header",
+      "label": "header.function_components"
+    },
+    {
+      "id": "textReplace",
+      "type": "textInput",
+      "label": "Replacing spaces",
+      "placeholder": "Spaces between words will be replaced with underscores",
+      "functions": [
+        "setData(replaceSpaces(textReplace, '_'))"
+      ]
+    },
+    {
+      "id": "sumOfPositiveAndNegative",
+      "type": "textInput",
+      "label": "Sum of positive & negative",
+      "placeholder": "Sum of 'Positive number' and 'Negative number' will appear here",
+      "functions": [
+        "setData(positiveNumber + negativeNumber)"
+      ]
+    },
+    {
       "id": "hiddenComponents",
       "type": "header",
       "label": "header.hidden_components"
+    },
+    {
+      "id": "hiddenInto",
+      "type": "staticText",
+      "label": "static_text.hidden_intro"
     },
     {
       "id": "hiddenInput",
       "type": "hidden",
       "label": "hidden_input.sample",
       "functions": [
-        "setData(positiveNumber * 2)"
+        "setData(positiveNumber * 2.33)"
       ]
     },
     {
-      "id": "timeInterval_1",
-      "type": "timeInterval",
-      "label": "Time interval"
+      "id": "errorsAndWarnings",
+      "type": "header",
+      "label": "header.errors_warnings"
     },
     {
       "id": "unknownInput",
       "type": "nonExistingType",
       "label": "I'm unknown"
+    },
+    {
+      "id": "customComponents",
+      "type": "header",
+      "label": "header.custom_components"
+    },
+    {
+      "id": "timeInterval_1",
+      "type": "timeInterval",
+      "label": "Time interval",
+      "constraints": {
+        "required": true
+      },
+      "options": {
+        "units": [
+          {
+            "code": "seconds",
+            "value": "unit.seconds"
+          },
+          {
+            "code": "minutes",
+            "value": "unit.minutes"
+          },
+          {
+            "code": "hours",
+            "value": "unit.hours"
+          },
+          {
+            "code": "days",
+            "value": "unit.days"
+          }
+        ]
+      }
     }
   ],
   "translations": {
@@ -297,7 +346,15 @@
       "header.text_inputs": "Text inputs",
       "header.static_components": "Static components",
       "header.hidden_components": "Hidden components",
-      "static_text.sample": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      "header.custom_components": "Custom components",
+      "header.errors_warnings": "Errors and warnings",
+      "header.function_components": "Components with functions",
+      "static_text.sample": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+      "static_text.hidden_intro": "In this section there is one hidden input with calculated value using simple formula: value of 'Positive number' is multiplied by 2.33. You can see this value in 'data' section below.",
+      "unit.seconds": "seconds",
+      "unit.minutes": "minutes",
+      "unit.hours": "hours",
+      "unit.days": "days"
     },
     "et": {
       "error.required_field": "Täitke väli.",

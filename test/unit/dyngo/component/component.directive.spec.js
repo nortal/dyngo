@@ -1,15 +1,15 @@
 describe('dgComponent directive', function () {
-  var $scope, $compile, componentProvider, $templateCache;
+  var $scope, $compile, dgComponentProvider, $templateCache;
 
   beforeEach(module('dyngo.component'));
   beforeEach(module('dyngo.functions'));
   beforeEach(module('dyngo.translator'));
   beforeEach(module('dyngo.component.templates'));
 
-  beforeEach(inject(function ($rootScope, _$compile_, _componentProvider_, _$templateCache_) {
+  beforeEach(inject(function ($rootScope, _$compile_, _dgComponentProvider_, _$templateCache_) {
     $scope = $rootScope.$new(); // dgComponent can't be a root scope - it needs a parent to ask data from
     $compile = _$compile_;
-    componentProvider = _componentProvider_;
+    dgComponentProvider = _dgComponentProvider_;
     $templateCache = _$templateCache_;
   }));
 
@@ -35,7 +35,7 @@ describe('dgComponent directive', function () {
 
   it('should render correct component from static template', function () {
     $scope.component = {type: 'coolHeader'};
-    componentProvider.registerComponent('coolHeader', {template: '<h1>I am a cool header!</h1>'});
+    dgComponentProvider.registerComponent('coolHeader', {template: '<h1>I am a cool header!</h1>'});
     $scope.data = {};
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
     $scope.$digest();
@@ -48,7 +48,7 @@ describe('dgComponent directive', function () {
 
   it('should render correct component from templateUrl', function () {
     $scope.component = {type: 'coolHeader'};
-    componentProvider.registerComponent('coolHeader', {templateUrl: 'templates/coolHeader.html'});
+    dgComponentProvider.registerComponent('coolHeader', {templateUrl: 'templates/coolHeader.html'});
     $templateCache.put('templates/coolHeader.html', '<h1>I am a cool header again!</h1>');
     $scope.data = {};
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
@@ -67,7 +67,7 @@ describe('dgComponent directive', function () {
       options: {a: 'a', b: 'b', c: 'c'},
       constraints: {min: 5}
     };
-    componentProvider.registerComponent('inputElement', {
+    dgComponentProvider.registerComponent('inputElement', {
       template: '<h1>I am a cool header!</h1>',
       options: {a: 'a', b: 'b'},
       constraints: {min: 0, max: 10}
@@ -91,7 +91,7 @@ describe('dgComponent directive', function () {
   });
 
   it('should have at least setData() function defined in scope', function () {
-    componentProvider.registerComponent('inputComponent', {template: '< type="text">'});
+    dgComponentProvider.registerComponent('inputComponent', {template: '< type="text">'});
     $scope.component = {
       type: 'inputComponent'
     };
@@ -101,7 +101,7 @@ describe('dgComponent directive', function () {
   });
 
   it('should execute functions when form data changes', function () {
-    componentProvider.registerComponent('inputComponent', {template: '< type="text">'});
+    dgComponentProvider.registerComponent('inputComponent', {template: '< type="text">'});
     $scope.component = {
       id: 'calculatedElement',
       type: 'inputComponent',

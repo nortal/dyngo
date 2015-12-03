@@ -13,7 +13,7 @@
  *   limitations under the License.
  */
 angular.module('dyngo.component.provider', [])
-  .provider('componentProvider', function () {
+  .provider('dgComponentProvider', function () {
     this.components = {};
 
     this.registerComponent = function (type, component) {

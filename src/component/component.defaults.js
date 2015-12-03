@@ -13,46 +13,46 @@
  *   limitations under the License.
  */
 angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
-  .run(function(componentProvider) {
-    componentProvider.registerComponent('textInput', {
+  .run(function(dgComponentProvider) {
+    dgComponentProvider.registerComponent('textInput', {
       group: 'Default',
       label: 'Text Input',
       templateUrl: 'templates/text.html'
     });
-    componentProvider.registerComponent('numberInput', {
+    dgComponentProvider.registerComponent('numberInput', {
       group: 'Default',
       label: 'Text Input',
       templateUrl: 'templates/number.html'
     });
-    componentProvider.registerComponent('checkbox', {
+    dgComponentProvider.registerComponent('checkbox', {
       group: 'Default',
       label: 'Checkbox',
       templateUrl: 'templates/checkbox.html'
     });
-    componentProvider.registerComponent('radio', {
+    dgComponentProvider.registerComponent('radio', {
       group: 'Default',
       label: 'Radio',
       templateUrl: 'templates/radio.html'
     });
-    componentProvider.registerComponent('select', {
+    dgComponentProvider.registerComponent('select', {
       group: 'Default',
       label: 'Select',
       templateUrl: 'templates/select.html'
     });
-    componentProvider.registerComponent('header', {
+    dgComponentProvider.registerComponent('header', {
       group: 'static-controls',
       templateUrl: 'templates/header.html'
     });
-    componentProvider.registerComponent('staticText', {
+    dgComponentProvider.registerComponent('staticText', {
       group: 'static-controls',
       templateUrl: 'templates/static-text.html'
     });
-    componentProvider.registerComponent('hidden', {
+    dgComponentProvider.registerComponent('hidden', {
       group: 'Default',
       templateUrl: 'templates/hidden.html'
     });
 
-    componentProvider.registerComponent('panel', {
+    dgComponentProvider.registerComponent('panel', {
       group: 'containers',
       templateUrl: 'templates/panel.html'
     });

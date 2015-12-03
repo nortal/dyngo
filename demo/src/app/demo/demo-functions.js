@@ -1,14 +1,16 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('dyngoDemo')
+  angular.module('dyngoDemo')
 
-  .run(function(dgFunctionProvider) {
-    dgFunctionProvider.registerFunction('replaceSpaces', function(s, r) {
-      if (angular.isUndefined(s)) {
-        return undefined;
-      }
-      return s.split(' ').join(r);
+    .run(function(dgFunctionProvider) {
+
+      dgFunctionProvider.registerFunction('replaceSpaces', function(val, replacement) {
+        if (angular.isUndefined(val)) {
+          return undefined;
+        }
+        return val.replace(/\s/g, replacement);
+      });
+
     });
-
-    console.log(dgFunctionProvider);
-  });
+})();

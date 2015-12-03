@@ -6,13 +6,8 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log, componentProvider) {
+  function runBlock($log) {
     $log.debug('runBlock end');
-    componentProvider.registerComponent('timeInterval', {
-      group: 'Default',
-      label: 'Select',
-      templateUrl: 'app/demo/templates/timeInterval.html'
-    });
   }
 
 })();

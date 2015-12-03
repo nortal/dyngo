@@ -27,6 +27,15 @@ $icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/"
   }
 }
 
+body {
+  padding: 50px;
+}
+
+.static-text {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 /**
  *  Do not remove the comments below. It's the markers used by gulp-inject to inject
  *  all your sass files automatically

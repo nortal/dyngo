@@ -51,6 +51,7 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
     };
 
     $scope.localize = function (key) {
+      console.log('will localize', key);
       if (angular.isUndefined(key)) {
         return undefined;
       }
@@ -77,46 +78,46 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
  *   limitations under the License.
  */
 angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
-  .run(["componentProvider", function(componentProvider) {
-    componentProvider.registerComponent('textInput', {
+  .run(["dgComponentProvider", function(dgComponentProvider) {
+    dgComponentProvider.registerComponent('textInput', {
       group: 'Default',
       label: 'Text Input',
       templateUrl: 'templates/text.html'
     });
-    componentProvider.registerComponent('numberInput', {
+    dgComponentProvider.registerComponent('numberInput', {
       group: 'Default',
       label: 'Text Input',
       templateUrl: 'templates/number.html'
     });
-    componentProvider.registerComponent('checkbox', {
+    dgComponentProvider.registerComponent('checkbox', {
       group: 'Default',
       label: 'Checkbox',
       templateUrl: 'templates/checkbox.html'
     });
-    componentProvider.registerComponent('radio', {
+    dgComponentProvider.registerComponent('radio', {
       group: 'Default',
       label: 'Radio',
       templateUrl: 'templates/radio.html'
     });
-    componentProvider.registerComponent('select', {
+    dgComponentProvider.registerComponent('select', {
       group: 'Default',
       label: 'Select',
       templateUrl: 'templates/select.html'
     });
-    componentProvider.registerComponent('header', {
+    dgComponentProvider.registerComponent('header', {
       group: 'static-controls',
       templateUrl: 'templates/header.html'
     });
-    componentProvider.registerComponent('staticText', {
+    dgComponentProvider.registerComponent('staticText', {
       group: 'static-controls',
       templateUrl: 'templates/static-text.html'
     });
-    componentProvider.registerComponent('hidden', {
+    dgComponentProvider.registerComponent('hidden', {
       group: 'Default',
       templateUrl: 'templates/hidden.html'
     });
 
-    componentProvider.registerComponent('panel', {
+    dgComponentProvider.registerComponent('panel', {
       group: 'containers',
       templateUrl: 'templates/panel.html'
     });
@@ -124,7 +125,7 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
 
 angular.module('dyngo.component')
 
-  .directive('dgComponent', ["$compile", "$parse", "componentProvider", "dgFunctionProvider", "$log", "$http", "$templateCache", function ($compile, $parse, componentProvider, dgFunctionProvider, $log, $http, $templateCache) {
+  .directive('dgComponent', ["$compile", "$parse", "dgComponentProvider", "dgFunctionProvider", "$log", "$http", "$templateCache", function ($compile, $parse, dgComponentProvider, dgFunctionProvider, $log, $http, $templateCache) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -135,7 +136,7 @@ angular.module('dyngo.component')
       controller: 'ComponentCtrl',
       link: function (scope, element, attrs) {
         var component = scope.component = $parse(attrs.dgComponent)(scope);
-        scope.$component = componentProvider.components[component.type];
+        scope.$component = dgComponentProvider.components[component.type];
         if (angular.isUndefined(scope.$component)) {
           var unknownTypeTemplate = '<div class="alert alert-warning" role="alert">Unknown component type: <strong>{{component.type}}</strong></div>';
           $log.error('Unknown component type:', component.type);
@@ -199,7 +200,7 @@ angular.module('dyngo.component')
  *   limitations under the License.
  */
 angular.module('dyngo.component.provider', [])
-  .provider('componentProvider', function () {
+  .provider('dgComponentProvider', function () {
     this.components = {};
 
     this.registerComponent = function (type, component) {
@@ -605,7 +606,7 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/static-text.html',
     '<div class="form-group">\n' +
-    '  <p ng-bind-html="label"></p>\n' +
+    '  <p class="static-text" ng-bind-html="label"></p>\n' +
     '</div>\n' +
     '');
 }]);
