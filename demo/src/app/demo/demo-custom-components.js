@@ -5,10 +5,10 @@
 
     .run(function(dgComponentProvider) {
 
-      dgComponentProvider.registerComponent('timeInterval', {
+      dgComponentProvider.registerComponent('periodRange', {
         group: 'Default',
         label: 'Select',
-        templateUrl: 'app/demo/templates/timeInterval.html'
+        templateUrl: 'app/demo/templates/periodRange.html'
       });
 
     });

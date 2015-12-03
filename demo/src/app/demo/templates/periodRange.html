@@ -9,16 +9,16 @@
 
       <div class="col-xs-5"> <!-- FIRST -->
         <div class="row">
-          <div class="col-xs-5" style="padding: 0px">
-            <input type="number" id="{{id}}_0" name="{{id}}" ng-model="data[id].intervalStart" class="form-control"
+          <div class="col-xs-5 period-range-input">
+            <input type="number" id="{{id}}_0" name="{{id}}" ng-model="data[id].from" class="form-control"
                    placeholder="{{placeholder}}"
                    min="{{min()}}" max="{{max()}}"
                    ng-disabled="constraints.disabled" ng-required="constraints.required"/>
           </div>
-          <div class="col-xs-7">
+          <div class="col-xs-7 period-range-input" >
             <select id="{{id}}" name="{{id}}_1" class="form-control"
-                    ng-options="option.code as option.value for option in options.units"
-                    ng-model="data[id].intervalStartUnit" ng-disabled="constraints.disabled"
+                    ng-options="option.code as option.value | dgTranslate:formName:lang for option in options.units"
+                    ng-model="data[id].fromUnit" ng-disabled="constraints.disabled"
                     ng-required="constraints.required">
               <option></option>
             </select>
@@ -26,22 +26,22 @@
         </div>
       </div>
 
-      <div class="col-xs-2">
+      <div class="col-xs-2 period-range-input">
         <p class="text-center">&#8212;</p>
       </div>
 
       <div class="col-xs-5"> <!-- SECOND -->
         <div class="row">
-          <div class="col-xs-5">
-            <input type="number" id="{{id}}_2" name="{{id}}" ng-model="data[id].intervalEnd" class="form-control"
+          <div class="col-xs-5 period-range-input">
+            <input type="number" id="{{id}}_2" name="{{id}}" ng-model="data[id].to" class="form-control"
                    placeholder="{{placeholder}}"
                    min="{{min()}}" max="{{max()}}"
                    ng-disabled="constraints.disabled" ng-required="constraints.required"/>
           </div>
-          <div class="col-xs-7">
+          <div class="col-xs-7 period-range-input">
             <select id="{{id}}" name="{{id}}_3" class="form-control"
-                    ng-options="option.code as option.value for option in options.units"
-                    ng-model="data[id].intervalEndUnit" ng-disabled="constraints.disabled"
+                    ng-options="option.code as option.value | dgTranslate:formName:lang for option in options.units"
+                    ng-model="data[id].toUnit" ng-disabled="constraints.disabled"
                     ng-required="constraints.required">
               <option></option>
             </select>

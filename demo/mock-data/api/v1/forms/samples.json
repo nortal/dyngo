@@ -309,9 +309,9 @@
       "label": "header.custom_components"
     },
     {
-      "id": "timeInterval_1",
-      "type": "timeInterval",
-      "label": "Time interval",
+      "id": "periodRange_1",
+      "type": "periodRange",
+      "label": "Period range",
       "constraints": {
         "required": true
       },
