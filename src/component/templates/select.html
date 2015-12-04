@@ -7,7 +7,7 @@
 
     <div class="input-group" ng-switch-when="true">
       <select id="{{id}}" name="{{id}}" class="form-control"
-              ng-options="option.code as option.value for option in options"
+              ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"
               ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">
         <option></option>
       </select>
@@ -23,7 +23,7 @@
     <div ng-switch-default>
       <div class="select">
         <select id="{{id}}" name="{{id}}" class="form-control"
-                ng-options="option.code as option.value for option in options"
+                ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"
                 ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">
           <option></option>
         </select>

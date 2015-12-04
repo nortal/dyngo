@@ -1,7 +1,8 @@
-describe('dyngo', function () {
-  var $scope, $compile, dyngo;
-
+describe('dyngo', function() {
+  var $scope, $compile, dyngo, dgTranslator;
   var formStructure;
+  var formName = 'demoForm';
+  var translatedValueEng = 'value in english';
 
   var defaultStructure = {
     "components": [
@@ -20,17 +21,20 @@ describe('dyngo', function () {
   beforeEach(module('dyngo'));
   beforeEach(module('dyngo.component.templates'));
 
-  beforeEach(inject(function ($rootScope, _$compile_, _dyngo_) {
+  beforeEach(inject(function($rootScope, _$compile_, _dyngo_, _dgTranslator_) {
     $scope = $rootScope;
     $compile = _$compile_;
     dyngo = _dyngo_;
+    dgTranslator = _dgTranslator_;
   }));
 
-  beforeEach(function () {
+  beforeEach(function() {
     $scope.data = {};
     formStructure = {};
     angular.copy(defaultStructure, formStructure);
-    dyngo.registerForm('demoForm', formStructure);
+    dyngo.registerForm(formName, formStructure);
+    $scope.lang = 'en';
+    dgTranslator.registerDictionary(formName, {en: {'translated_value': translatedValueEng}});
   });
 
   function compileElement(elementString, scope) {
@@ -49,7 +53,7 @@ describe('dyngo', function () {
     input.attr('ng-disabled').should.be.defined;
 
     // Element specific attribute
-    angular.forEach(expectedAttrs, function (attr) {
+    angular.forEach(expectedAttrs, function(attr) {
       assert.equal(attr.value, input.attr(attr.key));
     });
 
@@ -68,7 +72,7 @@ describe('dyngo', function () {
       input.attr('ng-disabled').should.be.defined;
 
       // Element specific attribute
-      angular.forEach(expectedAttrs, function (attr) {
+      angular.forEach(expectedAttrs, function(attr) {
         assert.equal(attr.value, input.attr(attr.key));
       });
     }
@@ -84,7 +88,7 @@ describe('dyngo', function () {
     select.attr('ng-disabled').should.be.defined;
 
     // Element specific attribute
-    angular.forEach(expectedAttrs, function (attr) {
+    angular.forEach(expectedAttrs, function(attr) {
       assert.equal(attr.value, select.attr(attr.key));
     });
 
@@ -103,7 +107,7 @@ describe('dyngo', function () {
     assert.equal('Component label', labels.first().html());
   }
 
-  it('should render text input', function () {
+  it('should render text input', function() {
     formStructure.components[0].type = 'textInput';
     formStructure.components[0].constraints.min = 5;
     formStructure.components[0].constraints.max = 15;
@@ -113,7 +117,7 @@ describe('dyngo', function () {
     validateLabel(elm);
   });
 
-  it('should render number input', function () {
+  it('should render number input', function() {
     formStructure.components[0].type = 'numberInput';
     formStructure.components[0].constraints.min = 5;
     formStructure.components[0].constraints.max = 15;
@@ -123,7 +127,7 @@ describe('dyngo', function () {
     validateLabel(elm);
   });
 
-  it('should render radio input', function () {
+  it('should render radio input', function() {
     formStructure.components[0].type = 'radio';
     formStructure.components[0].options = [
       {code: 'foo', text: 'Foo'}, {code: 'bar', text: 'Bar'}, {code: 'baz', text: 'Baz'}
@@ -134,32 +138,34 @@ describe('dyngo', function () {
     validateLabel(elm);
   });
 
-  it('should render select', function () {
+  it('should render select', function() {
     formStructure.components[0].type = 'select';
     formStructure.components[0].options = [
-      {code: 'foo', value: 'Foo'}, {code: 'bar', value: 'Bar'}, {code: 'baz', value: 'Baz'}
+      {code: 'foo', value: 'Foo'}, {code: 'bar', value: 'Bar'}, {code: 'baz', value: 'Baz'}, {code: 'qux', value: 'translated_value'}
     ];
 
     var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
-    validateSelect(elm, [], formStructure.components[0].options);
+    var expectedOptions = formStructure.components[0].options.slice();
+    expectedOptions[3].value = translatedValueEng;
+    validateSelect(elm, [], expectedOptions);
     validateLabel(elm);
   });
 
-  it('should render header', function () {
+  it('should render header', function() {
     formStructure.components[0].type = 'header';
     var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
     assert.equal(1, elm.find('h2').length);
     assert.equal('Component label', elm.find('h2').html());
   });
 
-  it('should render static text', function () {
+  it('should render static text', function() {
     formStructure.components[0].type = 'staticText';
     var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
     assert.equal(1, elm.find('p').length);
     assert.equal('Component label', elm.find('p').html());
   });
 
-  it('should render hidden input text', function () {
+  it('should render hidden input text', function() {
     formStructure.components[0].type = 'hidden';
     var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
     assert.equal(1, elm.find('input').length);

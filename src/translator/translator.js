@@ -25,5 +25,5 @@ angular.module('dyngo.translator', [])
   .filter('dgTranslate', function(dgTranslator) {
     return function(input, formName, lang) {
       return dgTranslator.translate(formName, input, lang);
-    }
+    };
   });
