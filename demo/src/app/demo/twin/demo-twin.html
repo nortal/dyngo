@@ -1,0 +1,35 @@
+<div class="row">
+
+  <div class="col-xs-6">
+
+    <form class="form-horizontal" name="demoForm">
+      <div dg-form="formA" dg-lang="en" ng-model="demo.dataA" ng-if="demo.dataA"></div>
+      <div class="form-group action" ng-if="!showResult">
+        <div class="pull-right">
+          <input type="submit" value="Submit" ng-click="demo.submit()" class="btn btn-primary"/>
+        </div>
+      </div>
+    </form>
+
+    <h1>Data A:</h1>
+    <pre>{{demo.dataA | json}}</pre>
+
+  </div>
+
+  <div class="col-xs-6">
+
+    <form class="form-horizontal" name="demoForm">
+      <div dg-form="formB" dg-lang="de" ng-model="demo.dataB" ng-if="demo.dataB"></div>
+      <div class="form-group action" ng-if="!showResult">
+        <div class="pull-right">
+          <input type="submit" value="Submit" ng-click="demo.submit()" class="btn btn-primary"/>
+        </div>
+      </div>
+    </form>
+
+    <h1>Data B:</h1>
+    <pre>{{demo.dataB | json}}</pre>
+
+  </div>
+
+</div>

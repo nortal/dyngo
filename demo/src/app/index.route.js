@@ -7,13 +7,18 @@
 
   function routeConfig($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'app/demo/demo.html',
-        controller: 'DemoFormController',
+      .when('/single', {
+        templateUrl: 'app/demo/single/demo-single.html',
+        controller: 'DemoSingleFormController',
+        controllerAs: 'demo'
+      })
+      .when('/twin', {
+        templateUrl: 'app/demo/twin/demo-twin.html',
+        controller: 'DemoTwinFormController',
         controllerAs: 'demo'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/single'
       });
   }
 

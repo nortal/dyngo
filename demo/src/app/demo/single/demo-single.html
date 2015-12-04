@@ -1,0 +1,11 @@
+<form class="form-horizontal">
+  <div dg-form="demoForm" dg-lang="en" ng-model="demo.formData" ng-if="demo.formData"></div>
+  <div class="form-group action">
+    <div class="pull-right">
+      <input type="submit" value="Submit" ng-click="demo.submit()" class="btn btn-primary"/>
+    </div>
+  </div>
+</form>
+
+<h1>Form data:</h1>
+<pre>{{demo.formData | json}}</pre>

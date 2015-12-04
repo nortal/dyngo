@@ -16,7 +16,7 @@
       }
     },
     {
-      "id": "simpleTextUtf",
+      "id": "simpleTextUtf8",
       "type": "textInput",
       "label": "Simple text, UTF8 test: öäõüžš",
       "placeholder": "öäõüžš"
