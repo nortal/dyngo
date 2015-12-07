@@ -141,7 +141,7 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
       group: 'Default',
       label: 'Radio',
       layout: {orientation: 'vertical'},
-      templateUrl: 'templates/radio-vertical.html'
+      templateUrl: 'templates/radio.html'
     });
 
     dgComponentProvider.registerComponent('select', {
@@ -273,50 +273,6 @@ angular.module('dyngo.component.provider', [])
     };
   });
 
-angular.module('dyngo.functions', [])
-
-  .provider('dgFunctionProvider', function () {
-    var instance = {functions: []};
-
-    instance.registerFunction = function (name, func) {
-      instance.functions.push(name);
-      instance[name] = func;
-    };
-
-    instance.get = function (name) {
-      return instance[name] || angular.noop;
-    };
-
-    var attachFunctionsToScope = function (scope) {
-      angular.forEach(instance.functions, function (funcName) {
-        if (angular.isUndefined(scope[funcName])) {
-          scope[funcName] = instance[funcName];
-        }
-      });
-    };
-
-    instance.executeFunctions = function (scope, component, data) {
-      attachFunctionsToScope(scope);
-      angular.forEach(component.functions, function (f) {
-        scope.$eval(f, data);
-      });
-    };
-
-    // Default functions
-    var round = function (value, precision) {
-      var p = Math.pow(10, angular.isDefined(precision) ? precision : 2);
-      return Math.round(value * p) / p;
-    };
-
-    return {
-      $get: function init() {
-        instance.registerFunction('round', round);
-        return instance;
-      }
-    };
-  });
-
-
 angular.module('dyngo.form', ['dyngo.translator'])
 
   .provider('dyngo', function () {
@@ -363,6 +319,50 @@ angular.module('dyngo.form', ['dyngo.translator'])
       template: '<div dg-container="form.structure" ng-model="data" ng-if="form"></div>'
     };
   });
+
+angular.module('dyngo.functions', [])
+
+  .provider('dgFunctionProvider', function () {
+    var instance = {functions: []};
+
+    instance.registerFunction = function (name, func) {
+      instance.functions.push(name);
+      instance[name] = func;
+    };
+
+    instance.get = function (name) {
+      return instance[name] || angular.noop;
+    };
+
+    var attachFunctionsToScope = function (scope) {
+      angular.forEach(instance.functions, function (funcName) {
+        if (angular.isUndefined(scope[funcName])) {
+          scope[funcName] = instance[funcName];
+        }
+      });
+    };
+
+    instance.executeFunctions = function (scope, component, data) {
+      attachFunctionsToScope(scope);
+      angular.forEach(component.functions, function (f) {
+        scope.$eval(f, data);
+      });
+    };
+
+    // Default functions
+    var round = function (value, precision) {
+      var p = Math.pow(10, angular.isDefined(precision) ? precision : 2);
+      return Math.round(value * p) / p;
+    };
+
+    return {
+      $get: function init() {
+        instance.registerFunction('round', round);
+        return instance;
+      }
+    };
+  });
+
 
 angular.module('dyngo.translator', [])
 
@@ -543,33 +543,7 @@ try {
   module = angular.module('dyngo.component.templates', []);
 }
 module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('templates/radio-horizontal.html',
-    '<div class="form-group">\n' +
-    '\n' +
-    '  <label class="col-sm-4 control-label"\n' +
-    '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
-    '\n' +
-    '  <div class="col-sm-4">\n' +
-    '\n' +
-    '\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
-    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
-    '    </div>\n' +
-    '  </div>\n' +
-    '\n' +
-    '</div>\n' +
-    '');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('dyngo.component.templates');
-} catch (e) {
-  module = angular.module('dyngo.component.templates', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('templates/radio-vertical.html',
+  $templateCache.put('templates/radio.html',
     '<div class="form-group">\n' +
     '\n' +
     '  <label class="col-sm-4 control-label"\n' +
