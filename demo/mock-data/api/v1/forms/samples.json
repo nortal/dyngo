@@ -45,6 +45,12 @@
       }
     },
     {
+      "id": "simpleTextWithDefaultValue",
+      "type": "textInput",
+      "label": "Simple text with default value",
+      "defaultValue": "this is default value"
+    },
+    {
       "id": "simpleTextWithHelp",
       "type": "textInput",
       "label": "Simple text with help",
@@ -99,6 +105,12 @@
       }
     },
     {
+      "id": "numberInputWithDefaultValue",
+      "type": "numberInput",
+      "label": "Number input with default value",
+      "defaultValue": 100500
+    },
+    {
       "id": "numberInputWithHelp",
       "type": "numberInput",
       "label": "Number input with help",
@@ -142,6 +154,38 @@
           "value": "Option 4"
         }
       ]
+    },
+    {
+      "id": "selectWithDefault",
+      "type": "select",
+      "label": "Simple select with default value",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "value": "Option 1",
+          "weight": 100500
+        },
+        {
+          "code": "option_2",
+          "value": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "value": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "value": "Option 4"
+        },
+        {
+          "code": "option_4",
+          "value": "Option 4"
+        }
+      ],
+      "defaultValue": "option_3"
     },
     {
       "id": "selectWithHelp",
@@ -226,6 +270,68 @@
           "text": "Option 5"
         }
       ]
+    },
+    {
+      "id": "radioWithDefault",
+      "type": "radio",
+      "label": "Radiobutton with default values",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ],
+      "defaultValue": "option_2"
+    },
+    {
+      "id": "checkboxWithDefault",
+      "type": "checkbox",
+      "label": "Checkbox with default values",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ],
+      "defaultValue": ["option_2", "option_5"]
     },
     {
       "id": "initiallyHiddenContainer",

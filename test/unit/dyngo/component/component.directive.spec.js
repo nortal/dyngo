@@ -1,4 +1,4 @@
-describe('dgComponent directive', function () {
+describe('dgComponent directive', function() {
   var $scope, $compile, dgComponentProvider, $templateCache;
 
   beforeEach(module('dyngo.component'));
@@ -6,14 +6,14 @@ describe('dgComponent directive', function () {
   beforeEach(module('dyngo.translator'));
   beforeEach(module('dyngo.component.templates'));
 
-  beforeEach(inject(function ($rootScope, _$compile_, _dgComponentProvider_, _$templateCache_) {
+  beforeEach(inject(function($rootScope, _$compile_, _dgComponentProvider_, _$templateCache_) {
     $scope = $rootScope.$new(); // dgComponent can't be a root scope - it needs a parent to ask data from
     $compile = _$compile_;
     dgComponentProvider = _dgComponentProvider_;
     $templateCache = _$templateCache_;
   }));
 
-  it('should not proceed if component type is undefined', function () {
+  it('should not proceed if component type is undefined', function() {
     $scope.component = {};
     $scope.data = {};
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
@@ -23,7 +23,7 @@ describe('dgComponent directive', function () {
     expect(element.children().first().html().indexOf('Unknown component type')).to.equal(0);
   });
 
-  it('should not proceed if component type is unknown', function () {
+  it('should not proceed if component type is unknown', function() {
     $scope.component = {type: 'someUnknownType'};
     $scope.data = {};
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
@@ -33,7 +33,7 @@ describe('dgComponent directive', function () {
     expect(element.children().first().html().indexOf('Unknown component type')).to.equal(0);
   });
 
-  it('should render correct component from static template', function () {
+  it('should render correct component from static template', function() {
     $scope.component = {type: 'coolHeader'};
     dgComponentProvider.registerComponent('coolHeader', {template: '<h1>I am a cool header!</h1>'});
     $scope.data = {};
@@ -46,7 +46,7 @@ describe('dgComponent directive', function () {
   });
 
 
-  it('should render correct component from templateUrl', function () {
+  it('should render correct component from templateUrl', function() {
     $scope.component = {type: 'coolHeader'};
     dgComponentProvider.registerComponent('coolHeader', {templateUrl: 'templates/coolHeader.html'});
     $templateCache.put('templates/coolHeader.html', '<h1>I am a cool header again!</h1>');
@@ -59,7 +59,7 @@ describe('dgComponent directive', function () {
     expect(element.children().first().html()).to.equal('I am a cool header again!');
   });
 
-  it('should init scope values', function () {
+  it('should init scope values', function() {
     $scope.component = {
       id: 'inputElement_1', type: 'inputElement', label: 'element label',
       description: 'element description',
@@ -90,17 +90,70 @@ describe('dgComponent directive', function () {
     expect(componentScope.constraints).to.deep.equal({min: 5, max: 10});
   });
 
-  it('should have at least setData() function defined in scope', function () {
+  it('should init default object value', function() {
+    $scope.component = {
+      id: 'elementA', type: 'inputElement', defaultValue: {foo: 1, bar: 'a', baz: true}
+    };
+    dgComponentProvider.registerComponent('inputElement', {
+      template: '<input />'
+    });
+    $scope.data = {};
+    var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect($scope.data['elementA']).to.deep.equal({foo: 1, bar: 'a', baz: true});
+  });
+
+  it('should not init default object value', function() {
+    $scope.component = {
+      id: 'elementA', type: 'inputElement', defaultValue: {foo: 1, bar: 'a', baz: true}
+    };
+    dgComponentProvider.registerComponent('inputElement', {
+      template: '<input />'
+    });
+    $scope.data = {'elementA': {foo: 2, bar: 'b'}};
+    var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect($scope.data['elementA']).to.deep.equal({foo: 2, bar: 'b'});
+  });
+
+  it('should init default string value', function() {
+    $scope.component = {
+      id: 'elementA', type: 'inputElement', defaultValue: 'foobar'
+    };
+    dgComponentProvider.registerComponent('inputElement', {
+      template: '<input />'
+    });
+    $scope.data = {};
+    var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect($scope.data['elementA']).to.deep.equal("foobar");
+  });
+
+  it('should not init default string value', function() {
+    $scope.component = {
+      id: 'elementA', type: 'inputElement', defaultValue: 'foobar'
+    };
+    dgComponentProvider.registerComponent('inputElement', {
+      template: '<input />'
+    });
+    $scope.data = {'elementA': 'barbaz'};
+    var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
+    $scope.$digest();
+    expect($scope.data['elementA']).to.deep.equal('barbaz');
+  });
+
+  it('should have at least setData() function defined in scope', function() {
     dgComponentProvider.registerComponent('inputComponent', {template: '< type="text">'});
     $scope.component = {
       type: 'inputComponent'
     };
+    $scope.data = {};
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
     $scope.$digest();
     expect(element.isolateScope().setData).not.to.be.undefined;
   });
 
-  it('should execute functions when form data changes', function () {
+  it('should execute functions when form data changes', function() {
     dgComponentProvider.registerComponent('inputComponent', {template: '< type="text">'});
     $scope.component = {
       id: 'calculatedElement',
@@ -111,11 +164,11 @@ describe('dgComponent directive', function () {
     $scope.foo = 'moo';
     var element = $compile('<div dg-component="component" ng-model="data"></div>')($scope);
     $scope.$digest();
-    $scope.$apply(function () {
+    $scope.$apply(function() {
       $scope.data.foo = 7;
     });
     expect($scope.data.calculatedElement).to.equal(24);
-    $scope.$apply(function () {
+    $scope.$apply(function() {
       $scope.data.foo = 1;
     });
     expect($scope.data.calculatedElement).to.equal(12);

@@ -1,6 +1,6 @@
 angular.module('dyngo.component')
 
-  .directive('dgComponent', function ($compile, $parse, dgComponentProvider, dgFunctionProvider, $log, $http, $templateCache) {
+  .directive('dgComponent', function($compile, $parse, dgComponentProvider, dgFunctionProvider, $log, $http, $templateCache) {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -9,7 +9,7 @@ angular.module('dyngo.component')
         component: '=dgComponent'
       },
       controller: 'ComponentCtrl',
-      link: function (scope, element, attrs) {
+      link: function(scope, element, attrs) {
         var component = scope.component = $parse(attrs.dgComponent)(scope);
         scope.$component = dgComponentProvider.components[component.type];
         if (angular.isUndefined(scope.$component)) {
@@ -37,12 +37,19 @@ angular.module('dyngo.component')
           element.append(children);
         }
 
+        function initDefaultValue() {
+          if (angular.isDefined(component.defaultValue) && angular.isUndefined(scope.data[component.id])) {
+            scope.data[component.id] = component.defaultValue;
+          }
+        }
+
         initScopeValues();
+        initDefaultValue();
 
         if (angular.isUndefined(scope.$component.template)) {
           $http.get(scope.$component.templateUrl, {
             cache: $templateCache
-          }).success(function (template) {
+          }).success(function(template) {
             scope.$component.template = template;
             attachComponentHtml();
           });
@@ -51,7 +58,7 @@ angular.module('dyngo.component')
         }
 
         if (angular.isDefined(component.functions)) {
-          scope.$watch('data', function () {
+          scope.$watch('data', function() {
             dgFunctionProvider.executeFunctions(scope, scope.component, scope.data);
           }, true);
         }
