@@ -30,6 +30,7 @@ angular.module('dyngo.component')
           scope.options = component.options || scope.$component.options || [];
           // TODO: replace with angular.merge after upgrade to angular 1.4+
           scope.constraints = angular.extend({}, scope.$component.constraints, component.constraints);
+          scope.layout = angular.extend({}, scope.$component.layout, component.layout);
         }
 
         function attachComponentHtml() {

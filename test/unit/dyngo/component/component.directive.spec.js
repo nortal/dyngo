@@ -60,18 +60,20 @@ describe('dgComponent directive', function() {
   });
 
   it('should init scope values', function() {
+    dgComponentProvider.registerComponent('inputElement', {
+      template: '<h1>I am a cool header!</h1>',
+      options: {a: 'a', b: 'b'},
+      constraints: {min: 0, max: 10},
+      layout: {orientation: 'vertical', height: '100px'}
+    });
     $scope.component = {
       id: 'inputElement_1', type: 'inputElement', label: 'element label',
       description: 'element description',
       placeholder: 'element placeholder',
       options: {a: 'a', b: 'b', c: 'c'},
-      constraints: {min: 5}
+      constraints: {min: 5},
+      layout: {height: '70px', width: '50%'}
     };
-    dgComponentProvider.registerComponent('inputElement', {
-      template: '<h1>I am a cool header!</h1>',
-      options: {a: 'a', b: 'b'},
-      constraints: {min: 0, max: 10}
-    });
     $scope.data = {};
     $scope.$parent.formModel = {};
     $scope.$parent.formName = 'form_1';
@@ -88,6 +90,7 @@ describe('dgComponent directive', function() {
     expect(componentScope.placeholder).to.equal('element placeholder');
     expect(componentScope.options).to.deep.equal({a: 'a', b: 'b', c: 'c'});
     expect(componentScope.constraints).to.deep.equal({min: 5, max: 10});
+    expect(componentScope.layout).to.deep.equal({orientation: 'vertical', height: '70px', width: '50%'});
   });
 
   it('should init default object value', function() {

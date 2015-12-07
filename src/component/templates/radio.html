@@ -3,14 +3,21 @@
   <label class="col-sm-4 control-label"
          ng-class="{required : constraints.required}">{{label}}</label>
 
-  <div class="col-sm-4">
-    <div class="radio" ng-repeat="option in options track by option.code">
+  <div class="col-sm-4" ng-switch="layout.orientation">
+
+    <div class="radio" ng-repeat="option in options track by option.code" ng-switch-when="vertical">
       <label>
         <input type="radio" name="{{id}}" id="{{id+'_'+$index}}" ng-model="data[id]"
                ng-value="option.code"
                ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}
       </label>
     </div>
+
+    <label class="radio-inline" ng-repeat="option in options track by option.code" ng-switch-when="horizontal">
+      <input type="radio" name="{{id}}" id="{{id+'_'+$index}}" ng-model="data[id]"
+             ng-value="option.code"
+             ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}
+    </label>
 
     <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">
       <div ng-message="required">{{localize("error.no_item_selected")}}</div>

@@ -127,8 +127,43 @@ describe('dyngo', function() {
     validateLabel(elm);
   });
 
-  it('should render radio input', function() {
+  it('should render vertical radio input', function() {
     formStructure.components[0].type = 'radio';
+    formStructure.components[0].options = [
+      {code: 'foo', text: 'Foo'}, {code: 'bar', text: 'Bar'}, {code: 'baz', text: 'Baz'}
+    ];
+
+    var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
+    validateMultipleInputs(elm, [], 3);
+    validateLabel(elm);
+  });
+
+  it('should render horizontal radio input', function() {
+    formStructure.components[0].type = 'radio';
+    formStructure.components[0].layout = {orientation: 'horizontal'};
+    formStructure.components[0].options = [
+      {code: 'foo', text: 'Foo'}, {code: 'bar', text: 'Bar'}, {code: 'baz', text: 'Baz'}
+    ];
+
+    var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
+    validateMultipleInputs(elm, [], 3);
+    validateLabel(elm);
+  });
+
+  it('should render vertical checkboxes', function() {
+    formStructure.components[0].type = 'checkbox';
+    formStructure.components[0].options = [
+      {code: 'foo', text: 'Foo'}, {code: 'bar', text: 'Bar'}, {code: 'baz', text: 'Baz'}
+    ];
+
+    var elm = compileElement('<div dg-form="demoForm" dg-lang="en" ng-model="data"></div>', $scope);
+    validateMultipleInputs(elm, [], 3);
+    validateLabel(elm);
+  });
+
+  it('should render horizontal checkboxes', function() {
+    formStructure.components[0].type = 'checkbox';
+    formStructure.components[0].layout = {orientation: 'horizontal'};
     formStructure.components[0].options = [
       {code: 'foo', text: 'Foo'}, {code: 'bar', text: 'Bar'}, {code: 'baz', text: 'Baz'}
     ];

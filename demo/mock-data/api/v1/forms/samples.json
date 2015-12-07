@@ -212,9 +212,9 @@
       }
     },
     {
-      "id": "radio1",
+      "id": "radioVertical",
       "type": "radio",
-      "label": "Radiobutton",
+      "label": "Radiobutton vertical",
       "constraints": {
         "required": true
       },
@@ -242,11 +242,77 @@
       ]
     },
     {
-      "id": "checkbox1",
-      "type": "checkbox",
-      "label": "Checkbox",
+      "id": "radioHorizontal",
+      "type": "radio",
+      "label": "Radiobutton horizontal",
       "constraints": {
         "required": true
+      },
+      "layout": {
+        "orientation": "horizontal"
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ]
+    },
+    {
+      "id": "checkboxVertical",
+      "type": "checkbox",
+      "label": "Checkbox vertical",
+      "constraints": {
+        "required": true
+      },
+      "options": [
+        {
+          "code": "option_1",
+          "text": "Option 1"
+        },
+        {
+          "code": "option_2",
+          "text": "Option 2"
+        },
+        {
+          "code": "option_3",
+          "text": "Option 3"
+        },
+        {
+          "code": "option_4",
+          "text": "Option 4"
+        },
+        {
+          "code": "option_5",
+          "text": "Option 5"
+        }
+      ]
+    },
+    {
+      "id": "checkboxHorizontal",
+      "type": "checkbox",
+      "label": "Checkbox horizontal",
+      "constraints": {
+        "required": true
+      },
+      "layout": {
+        "orientation": "horizontal"
       },
       "options": [
         {
@@ -331,7 +397,10 @@
           "text": "Option 5"
         }
       ],
-      "defaultValue": ["option_2", "option_5"]
+      "defaultValue": [
+        "option_2",
+        "option_5"
+      ]
     },
     {
       "id": "initiallyHiddenContainer",

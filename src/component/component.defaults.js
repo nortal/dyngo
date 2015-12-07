@@ -27,13 +27,16 @@ angular.module('dyngo.component.defaults', ['dyngo.component.provider'])
     dgComponentProvider.registerComponent('checkbox', {
       group: 'Default',
       label: 'Checkbox',
+      layout: {orientation: 'vertical'},
       templateUrl: 'templates/checkbox.html'
     });
     dgComponentProvider.registerComponent('radio', {
       group: 'Default',
       label: 'Radio',
+      layout: {orientation: 'vertical'},
       templateUrl: 'templates/radio.html'
     });
+
     dgComponentProvider.registerComponent('select', {
       group: 'Default',
       label: 'Select',
