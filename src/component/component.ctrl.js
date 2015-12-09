@@ -1,8 +1,8 @@
 angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider', 'dyngo.component.templates',
-  'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
+    'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
-  .controller('ComponentCtrl', function ($scope, dgTranslator) {
-    $scope.evaluateConstraint = function (name) {
+  .controller('ComponentCtrl', function($scope, dgTranslator) {
+    $scope.evaluateConstraint = function(name) {
       if (angular.isUndefined($scope.constraints) || angular.isUndefined($scope.constraints[name])) {
         return null;
       }
@@ -17,15 +17,15 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       return null;
     };
 
-    $scope.min = function () {
+    $scope.min = function() {
       return $scope.evaluateConstraint('min');
     };
 
-    $scope.max = function () {
+    $scope.max = function() {
       return $scope.evaluateConstraint('max');
     };
 
-    $scope.setData = function (value) {
+    $scope.setData = function(value) {
       if (angular.isUndefined(value) || value === null || (angular.isNumber(value) && isNaN(value))) {
         $scope.data[$scope.id] = undefined;
       } else if (!angular.equals($scope.data[$scope.id], value)) {
@@ -33,14 +33,22 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       }
     };
 
-    $scope.localize = function (key) {
+    $scope.localize = function(key) {
       if (angular.isUndefined(key)) {
         return undefined;
       }
       var translatedValue = dgTranslator.translate($scope.formName, key, $scope.lang);
-      return translatedValue.replace(/{{([^}]*)}}/g, function (match, group) {
+      return translatedValue.replace(/{{([^}]*)}}/g, function(match, group) {
         return $scope.$eval(group, $scope.data);
       });
+    };
+
+    $scope.isErrorDisplayed = function() {
+      if (angular.isUndefined($scope.id) || angular.isUndefined($scope.formModel) || angular.isUndefined($scope.formModel[$scope.id])) {
+        return false;
+      }
+      var touchedOrSubmitted = $scope.formModel[$scope.id].$touched || $scope.formModel.$submitted;
+      return touchedOrSubmitted === true && $scope.formModel[$scope.id].$invalid === true;
     };
 
   });

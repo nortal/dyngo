@@ -1,9 +1,9 @@
-describe('ComponentCtrl:', function () {
+describe('ComponentCtrl:', function() {
   var $scope, $controller, component, componentCtrl, dgTranslator;
 
   beforeEach(module('dyngo.component'));
 
-  beforeEach(inject(function ($rootScope, _$controller_, _dgTranslator_) {
+  beforeEach(inject(function($rootScope, _$controller_, _dgTranslator_) {
     $scope = $rootScope;
     $controller = _$controller_;
     $scope.data = {};
@@ -12,16 +12,16 @@ describe('ComponentCtrl:', function () {
     dgTranslator = _dgTranslator_
   }));
 
-  it('evaluateConstraint() should return null when no constraints are not defined', function () {
+  it('evaluateConstraint() should return null when no constraints are not defined', function() {
     expect($scope.evaluateConstraint('foo')).to.be.null;
   });
 
-  it('evaluateConstraint() should return null when given constraint is not defined', function () {
+  it('evaluateConstraint() should return null when given constraint is not defined', function() {
     component.constraints = {bar: 'true'};
     expect($scope.evaluateConstraint('foo')).to.be.null;
   });
 
-  it('evaluateConstraint() should return evaluated value of expression', function () {
+  it('evaluateConstraint() should return evaluated value of expression', function() {
     $scope.constraints = {foo: 'true'};
     expect($scope.evaluateConstraint('foo')).to.equal(true);
 
@@ -36,17 +36,17 @@ describe('ComponentCtrl:', function () {
     expect($scope.evaluateConstraint('foo')).to.equal('20z');
   });
 
-  it('evaluateConstraint() should return number value without evaluation', function () {
+  it('evaluateConstraint() should return number value without evaluation', function() {
     $scope.constraints = {foo: 12};
     expect($scope.evaluateConstraint('foo')).to.equal(12);
   });
 
-  it('evaluateConstraint() should return boolean value without evaluation', function () {
+  it('evaluateConstraint() should return boolean value without evaluation', function() {
     $scope.constraints = {foo: true};
     expect($scope.evaluateConstraint('foo')).to.equal(true);
   });
 
-  it('evaluateConstraint() should return null when value is neither string or number', function () {
+  it('evaluateConstraint() should return null when value is neither string or number', function() {
     $scope.constraints = {foo: {}};
     expect($scope.evaluateConstraint('foo')).to.be.null;
 
@@ -57,7 +57,7 @@ describe('ComponentCtrl:', function () {
     expect($scope.evaluateConstraint('foo')).to.be.null;
   });
 
-  it('setData() should set value to undefined', function () {
+  it('setData() should set value to undefined', function() {
     $scope.data.foo = 'Foo';
     $scope.id = 'foo';
     $scope.setData(undefined);
@@ -72,7 +72,7 @@ describe('ComponentCtrl:', function () {
     expect($scope.data.foo).to.be.undefined;
   });
 
-  it('setData() should set value', function () {
+  it('setData() should set value', function() {
     $scope.id = 'foo';
     $scope.setData('Foo');
     expect($scope.data.foo).to.equal('Foo');
@@ -94,7 +94,7 @@ describe('ComponentCtrl:', function () {
     expect($scope.data.foo).to.deep.equal(['abc', 'def']);
   });
 
-  it('setData() should do nothing if value object has not changed', function () {
+  it('setData() should do nothing if value object has not changed', function() {
     $scope.id = 'foo';
     var foo = {bar: 'baz', qux: {moo: true}};
     $scope.setData(foo);
@@ -103,7 +103,7 @@ describe('ComponentCtrl:', function () {
     expect($scope.data.foo).to.equal(foo);
   });
 
-  it('localize() should return localized and evaluated value', function () {
+  it('localize() should return localized and evaluated value', function() {
     $scope.formName = 'sampleForm';
     $scope.lang = 'en';
 
@@ -111,6 +111,34 @@ describe('ComponentCtrl:', function () {
     $scope.data.quxWord = 'qux';
     //$scope.component = {translations: {bar: '{{3+1}} known words: foo, bar, baz and {{quxWord}}!'}};
     expect($scope.localize('some_key')).to.equal('4 known words: foo, bar, baz and qux!');
+  });
+
+  it('isErrorDisplayed() should return false when scope data is missing', function() {
+    expect($scope.isErrorDisplayed()).to.equal(false);
+    $scope.id = 'foo';
+    expect($scope.isErrorDisplayed()).to.equal(false);
+    $scope.formModel = {};
+    expect($scope.isErrorDisplayed()).to.equal(false);
+    $scope.formModel = {foo: undefined};
+    expect($scope.isErrorDisplayed()).to.equal(false);
+  });
+
+  it('isErrorDisplayed() should return false', function() {
+    $scope.id = 'foo';
+    $scope.formModel = {foo: {$invalid: false, $touched: false}, $submitted: false};
+    expect($scope.isErrorDisplayed()).to.equal(false);
+    $scope.formModel = {foo: {$invalid: true, $touched: false}, $submitted: false};
+    expect($scope.isErrorDisplayed()).to.equal(false);
+  });
+
+  it('isErrorDisplayed() should return true', function() {
+    $scope.id = 'foo';
+    $scope.formModel = {foo: {$touched: true, $invalid: true}, $submitted: false};
+    expect($scope.isErrorDisplayed()).to.equal(true);
+    $scope.formModel = {foo: {$touched: false, $invalid: true}, $submitted: true};
+    expect($scope.isErrorDisplayed()).to.equal(true);
+    $scope.formModel = {foo: {$touched: true, $invalid: true}, $submitted: true};
+    expect($scope.isErrorDisplayed()).to.equal(true);
   });
 
 });

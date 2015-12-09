@@ -15,54 +15,11 @@
 angular.module('dyngo', ['dyngo.form', 'dyngo.container', 'dyngo.component', 'dyngo.component.provider',
   'dyngo.component.defaults', 'dyngo.functions', 'dyngo.translator']);
 
-angular.module('dyngo.container', [])
-
-  .controller('ContainerCtrl', ["$scope", function ($scope) {
-    $scope.visible = function (component) {
-      var visible = true;
-
-      var unsetData = function (component) {
-        delete $scope.data[component.id];
-        angular.forEach(component.components, function (child) {
-          unsetData(child);
-        });
-      };
-
-      var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
-      if (visible && angular.isDefined(visibilityExpression)) {
-        visible = $scope.$eval(visibilityExpression, $scope.data);
-      }
-      if (!visible) {
-        unsetData(component);
-      }
-      return visible;
-    };
-
-  }])
-
-  .directive('dgContainer', function () {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      scope: {
-        container: '=dgContainer',
-        data: '=ngModel'
-      },
-      template: '<div ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
-      controller: 'ContainerCtrl',
-      link: function (scope) {
-        scope.formModel = scope.$parent.formModel;
-        scope.formName = scope.$parent.formName;
-        scope.lang = scope.$parent.lang;
-      }
-    };
-  });
-
 angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider', 'dyngo.component.templates',
-  'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
+    'checklist-model', 'mgcrea.ngStrap.popover', 'ngSanitize', 'ngMessages'])
 
-  .controller('ComponentCtrl', ["$scope", "dgTranslator", function ($scope, dgTranslator) {
-    $scope.evaluateConstraint = function (name) {
+  .controller('ComponentCtrl', ["$scope", "dgTranslator", function($scope, dgTranslator) {
+    $scope.evaluateConstraint = function(name) {
       if (angular.isUndefined($scope.constraints) || angular.isUndefined($scope.constraints[name])) {
         return null;
       }
@@ -77,15 +34,15 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       return null;
     };
 
-    $scope.min = function () {
+    $scope.min = function() {
       return $scope.evaluateConstraint('min');
     };
 
-    $scope.max = function () {
+    $scope.max = function() {
       return $scope.evaluateConstraint('max');
     };
 
-    $scope.setData = function (value) {
+    $scope.setData = function(value) {
       if (angular.isUndefined(value) || value === null || (angular.isNumber(value) && isNaN(value))) {
         $scope.data[$scope.id] = undefined;
       } else if (!angular.equals($scope.data[$scope.id], value)) {
@@ -93,14 +50,22 @@ angular.module('dyngo.component', ['dyngo.translator', 'dyngo.component.provider
       }
     };
 
-    $scope.localize = function (key) {
+    $scope.localize = function(key) {
       if (angular.isUndefined(key)) {
         return undefined;
       }
       var translatedValue = dgTranslator.translate($scope.formName, key, $scope.lang);
-      return translatedValue.replace(/{{([^}]*)}}/g, function (match, group) {
+      return translatedValue.replace(/{{([^}]*)}}/g, function(match, group) {
         return $scope.$eval(group, $scope.data);
       });
+    };
+
+    $scope.isErrorDisplayed = function() {
+      if (angular.isUndefined($scope.id) || angular.isUndefined($scope.formModel) || angular.isUndefined($scope.formModel[$scope.id])) {
+        return false;
+      }
+      var touchedOrSubmitted = $scope.formModel[$scope.id].$touched || $scope.formModel.$submitted;
+      return touchedOrSubmitted === true && $scope.formModel[$scope.id].$invalid === true;
     };
 
   }]);
@@ -273,6 +238,49 @@ angular.module('dyngo.component.provider', [])
     };
   });
 
+angular.module('dyngo.container', [])
+
+  .controller('ContainerCtrl', ["$scope", function ($scope) {
+    $scope.visible = function (component) {
+      var visible = true;
+
+      var unsetData = function (component) {
+        delete $scope.data[component.id];
+        angular.forEach(component.components, function (child) {
+          unsetData(child);
+        });
+      };
+
+      var visibilityExpression = component.constraints ? component.constraints.visible : undefined;
+      if (visible && angular.isDefined(visibilityExpression)) {
+        visible = $scope.$eval(visibilityExpression, $scope.data);
+      }
+      if (!visible) {
+        unsetData(component);
+      }
+      return visible;
+    };
+
+  }])
+
+  .directive('dgContainer', function () {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      scope: {
+        container: '=dgContainer',
+        data: '=ngModel'
+      },
+      template: '<div ng-repeat="component in container.components" dg-component="component" ng-model="data" ng-if="visible(component)"></div>',
+      controller: 'ContainerCtrl',
+      link: function (scope) {
+        scope.formModel = scope.$parent.formModel;
+        scope.formName = scope.$parent.formName;
+        scope.lang = scope.$parent.lang;
+      }
+    };
+  });
+
 angular.module('dyngo.form', ['dyngo.translator'])
 
   .provider('dyngo', function () {
@@ -320,6 +328,36 @@ angular.module('dyngo.form', ['dyngo.translator'])
     };
   });
 
+angular.module('dyngo.translator', [])
+
+  .value('dgDictionary', {})
+
+  .service('dgTranslator', ["dgDictionary", function(dgDictionary) {
+
+    this.registerDictionary = function(formName, dictionary) {
+      dgDictionary[formName] = dictionary || {};
+    };
+
+    this.translate = function(formName, key, lang) {
+      var translatedValue;
+      var dictionary = dgDictionary[formName];
+      if (angular.isDefined(dictionary) && angular.isDefined(dictionary[lang])) {
+        translatedValue = dictionary[lang][key];
+      }
+      if (angular.isUndefined(translatedValue)) {
+        translatedValue = key;
+      }
+      return translatedValue;
+    };
+
+  }])
+
+  .filter('dgTranslate', ["dgTranslator", function(dgTranslator) {
+    return function(input, formName, lang) {
+      return dgTranslator.translate(formName, input, lang);
+    };
+  }]);
+
 angular.module('dyngo.functions', [])
 
   .provider('dgFunctionProvider', function () {
@@ -364,36 +402,6 @@ angular.module('dyngo.functions', [])
   });
 
 
-angular.module('dyngo.translator', [])
-
-  .value('dgDictionary', {})
-
-  .service('dgTranslator', ["dgDictionary", function(dgDictionary) {
-
-    this.registerDictionary = function(formName, dictionary) {
-      dgDictionary[formName] = dictionary || {};
-    };
-
-    this.translate = function(formName, key, lang) {
-      var translatedValue;
-      var dictionary = dgDictionary[formName];
-      if (angular.isDefined(dictionary) && angular.isDefined(dictionary[lang])) {
-        translatedValue = dictionary[lang][key];
-      }
-      if (angular.isUndefined(translatedValue)) {
-        translatedValue = key;
-      }
-      return translatedValue;
-    };
-
-  }])
-
-  .filter('dgTranslate', ["dgTranslator", function(dgTranslator) {
-    return function(input, formName, lang) {
-      return dgTranslator.translate(formName, input, lang);
-    };
-  }]);
-
 (function(module) {
 try {
   module = angular.module('dyngo.component.templates');
@@ -402,7 +410,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/checkbox.html',
-    '<div class="form-group">\n' +
+    '<div class="form-group" ng-class="{\'has-error\': isErrorDisplayed()}">\n' +
     '\n' +
     '  <label for="{{id+\'_\'+$index}}" class="col-sm-4 control-label"\n' +
     '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
@@ -424,9 +432,10 @@ module.run(['$templateCache', function($templateCache) {
     '    </label>\n' +
     '\n' +
     '    <div ng-messages="formModel[id].$error" class="message-invalid"\n' +
-    '         ng-if="formModel.submitPressed && constraints.required && (!data[id] || data[id].length == 0)">\n' +
-    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '         ng-if="isErrorDisplayed() && constraints.required && (!data[id] || data[id].length == 0)">\n' +
+    '      <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>\n' +
     '    </div>\n' +
+    '\n' +
     '  </div>\n' +
     '\n' +
     '</div>\n' +
@@ -476,7 +485,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/number.html',
-    '<div class="form-group">\n' +
+    '<div class="form-group" ng-class="{\'has-error\': isErrorDisplayed()}">\n' +
     '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
     '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
     '\n' +
@@ -503,10 +512,11 @@ module.run(['$templateCache', function($templateCache) {
     '             min="{{min()}}" max="{{max()}}"\n' +
     '             ng-disabled="constraints.disabled" ng-required="constraints.required"/>\n' +
     '    </div>\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
-    '      <div ng-message="required">{{localize("error.required_field")}}</div>\n' +
-    '      <div ng-message="max">{{localize("error.value_is_gt_max")}}</div>\n' +
-    '      <div ng-message="min">{{localize("error.value_is_lt_min")}}</div>\n' +
+    '\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed()">\n' +
+    '      <span class="help-block" ng-message="required">{{localize("error.required")}}</span>\n' +
+    '      <span class="help-block" ng-message="min">{{localize("error.min")}}</span>\n' +
+    '      <span class="help-block" ng-message="max">{{localize("error.max")}}</span>\n' +
     '    </div>\n' +
     '\n' +
     '  </div>\n' +
@@ -544,7 +554,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/radio.html',
-    '<div class="form-group">\n' +
+    '<div class="form-group" ng-class="{\'has-error\': isErrorDisplayed()}">\n' +
     '\n' +
     '  <label class="col-sm-4 control-label"\n' +
     '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
@@ -565,8 +575,8 @@ module.run(['$templateCache', function($templateCache) {
     '             ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}\n' +
     '    </label>\n' +
     '\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
-    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed">\n' +
+    '      <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>\n' +
     '    </div>\n' +
     '  </div>\n' +
     '\n' +
@@ -583,7 +593,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/select.html',
-    '<div class="form-group">\n' +
+    '<div class="form-group" ng-class="{\'has-error\': isErrorDisplayed()}">\n' +
     '\n' +
     '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
     '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
@@ -615,8 +625,8 @@ module.run(['$templateCache', function($templateCache) {
     '      </div>\n' +
     '    </div>\n' +
     '\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">\n' +
-    '      <div ng-message="required">{{localize("error.no_item_selected")}}</div>\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed()">\n' +
+    '      <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>\n' +
     '    </div>\n' +
     '\n' +
     '  </div>\n' +
@@ -650,7 +660,7 @@ try {
 }
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('templates/text.html',
-    '<div class="form-group" ng-class="{\'has-error\': formModel[id].$touched && formModel[id].$invalid}">\n' +
+    '<div class="form-group" ng-class="{\'has-error\': isErrorDisplayed()}">\n' +
     '  <label for="{{id}}" class="col-sm-4 control-label"\n' +
     '         ng-class="{required : constraints.required}">{{label}}</label>\n' +
     '\n' +
@@ -678,9 +688,10 @@ module.run(['$templateCache', function($templateCache) {
     '             ng-required="constraints.required"/>\n' +
     '    </div>\n' +
     '\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid"\n' +
-    '         ng-if="formModel[id].$touched && formModel[id].$invalid">\n' +
-    '      <span class="help-block" ng-message="required">{{localize("error.required_field")}}</span>\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed()">\n' +
+    '      <span class="help-block" ng-message="required">{{localize("error.required")}}</span>\n' +
+    '      <span class="help-block" ng-message="minlength">{{localize("error.minlength")}}</span>\n' +
+    '      <span class="help-block" ng-message="maxlength">{{localize("error.maxlength")}}</span>\n' +
     '    </div>\n' +
     '  </div>\n' +
     '\n' +

@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" ng-class="{'has-error': isErrorDisplayed()}">
 
   <label class="col-sm-4 control-label"
          ng-class="{required : constraints.required}">{{label}}</label>
@@ -19,8 +19,8 @@
              ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}
     </label>
 
-    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="formModel.submitPressed">
-      <div ng-message="required">{{localize("error.no_item_selected")}}</div>
+    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed">
+      <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>
     </div>
   </div>
 

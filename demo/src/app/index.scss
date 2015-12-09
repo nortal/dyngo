@@ -36,6 +36,13 @@ body {
   padding-right: 15px;
 }
 
+
+.control-label.required:after {
+  content: " *";
+  color: red;
+}
+
+
 .period-range-input {
   padding: 3px;
 }
