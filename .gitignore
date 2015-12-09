@@ -28,4 +28,6 @@ demo/.sass-cache/
 demo/.idea/
 demo/.tmp/
 demo/dist/
+demo/properties.json
+demo/src/app/index.constants.js
 
