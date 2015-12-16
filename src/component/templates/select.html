@@ -9,7 +9,7 @@
       <select id="{{id}}" name="{{id}}" class="form-control"
               ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"
               ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">
-        <option></option>
+        <option value="">{{placeholder}}</option>
       </select>
        <span class="input-group-btn">
          <button type="button" class="btn btn-default"
@@ -25,7 +25,7 @@
         <select id="{{id}}" name="{{id}}" class="form-control"
                 ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"
                 ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">
-          <option></option>
+          <option value="">{{placeholder}}</option>
         </select>
       </div>
     </div>

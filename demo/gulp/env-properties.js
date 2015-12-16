@@ -31,7 +31,7 @@ gulp.task('replace-env-properties', function() {
   var envPropertiesFile = 'env/' + env + '.json';
   if (!fileExists(envPropertiesFile)) {
     gutil.log(gutil.colors.red('File \'' + envPropertiesFile + '\' does not exist!'));
-    return;
+    process.exit(1);
   }
 
   gulp.src('src/app/index.constants.js.template')

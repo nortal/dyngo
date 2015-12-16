@@ -131,6 +131,7 @@
       "constraints": {
         "required": true
       },
+      "placeholder": "Please choose something",
       "options": [
         {
           "code": "option_1",

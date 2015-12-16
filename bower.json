@@ -19,6 +19,7 @@
     "gulpfile.js",
     "karma-*.js",
     "LICENSE_HEADER",
+    "*.sh",
     "**/.*"
   ],
   "dependencies": {

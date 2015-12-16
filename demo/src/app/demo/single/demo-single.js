@@ -3,7 +3,7 @@
 
   angular.module('dyngoDemo.single', [])
 
-    .controller('DemoSingleFormController', function($window, dyngo, DemoService) {
+    .controller('DemoSingleFormController', function($window, dyngo, DemoService, $scope) {
       var vm = this;
 
       DemoService.loadStructure('samples').then(function(formStructure) {
@@ -12,8 +12,7 @@
       });
 
       vm.submit = function() {
-        vm.demoForm.submitPressed = true;
-        if (vm.demoForm.$valid) {
+        if ($scope.demoForm.$valid) {
           DemoService.saveData(vm.formData).then(function() {
             $window.scrollTo(0, 0);
           });

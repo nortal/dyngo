@@ -604,7 +604,7 @@ module.run(['$templateCache', function($templateCache) {
     '      <select id="{{id}}" name="{{id}}" class="form-control"\n' +
     '              ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"\n' +
     '              ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">\n' +
-    '        <option></option>\n' +
+    '        <option value="">{{placeholder}}</option>\n' +
     '      </select>\n' +
     '       <span class="input-group-btn">\n' +
     '         <button type="button" class="btn btn-default"\n' +
@@ -620,7 +620,7 @@ module.run(['$templateCache', function($templateCache) {
     '        <select id="{{id}}" name="{{id}}" class="form-control"\n' +
     '                ng-options="option.code as option.value | dgTranslate:formName:lang for option in options"\n' +
     '                ng-model="data[id]" ng-disabled="constraints.disabled" ng-required="constraints.required">\n' +
-    '          <option></option>\n' +
+    '          <option value="">{{placeholder}}</option>\n' +
     '        </select>\n' +
     '      </div>\n' +
     '    </div>\n' +
