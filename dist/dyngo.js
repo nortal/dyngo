@@ -328,36 +328,6 @@ angular.module('dyngo.form', ['dyngo.translator'])
     };
   });
 
-angular.module('dyngo.translator', [])
-
-  .value('dgDictionary', {})
-
-  .service('dgTranslator', ["dgDictionary", function(dgDictionary) {
-
-    this.registerDictionary = function(formName, dictionary) {
-      dgDictionary[formName] = dictionary || {};
-    };
-
-    this.translate = function(formName, key, lang) {
-      var translatedValue;
-      var dictionary = dgDictionary[formName];
-      if (angular.isDefined(dictionary) && angular.isDefined(dictionary[lang])) {
-        translatedValue = dictionary[lang][key];
-      }
-      if (angular.isUndefined(translatedValue)) {
-        translatedValue = key;
-      }
-      return translatedValue;
-    };
-
-  }])
-
-  .filter('dgTranslate', ["dgTranslator", function(dgTranslator) {
-    return function(input, formName, lang) {
-      return dgTranslator.translate(formName, input, lang);
-    };
-  }]);
-
 angular.module('dyngo.functions', [])
 
   .provider('dgFunctionProvider', function () {
@@ -401,6 +371,36 @@ angular.module('dyngo.functions', [])
     };
   });
 
+
+angular.module('dyngo.translator', [])
+
+  .value('dgDictionary', {})
+
+  .service('dgTranslator', ["dgDictionary", function(dgDictionary) {
+
+    this.registerDictionary = function(formName, dictionary) {
+      dgDictionary[formName] = dictionary || {};
+    };
+
+    this.translate = function(formName, key, lang) {
+      var translatedValue;
+      var dictionary = dgDictionary[formName];
+      if (angular.isDefined(dictionary) && angular.isDefined(dictionary[lang])) {
+        translatedValue = dictionary[lang][key];
+      }
+      if (angular.isUndefined(translatedValue)) {
+        translatedValue = key;
+      }
+      return translatedValue;
+    };
+
+  }])
+
+  .filter('dgTranslate', ["dgTranslator", function(dgTranslator) {
+    return function(input, formName, lang) {
+      return dgTranslator.translate(formName, input, lang);
+    };
+  }]);
 
 (function(module) {
 try {
@@ -575,7 +575,7 @@ module.run(['$templateCache', function($templateCache) {
     '             ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}\n' +
     '    </label>\n' +
     '\n' +
-    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed">\n' +
+    '    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed()">\n' +
     '      <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>\n' +
     '    </div>\n' +
     '  </div>\n' +

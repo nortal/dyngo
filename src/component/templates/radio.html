@@ -19,7 +19,7 @@
              ng-disabled="constraints.disabled" ng-required="constraints.required">{{localize(option.text)}}
     </label>
 
-    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed">
+    <div ng-messages="formModel[id].$error" class="message-invalid" ng-if="isErrorDisplayed()">
       <div class="help-block" ng-message="required">{{localize("error.required_select")}}</div>
     </div>
   </div>
