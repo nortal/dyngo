@@ -23,15 +23,15 @@
     "**/.*"
   ],
   "dependencies": {
-    "angular": ">=1.4.8",
-    "angular-messages": ">=1.4.8",
-    "angular-sanitize": ">=1.4.8",
+    "angular": "~1.4.8",
+    "angular-messages": "~1.4.8",
+    "angular-sanitize": "~1.4.8",
     "angular-strap": "~2.3.5",
     "checklist-model": "~0.5.0"
   },
   "devDependencies": {
-    "angular-mocks": ">=1.4.8",
-    "angular-scenario": ">=1.4.8"
+    "angular-mocks": "~1.4.8",
+    "angular-scenario": "~1.4.8"
   },
   "homepage": "https://github.com/nortal/dyngo",
   "repository": {
