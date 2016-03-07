@@ -8,7 +8,7 @@
 
       DemoService.loadStructure('samples').then(function(formStructure) {
         dyngo.registerForm('demoForm', formStructure);
-        vm.formData = {};
+        vm.formData = {'selectSample': 1};
       });
 
       vm.submit = function() {
