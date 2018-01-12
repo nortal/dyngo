@@ -1,0 +1,26 @@
+<div class="form-group row">
+  <label [ngClass]="{'required': isRequired()}" class="col-sm-4 col-form-label">
+    {{translate(formControl.label)}}
+  </label>
+
+  <div class="col-sm-8">
+
+    <div *ngFor="let option of formControl.options"
+         class="form-check" [ngClass]="{'form-check-inline': formControl.layout?.orientation == 'horizontal'}">
+      <input class="form-check-input" type="radio" name="{{formControl.id}}" id="{{formControl.id + '-' + option.code}}"
+             [value]="option.code" [(ngModel)]="data[formControl.id]" #model="ngModel" [disabled]="isDisabled()"
+             [required]="isRequired()">
+      <label class="form-check-label" for="{{formControl.id + '-' + option.code}}">
+        {{translate(option.text)}}
+      </label>
+    </div>
+
+  </div>
+
+  <!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="alert alert-danger">-->
+  <!--<div [hidden]="!model.errors.required">{{translate("error.required_select")}}</div>-->
+  <!--</div>-->
+
+</div>
+
+

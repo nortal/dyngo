@@ -1,29 +1,13 @@
-/**
- *  Welcome to your gulpfile!
- *  The gulp tasks are splitted in several files in the gulp directory
- *  because putting all here was really too long
- */
+const gulp = require('gulp');
+const copyfiles = require('copyfiles');
 
-'use strict';
+const LIBRARY_SRC = '../dist/**/*';
+const LIBRARY_DIST = 'esm/lib';
 
-var gulp = require('gulp');
-var wrench = require('wrench');
-
-/**
- *  This will load all js or coffee files in the gulp directory
- *  in order to load all gulp tasks
- */
-wrench.readdirSyncRecursive('./gulp').filter(function(file) {
-  return (/\.(js|coffee)$/i).test(file);
-}).map(function(file) {
-  require('./gulp/' + file);
+gulp.task('copy-lib', (callback) => {
+  copyfiles([ LIBRARY_SRC, LIBRARY_DIST ], 2, callback);
 });
 
-
-/**
- *  Default task clean temporaries directories and launch the
- *  main optimization build task
- */
-gulp.task('default', ['clean'], function () {
-  gulp.start('build');
+gulp.task('copy-lib:watch', () => {
+  gulp.watch(LIBRARY_SRC, ['copy-lib']);
 });

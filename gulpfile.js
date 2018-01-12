@@ -1,124 +1,63 @@
-var gulp = require('gulp');
-var karma = require('karma').server;
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var path = require('path');
-var plumber = require('gulp-plumber');
-var runSequence = require('run-sequence');
-var jshint = require('gulp-jshint');
-var ngHtml2Js = require("gulp-ng-html2js");
-var header = require('gulp-header');
-var fs = require('fs');
-var ngAnnotate = require('gulp-ng-annotate');
-
+const gulp = require('gulp');
+const sass = require('node-sass');
+const inlineTemplates = require('gulp-inline-ng2-template');
+const exec = require('child_process').exec;
 
 /**
- * File patterns
- **/
-
-// Root directory
-var rootDirectory = path.resolve('./');
-
-// Source directory for build process
-var sourceDirectory = path.join(rootDirectory, './src');
-
-var sourceFiles = [
-
-  // Make sure module files are handled first
-  path.join(sourceDirectory, '/**/*.module.js'),
-
-  // Then add all JavaScript files
-  path.join(sourceDirectory, '/**/*.js'),
-
-  path.join(rootDirectory, './tmp/templates.js')
-];
-
-gulp.task('html2js', function () {
-  return gulp.src('src/component/templates/*.html')
-    .pipe(plumber())
-    .pipe(ngHtml2Js({
-      moduleName: 'dyngo.component.templates',
-      prefix: 'templates/'
-    }))
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest('./tmp'));
-});
-
-gulp.task('build-src', function () {
-  gulp.src(sourceFiles)
-    .pipe(plumber())
-    .pipe(ngAnnotate())
-    .pipe(concat('dyngo.js'))
-    .pipe(gulp.dest('./dist/'))
-    .pipe(uglify())
-    .pipe(header(fs.readFileSync('LICENSE_HEADER', 'utf8')))
-    .pipe(rename('dyngo.min.js'))
-    .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build', function () {
-  runSequence('html2js', 'build-src');
-});
-
-/**
- * Process
+ * Inline templates configuration.
+ * @see  https://github.com/ludohenin/gulp-inline-ng2-template
  */
-gulp.task('process-all', function (done) {
-  runSequence('jshint-src', 'test-src', 'build', done)
+const INLINE_TEMPLATES = {
+  SRC: './src/**/*.ts',
+  DIST: './tmp/src-inlined',
+  CONFIG: {
+    base: '/src',
+    target: 'es6',
+    useRelativePaths: true,
+    styleProcessor: compileSass
+  }
+};
+
+/**
+ * Inline external HTML and SCSS templates into Angular component files.
+ * @see: https://github.com/ludohenin/gulp-inline-ng2-template
+ */
+gulp.task('inline-templates', () => {
+  return gulp.src(INLINE_TEMPLATES.SRC)
+    .pipe(inlineTemplates(INLINE_TEMPLATES.CONFIG))
+    .pipe(gulp.dest(INLINE_TEMPLATES.DIST));
 });
 
 /**
- * Watch task
+ * Build ESM by running npm task.
+ * This is a temporary solution until ngc is supported --watch mode.
+ * @see: https://github.com/angular/angular/issues/12867
  */
-gulp.task('watch', function () {
-
-  // Watch JavaScript files
-  gulp.watch(sourceFiles, ['process-all']);
+gulp.task('build:esm', ['inline-templates'], (callback) => {
+  exec('npm run ngcompile', function (error, stdout, stderr) {
+    console.log(stdout, stderr);
+    callback(error)
+  });
 });
 
 /**
- * Validate source JavaScript
+ * Implements ESM build watch mode.
+ * This is a temporary solution until ngc is supported --watch mode.
+ * @see: https://github.com/angular/angular/issues/12867
  */
-
-gulp.task('jshint-src', function () {
-  return gulp.src(sourceFiles)
-    .pipe(plumber())
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'))
+gulp.task('build:esm:watch', ['build:esm'], () => {
+  gulp.watch('src/**/*', ['build:esm']);
 });
 
 /**
- * Run test once and exit
+ * Compile SASS to CSS.
+ * @see https://github.com/ludohenin/gulp-inline-ng2-template
+ * @see https://github.com/sass/node-sass
  */
-gulp.task('test-src', function (done) {
-  karma.start({
-    configFile: __dirname + '/karma-src.conf.js',
-    singleRun: true
-  }, done);
-});
-
-/**
- * Run test once and exit
- */
-gulp.task('test-dist-concatenated', function (done) {
-  karma.start({
-    configFile: __dirname + '/karma-dist-concatenated.conf.js',
-    singleRun: true
-  }, done);
-});
-
-/**
- * Run test once and exit
- */
-gulp.task('test-dist-minified', function (done) {
-  karma.start({
-    configFile: __dirname + '/karma-dist-minified.conf.js',
-    singleRun: true
-  }, done);
-});
-
-gulp.task('default', function () {
-  runSequence('process-all', 'watch')
-});
+function compileSass(path, ext, file, callback) {
+  let compiledCss = sass.renderSync({
+    file: path,
+    outputStyle: 'compressed',
+  });
+  callback(null, compiledCss.css);
+}
