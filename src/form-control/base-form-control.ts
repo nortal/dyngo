@@ -3,7 +3,10 @@ import {FormService} from '../form';
 import {TranslationService} from '../translation/translation.service';
 import {FormControl} from './form-control.model';
 
-@Component({})
+@Component({
+  selector: 'ng-base-form-control',
+  template: '<div>This is base form control.</div>'
+})
 export class BaseFormControl implements OnInit {
 
   @Input('dgFormControl') public formControl: FormControl;
@@ -17,24 +20,24 @@ export class BaseFormControl implements OnInit {
     let form = this.formService.getForm(this.formName);
     this.data = form.data;
     this.lang = form.lang;
+    if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
+      this.data[this.formControl.id] = this.formControl.defaultValue;
+    }
   }
 
-  public translate(value: {[key: string]:any}): string {
-    let translatedValue = this.translationService.translate(this.formName, value, this.lang);
+  public translate(localizedValue: { [key: string]: any }): string {
+    let translatedValue = this.translationService.translate(this.formName, localizedValue, this.lang);
     if (!translatedValue) {
       return;
     }
     return translatedValue.replace(/{{([^}]*)}}/g, (match, group) => {
-      console.log(match, group);
       if (group == 'max()') {
-        console.log('returning max()');
         return <string>this.max();
       }
       if (group == 'min()') {
-        console.log('returning min()');
         return <string>this.min();
       }
-      console.log('Uknown value', group);
+      console.log('Unknown value', group);
       return 'foobar';
       // return $scope.$eval(group, $scope.data);
     });
@@ -66,8 +69,8 @@ export class BaseFormControl implements OnInit {
       return 'fixme!!'; //FIXME
     } else if (typeof constraintExpression === 'number') {
       return constraintExpression;
-      } else if (typeof constraintExpression === 'boolean') {
-        return constraintExpression;
+    } else if (typeof constraintExpression === 'boolean') {
+      return constraintExpression;
     }
   };
 

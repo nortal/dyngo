@@ -10,3 +10,15 @@ label.required:after {
     content: "*";
     color: #a94442; /* red */
 }
+
+.input-group {
+    flex-wrap: wrap!important;
+}
+
+.input-group .invalid-feedback {
+    flex-basis: 100%!important;
+}
+
+.input-group .ng-invalid + .invalid-feedback {
+    display: block;
+}

@@ -6,7 +6,7 @@
   <div class="input-group col-sm-8">
 
     <input type="number" class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
-           placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()"
+           placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"
            min="{{min()}}" max="{{max()}}" #model="ngModel">
 
     <div class="input-group-btn" *ngIf="formControl.description">
@@ -14,12 +14,12 @@
       </button>
     </div>
 
-  </div>
+    <div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">
+      <div [hidden]="!model.errors.required">{{translate("error.required")}}</div>
+      <div [hidden]="!model.errors.minlength">{{translate("error.min")}}</div>
+      <div [hidden]="!model.errors.maxlength">{{translate("error.max")}}</div>
+    </div>
 
-  <div *ngIf="model.errors && (model.dirty || model.touched)" class="alert alert-danger">
-    <div [hidden]="!model.errors.required">{{translate("error.required")}}</div>
-    <div [hidden]="!model.errors.minlength">{{translate("error.min")}}</div>
-    <div [hidden]="!model.errors.maxlength">{{translate("error.max")}}</div>
   </div>
 
 </div>

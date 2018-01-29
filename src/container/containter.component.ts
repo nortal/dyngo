@@ -3,7 +3,6 @@ import {Container} from './container.model';
 import {FormService} from '../form';
 import {FormControl} from '../form-control/form-control.model';
 
-
 @Component({
   selector: 'dg-container',
   templateUrl: './container.component.html',

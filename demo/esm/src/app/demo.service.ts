@@ -351,7 +351,7 @@ export class DemoService {
       {
         "id": "radioWithDefault",
         "type": "radio",
-        "label": {"en": "Radiobutton with default values"},
+        "label": {"en": "Radiobutton with default value"},
         "constraints": {
           "required": true
         },
@@ -522,28 +522,35 @@ export class DemoService {
           ]
         }
       }
-    ],
-    "translations": {
-      "en": {
-        "error.required": "You did not enter a field.",
-        "error.max": "Value should not be greater than {{max()}}.",
-        "error.min": "Value should not be less than {{min()}}.",
-        "error.maxlength": "The maximum number of characters allowed is {{max()}}.",
-        "error.minlength": "The minumum number of characters allowed is {{min()}}.",
-        "error.required_select": "No item selected."
-      }
-    }
+    ]
   };
 
+  dictionary: any = {
+    "error.required": {"en": "You did not enter a field."},
+    "error.max": {"en": "Value should not be greater than {{max()}}."},
+    "error.min": {"en": "Value should not be less than {{min()}}."},
+    "error.maxlength": {"en": "The maximum number of characters allowed is {{max()}}."},
+    "error.minlength": {"en": "The minumum number of characters allowed is {{min()}}."},
+    "error.required_select": {"en": "No item selected."}
+  };
 
   constructor(private formService: FormService) {
 
   }
 
-  public init(formData: any): void {
+  public initWithBuiltInForm(formData: any): Form {
     let form = new Form(this.rootContainer, 'en');
+    form.dictionary = this.dictionary;
     form.data = formData;
-    this.formService.registerForm('demoForm', form, {});
+    this.formService.registerForm('demoForm', form);
+    return form;
+  }
+
+  public init(rootContainer: any, formData: any): void {
+    let form = new Form(rootContainer, 'en');
+    // form.dictionary = this.rootContainer.dictionary;
+    form.data = formData;
+    this.formService.registerForm('demoForm', form);
   }
 
 }

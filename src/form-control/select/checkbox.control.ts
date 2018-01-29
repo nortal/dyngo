@@ -8,11 +8,16 @@ import {BaseFormControl} from '../base-form-control';
 })
 export class CheckboxControl extends BaseFormControl {
 
-  public getDataObject(): any[] {
+  public ngOnInit(): void {
+    super.ngOnInit();
     if (!this.data[this.formControl.id]) {
+      console.log('creating empty array');
       this.data[this.formControl.id] = [];
     }
-    return this.data[this.formControl.id];
+  }
+
+  public isChecked(optionCode: string): boolean {
+    return this.data[this.formControl.id].indexOf(optionCode) !== -1;
   }
 
 }

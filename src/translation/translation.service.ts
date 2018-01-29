@@ -1,30 +1,28 @@
 import {Injectable} from '@angular/core';
+import {FormService} from '../form';
 
 @Injectable()
 export class TranslationService {
 
-  private dictionaries: any = {};
+  constructor(private formService: FormService) {}
 
-  public registerDictionary(formName: string, dictionary: any) {
-    this.dictionaries[formName] = dictionary;
+  public translate(formName: string, value: any, lang: string): string {
+    if (typeof value === 'string') {
+      return this.lookupInDictionary(formName, value, lang);
+    }
+    return this.translateValue(value, lang);
   }
 
-  // public translate(formName: string, key: string, lang: string): string {
-  //   // console.log('translate', formName, key, lang);
-  //   let translatedValue;
-  //   let dictionary = this.dictionaries[formName];
-  //   if (!!dictionary && !!dictionary[lang]) {
-  //     translatedValue = dictionary[lang][key];
-  //   }
-  //   if (!translatedValue) {
-  //     translatedValue = key;
-  //   }
-  //   return translatedValue;
-  // };
+  private translateValue(translations: { [key: string]: string }, lang: string): string {
+    if (!!translations) {
+      return translations[lang] || '## MISSING TRANSLATION ##';
+    }
+  };
 
-  public translate(formName: string, tranlations: { [key: string]: string }, lang: string): string {
-    if (!!tranlations) {
-      return tranlations[lang] || '## MISSING TRANSLATION ##';
+  private lookupInDictionary(formName: string, key: string, lang: string): string {
+    let dictionary = this.formService.getForm(formName).dictionary;
+    if (!!dictionary && !!dictionary[key]) {
+      return (<any>dictionary[key])[lang] || '## MISSING TRANSLATION ##';
     }
   };
 

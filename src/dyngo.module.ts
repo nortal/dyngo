@@ -12,6 +12,7 @@ import {
   TextInputControl
 } from './form-control';
 import {ChecklistDirective} from './form-control/select/checklist.directive';
+import {BaseFormControl} from './form-control/base-form-control';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import {ChecklistDirective} from './form-control/select/checklist.directive';
     FormService, TranslationService
   ],
   declarations: [
-    FormComponent, ContainerComponent, FormControlComponent,
+    FormComponent, ContainerComponent, FormControlComponent, BaseFormControl,
     TextInputControl, NumberInputControl,
     SelectControl, CheckboxControl, RadioControl,
     HeaderControl, StaticTextControl,

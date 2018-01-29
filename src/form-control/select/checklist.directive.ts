@@ -1,35 +1,25 @@
-import {Directive, ElementRef} from '@angular/core';
+import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 
-@Directive(
-  {
-    selector: '[dg-checklist]',
-    inputs: [
-      'targetArray: dg-checklist'
-    ],
-    host: {
-      '(change)': 'onChange($event)',
-      '[checked]': 'isChecked()'
-    }
-  }
-)
+@Directive({
+  selector: '[checklist]',
+})
 export class ChecklistDirective {
   el: ElementRef;
-  targetArray: string[] = [];
+
+  @Input('checklist')
+  checklist: any[];
 
   constructor(el: ElementRef) {
     this.el = el;
   }
 
-  onChange($event: any) {
-    if ($event.target.checked) {
-      this.targetArray.push($event.target.value);
+  @HostListener('change', ['$event.target']) onChange(checkbox: any) {
+    console.log('change', this.checklist);
+    if (checkbox.checked) {
+      this.checklist.push(checkbox.value);
     }
     else {
-      this.targetArray.splice(this.targetArray.indexOf(this.el.nativeElement.value), 1);
+      this.checklist.splice(this.checklist.indexOf(this.el.nativeElement.value), 1);
     }
-  }
-
-  isChecked() {
-    return !!this.targetArray && this.targetArray.indexOf(this.el.nativeElement.value) !== -1;
   }
 }
