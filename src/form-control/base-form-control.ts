@@ -37,9 +37,8 @@ export class BaseFormControl implements OnInit {
       if (group == 'min()') {
         return <string>this.min();
       }
-      console.log('Unknown value', group);
-      return 'foobar';
-      // return $scope.$eval(group, $scope.data);
+      // Is it required? Or returning just group would be enough?
+      return this.formService.evaluateExpression(group, this.data);
     });
   }
 
@@ -59,14 +58,13 @@ export class BaseFormControl implements OnInit {
     return this.evaluateConstraint('max');
   };
 
-  private evaluateConstraint(name: string) {
+  private evaluateConstraint(name: string): string | number | boolean {
     if (!this.formControl.constraints || !this.formControl.constraints[<any>name]) {
       return;
     }
     let constraintExpression = this.formControl.constraints[<any>name];
     if (typeof constraintExpression === 'string') {
-      // return $scope.$eval(constraintExpression, $scope.data);
-      return 'fixme!!'; //FIXME
+      return this.formService.evaluateExpression(constraintExpression, this.data);
     } else if (typeof constraintExpression === 'number') {
       return constraintExpression;
     } else if (typeof constraintExpression === 'boolean') {

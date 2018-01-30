@@ -429,6 +429,57 @@ export class DemoService {
         ]
       },
       {
+        "id": "constraints",
+        "type": "header",
+        "label": {"en": "Constraints"}
+      },
+      {
+        "id": "countryNameVisible",
+        "type": "radio",
+        "layout": {
+          "orientation": "horizontal"
+        },
+        "label": {"en": "'Country name' visible?"},
+        "options": [{"code": "yes", "text": {"en": "Yes"}}, {"code": "no", "text": {"en": "No"}}],
+        "defaultValue": "yes"
+      },
+      {
+        "id": "countryNameEditable",
+        "type": "radio",
+        "layout": {
+          "orientation": "horizontal"
+        },
+        "label": {"en": "'Country name' editable?"},
+        "options": [{"code": "yes", "text": {"en": "Yes"}}, {"code": "no", "text": {"en": "No"}}],
+        "defaultValue": "yes",
+        "constraints": {
+          "visible": "countryNameVisible === 'yes'"
+        }
+      },
+      {
+        "id": "countryNameRequired",
+        "type": "radio",
+        "layout": {
+          "orientation": "horizontal"
+        },
+        "label": {"en": "'Country name' required?"},
+        "options": [{"code": "yes", "text": {"en": "Yes"}}, {"code": "no", "text": {"en": "No"}}],
+        "defaultValue": "no",
+        "constraints": {
+          "visible": "countryNameVisible === 'yes'"
+        }
+      },
+      {
+        "id": "countryName",
+        "type": "textInput",
+        "label": {"en": "Country name"},
+        "constraints": {
+          "visible": "countryNameVisible === 'yes'",
+          "disabled": "countryNameEditable === 'no'",
+          "required": "countryNameRequired === 'yes'"
+        }
+      },
+      {
         "id": "staticControls",
         "type": "header",
         "label": {"en": "Static controls"}

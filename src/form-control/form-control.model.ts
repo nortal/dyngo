@@ -5,7 +5,7 @@ export class FormControl {
   placeholder: { [key: string]: any };
   description: { [key: string]: any };
   options: any;
-  constraints: any[];
+  constraints: { [key: string]: any };
   label: { [key: string]: any };
   defaultValue: any;
 

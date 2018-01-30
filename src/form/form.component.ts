@@ -21,8 +21,8 @@ export class FormComponent implements OnInit {
     this.data = this.form.data;
   }
 
-  public onSubmit(myForm: NgForm): void {
-    console.log('onSubmit', myForm);
+  public onSubmit(df: NgForm): void {
+    console.log('onSubmit', df);
   }
 
 }

@@ -20,24 +20,8 @@ export class ContainerComponent implements OnInit {
   }
 
   public isControlVisible(formControl: FormControl): boolean {
-    let visibilityExpression: string = formControl.constraints ? formControl.constraints[<any>'visible'] : undefined;
-    if (!visibilityExpression) {
-      return true;
-    }
-    let keys: string[] = [];
-    let values: any[] = [];
-    for (let key of Object.keys(this.data)) {
-      if (key === 'this') {
-        continue;
-      }
-      keys.push(key);
-      values.push(this.data[key])
-    }
-    try {
-      return new Function(...keys, 'return ' + visibilityExpression).apply(null, values);
-    } catch (e) {
-      console.error('Failed to evaluate expression', visibilityExpression, e);
-    }
+    let visibilityExpression: string = formControl.constraints ? formControl.constraints['visible'] : undefined;
+    return this.formService.evaluateExpression(visibilityExpression, this.data);
   }
 
 }
