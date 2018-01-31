@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {FormService} from '../../lib/';
+import {FormService} from '../../lib/form';
 import {Form} from '../../lib/form/form.model';
+
 
 @Injectable()
 export class DemoService {
@@ -498,7 +499,7 @@ export class DemoService {
       "type": "staticText",
       "label": {"en": "<strong>Passwords do not match!</strong>"},
       "constraints": {
-        "visible": "passwordA && passwordB && passwordA !== passwordB"
+        "visible": "(passwordA && passwordB) && passwordA != passwordB"
       }
     }
   ];

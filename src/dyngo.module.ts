@@ -13,6 +13,7 @@ import {
 } from './form-control';
 import {ChecklistDirective} from './form-control/select/checklist.directive';
 import {BaseFormControl} from './form-control/base-form-control';
+import {DateInputControl} from './form-control/input/date-input.control';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import {BaseFormControl} from './form-control/base-form-control';
   ],
   declarations: [
     FormComponent, ContainerComponent, FormControlComponent, BaseFormControl,
-    TextInputControl, NumberInputControl,
+    TextInputControl, NumberInputControl, DateInputControl,
     SelectControl, CheckboxControl, RadioControl,
     HeaderControl, StaticTextControl,
     ChecklistDirective

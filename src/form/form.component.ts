@@ -23,6 +23,9 @@ export class FormComponent implements OnInit {
 
   public onSubmit(df: NgForm): void {
     console.log('onSubmit', df);
+    if (this.form.submitCallback) {
+      this.form.submitCallback();
+    }
   }
 
 }

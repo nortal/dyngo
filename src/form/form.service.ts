@@ -13,6 +13,12 @@ export class FormService {
     }
   };
 
+  public unregisterForm(name: string) {
+    if (!!name) {
+      delete this.forms[name];
+    }
+  };
+
   public getForm(formName: string): Form {
     if (!this.forms[formName]) {
       console.log('Form "' + formName + '" is not registered!');

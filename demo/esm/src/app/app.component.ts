@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DemoService} from './demo.service';
 import {HttpClient} from '@angular/common/http';
-import {Form} from '../../../../src/form/form.model';
+import {Form} from '../../lib/form/form.model';
+
 
 @Component({
   selector: 'demo-app',
@@ -82,6 +83,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.demoService.initWithBuiltInForm(this.formData);
+    this.form.submitCallback = () => console.log('submit callback called');
     this.structureJson = this.toPrettyJson(this.form.rootContainer);
     this.dictionaryJson = this.toPrettyJson(this.form.dictionary);
     // this.formLoaded = true;
