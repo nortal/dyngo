@@ -3,7 +3,7 @@
 Provides a functionality for building forms in AngularJS according to structure and rules described in JSON format.
 
 ## License
-Apache License, Version 2.0
+MIT
 
 ## Features (short version):
 * Supports most common HTML input types
@@ -16,21 +16,21 @@ Apache License, Version 2.0
 * Translations
 
 ## Dependencies:
-* Angular 1.3+
-* [AngularStrap](http://mgcrea.github.io/angular-strap/) 2.1+
-* [Checklist-model](http://vitalets.github.io/checklist-model/) 0.1.3+
+* Angular 5+
+* [ngx-bootstrap](https://github.com/valor-software/ngx-bootstrap) 2.0.2+
+* [context-eval](https://www.npmjs.com/package/context-eval) 0.1.0
 
-## Demo
-* You can see a full-featured demo [here](http://nortal.github.io/dyngo) 
-* Another option is to run it on your own machine
-  * Prerequisites: [nodejs](https://nodejs.org/), [bower](http://bower.io/#install-bower), [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) and [grunt](http://gruntjs.com/getting-started) (sorry for that, will replace grunt with gulp in demo application soon)
-  * Clone the repository: `git clone https://github.com/nortal/dyngo.git`
-  * Execute run-demo.sh in root directory: `./run-demo.sh`
-  * Navigate to [http://localhost:9001](http://localhost:9001) in your browser
+## Demo 
+```bash
+  yarn install
+  yarn build:lib
+  ng serve
+```
+Navigate to [http://localhost:4200]([http://localhost:4200]) in your browser  
   
 ## Installation
 1. Attach dyngo to your project. As Dyngo is published in bower registry, then the easiest way is to use bower:
-`bower install --save dyngo`
+`npm install --save ngx-dyngo-lib`
 2. Add dyngo as a dependency to your Angular module:
 ```js
 angular.module('myApp', ['dyngo'])
