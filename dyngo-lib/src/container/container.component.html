@@ -1,0 +1,4 @@
+<div *ngFor="let formControl of container.controls">
+  <dg-form-control [dgFormControl]="formControl" [dgFormName]="formName"
+                   *ngIf="isControlVisible(formControl)"></dg-form-control>
+</div>
