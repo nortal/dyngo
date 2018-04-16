@@ -4,7 +4,7 @@ import {TranslationService} from '../translation/translation.service';
 import {FormControl} from './form-control.model';
 
 @Component({
-  selector: 'ng-base-form-control',
+  selector: 'dg-base-form-control',
   template: '<div>This is base form control.</div>'
 })
 export class BaseFormControl implements OnInit {
