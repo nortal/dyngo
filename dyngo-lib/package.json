@@ -1,6 +1,6 @@
 {
-  "name": "ngx-dyngo-lib",
-  "version": "2.0.0-b3",
+  "name": "dyngo-lib",
+  "version": "2.0.3",
   "repository": "https://github.com/nortal/dyngo.git",
   "author": {
     "name": "Vassili Jakovlev",
