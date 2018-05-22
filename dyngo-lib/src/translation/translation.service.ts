@@ -20,7 +20,7 @@ export class TranslationService {
   };
 
   private lookupInDictionary(formName: string, key: string, lang: string): string {
-    let dictionary = this.formService.getForm(formName).dictionary;
+    const dictionary = this.formService.getForm(formName).dictionary;
     if (!!dictionary && !!dictionary[key]) {
       return (<any>dictionary[key])[lang] || '## MISSING TRANSLATION ##';
     }

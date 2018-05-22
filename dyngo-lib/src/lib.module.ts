@@ -17,8 +17,8 @@ import { FormControlComponent } from './form-control/form-control.component';
 import { DateInputControl } from './form-control/input/date-input.control';
 import { ChecklistDirective } from './form-control/select/checklist.directive';
 
-import { FormService } from './form/form.service';
-import { TranslationService } from './translation/translation.service';
+import { FormService } from './form';
+import { TranslationService } from './translation';
 
 
 @NgModule({

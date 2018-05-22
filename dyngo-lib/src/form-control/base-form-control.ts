@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from '../form';
-import {TranslationService} from '../translation/translation.service';
+import {TranslationService} from '../translation';
 import {FormControl} from './form-control.model';
 
 @Component({
