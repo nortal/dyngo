@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormService} from '../form';
-import {TranslationService} from '../translation';
+import {FormService } from '../form/form.service';
 import {FormControl} from './form-control.model';
+import {TranslationService} from '../form/translation.service';
 
 @Component({
   selector: 'dg-base-form-control',

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormService} from '../form';
+import {FormService} from '../form/form.service';
 
 @Injectable()
 export class DefaultControlProviderService {
