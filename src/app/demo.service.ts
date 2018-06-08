@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Form, FormService } from '@dyngo';
+import {Injectable} from '@angular/core';
+import {Form, FormService} from '@dyngo';
 
 
 @Injectable()
@@ -67,6 +67,12 @@ export class DemoService {
         'title': {'en': 'Some title'},
         'content': {'en': 'Some help content for this field'}
       }
+    },
+    {
+      'id': 'simpleTextArea',
+      'type': 'textArea',
+      'label': {'en': 'Simple text area'},
+      'placeholder': {'en': 'This is a placeholder for text area.\nIt can be multiline.'},
     }];
 
   numberInputs: any[] = [{

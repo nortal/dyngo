@@ -17,6 +17,7 @@ import {StaticTextControl} from './form-control/static/static-text.control';
 import {SelectControl} from './form-control/select/select.control';
 import {RadioControl} from './form-control/select/radio.control';
 import {CheckboxControl} from './form-control/select/checkbox.control';
+import {TextAreaControl} from './form-control/input/text-area-control.component';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import {CheckboxControl} from './form-control/select/checkbox.control';
   ],
   declarations: [
     FormComponent, ContainerComponent, FormControlComponent, BaseFormControl,
-    TextInputControl, NumberInputControl, DateInputControl,
+    TextInputControl, NumberInputControl, DateInputControl, TextAreaControl,
     SelectControl, CheckboxControl, RadioControl,
     HeaderControl, StaticTextControl,
     ChecklistDirective
