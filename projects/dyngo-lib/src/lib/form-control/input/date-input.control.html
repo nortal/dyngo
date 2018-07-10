@@ -1,0 +1,23 @@
+<div class="form-group row">
+  <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-lg-4">
+    {{translate(formControl.label)}}
+  </label>
+
+  <div class="input-group col-lg-8">
+
+    <input type="date" class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
+           placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"
+           #model="ngModel">
+
+    <div class="input-group-btn" *ngIf="formControl.description">
+      <button class="btn btn-outline-secondary" type="button">?
+      </button>
+    </div>
+
+    <div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">
+      <div [hidden]="!model.errors.required">{{translate("error.required")}}</div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Form } from '@dyngo';
-import { DemoService } from './demo.service';
+import {Component, OnInit} from '@angular/core';
+import { FormioForm } from 'projects/dyngo-lib/src/public_api';
+import {DemoService} from './demo.service';
 
 
 @Component({
-  selector: 'dg-root',
+  selector: 'app-root',
   templateUrl: './app.component.html'
 })
 
 export class AppComponent implements OnInit {
 
-  public form: Form;
+  public form: FormioForm;
   public formData: any = {};
 
   public structureJson: string;
@@ -24,10 +24,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.demoService.initWithBuiltInForm(this.formData);
-    this.form.submitCallback = () => console.log('submit callback called');
-    this.structureJson = this.toPrettyJson(this.form.rootContainer);
-    this.dictionaryJson = this.toPrettyJson(this.form.dictionary);
+    this.demoService.initWithBuiltInForm(this.formData)
+      .subscribe(f => this.form = f);
+    // this.form.submitCallback = () => console.log('submit callback called');
+    // this.structureJson = this.toPrettyJson(this.form.rootContainer);
+    // this.dictionaryJson = this.toPrettyJson(this.form.dictionary);
   }
 
   toPrettyJson(obj: any): string {
@@ -36,20 +37,20 @@ export class AppComponent implements OnInit {
 
   public updateFormStructure() {
     delete this.structureError;
-    try {
-      this.form.rootContainer = JSON.parse(this.structureJson);
-    } catch (e) {
-      this.structureError = e;
-    }
+    // try {
+      // this.form.rootContainer = JSON.parse(this.structureJson);
+    // } catch (e) {
+    //   this.structureError = e;
+    // }
   }
 
   public updateDictionary() {
     delete this.dictionaryError;
-    try {
-      this.form.dictionary = JSON.parse(this.dictionaryJson);
-    } catch (e) {
-      this.dictionaryError = e;
-    }
+    // try {
+    //   this.form.dictionary = JSON.parse(this.dictionaryJson);
+    // } catch (e) {
+    //   this.dictionaryError = e;
+    // }
   }
 
 
