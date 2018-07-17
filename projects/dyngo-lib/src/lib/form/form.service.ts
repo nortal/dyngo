@@ -11,20 +11,20 @@ export class FormService {
     if (!!name && !!form) {
       this.forms[name] = form;
     }
-  };
+  }
 
   public unregisterForm(name: string) {
     if (!!name) {
       delete this.forms[name];
     }
-  };
+  }
 
   public getForm(formName: string): FormioForm {
     if (!this.forms[formName]) {
       console.log('Form "' + formName + '" is not registered!');
     }
     return this.forms[formName];
-  };
+  }
 
   public registerElementType(type: string, element: any) {
     if (!type || !element) {
@@ -46,7 +46,7 @@ export class FormService {
         continue;
       }
       keys.push(key);
-      values.push(data[key])
+      values.push(data[key]);
     }
     try {
       return new Function(...keys, 'return ' + expression).apply(null, values);
@@ -55,5 +55,5 @@ export class FormService {
     }
   }
 
-
 }
+

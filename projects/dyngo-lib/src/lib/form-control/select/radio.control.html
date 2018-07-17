@@ -1,9 +1,11 @@
 <div class="form-group row">
-  <label [ngClass]="{'required': isRequired()}" class="col-form-label col-lg-4">
+
+  <label [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
     {{translate(formControl.label)}}
   </label>
 
-  <div class="col-lg-8">
+  <div class="input-group col-md-{{controlWidth}}">
 
     <div *ngFor="let option of formControl.values"
          class="form-check" [ngClass]="{'form-check-inline': formControl.layout?.orientation == 'horizontal'}">

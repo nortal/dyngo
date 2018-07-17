@@ -50,6 +50,8 @@ export interface FormioForm {
   tags?: string[];
   access?: AccessSetting[];
   submissionAccess?: AccessSetting[];
+
+  data?: object;
 }
 
 export interface AlertsOptions {

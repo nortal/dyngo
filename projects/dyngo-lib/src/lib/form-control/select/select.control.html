@@ -1,9 +1,11 @@
 <div class="form-group row">
-  <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-lg-4">
+
+  <label [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
     {{translate(formControl.label)}}
   </label>
 
-  <div class="input-group col-lg-8">
+  <div class="input-group col-md-{{controlWidth}}">
 
     <select id="{{formControl.id}}" name="{{formControl.id}}" class="form-control" [(ngModel)]="data[formControl.id]"
             #model="ngModel" [disabled]="isDisabled()" [required]="isRequired()">

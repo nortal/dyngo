@@ -28,9 +28,11 @@ export class DemoService {
     // return this.httpClient.get('https://examples.form.io/example')
     //   .pipe(tap(f => this.formService.registerForm('demoForm', f)));
 
-    this.formService.registerForm('demoForm', SCH_FORM);
-    // return new Observable(FORM);
-    return of(SCH_FORM);
+    const form: FormioForm = SCH_FORM;
+    // const form: FormioForm = SCH_FORM;
+    form.data = formData;
+    this.formService.registerForm('demoForm', form);
+    return of(form);
   }
 
   // public init(rootContainer: any, formData: any): void {

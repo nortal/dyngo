@@ -16,8 +16,7 @@ export class ContainerComponent implements OnInit {
   public constructor(private formService: FormService) {}
 
   public ngOnInit(): void {
-    // this.data = this.formService.getForm(this.formName).data;
-    this.data = {};
+    this.data = this.formService.getForm(this.formName).data;
   }
 
   public isControlVisible(formControl: FormControl): boolean {

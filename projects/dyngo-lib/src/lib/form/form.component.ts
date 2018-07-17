@@ -19,7 +19,7 @@ export class FormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form = this.formService.getForm(this.name);
-    this.data = {}; // this.form.data;
+    this.data = this.form.data;
   }
 
   public onSubmit(df: NgForm): void {

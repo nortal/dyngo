@@ -1,9 +1,11 @@
 <div class="form-group row">
-  <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-lg-4">
+
+  <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
     {{translate(formControl.label)}}
   </label>
 
-  <div class="input-group col-lg-8" [ngClass]="{'is-invalid': model.valid}">
+  <div class="input-group col-md-{{controlWidth}}">
 
     <textarea class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
            placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"

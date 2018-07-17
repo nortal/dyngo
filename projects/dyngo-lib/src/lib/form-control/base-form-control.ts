@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormService } from '../form/form.service';
-import {FormControl} from './form-control.model';
-import {TranslationService} from '../form/translation.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormService } from '../form/form.service';
+import { FormControl } from './form-control.model';
+import { TranslationService } from '../form/translation.service';
 
 @Component({
   selector: 'dg-base-form-control',
@@ -9,20 +9,48 @@ import {TranslationService} from '../form/translation.service';
 })
 export class BaseFormControl implements OnInit {
 
+  static DEFAULT_LABEL_WIDTH = 4;
+  static DEFAULT_LABEL_ALIGN = 'left';
+  static DEFAULT_CONTROL_WIDTH = 8;
+
   @Input('dgFormControl') public formControl: FormControl;
   @Input('dgFormName') formName: string;
+  @Input() defaults: object;
   data: any;
   lang: string;
 
-  public constructor(private formService: FormService, private translationService: TranslationService) {}
+  public constructor(private formService: FormService, private translationService: TranslationService) {
+  }
 
   public ngOnInit(): void {
     const form = this.formService.getForm(this.formName);
-    this.data = {}; // form.data;
+    this.data = form.data;
     this.lang = 'en'; // form.lang;
+    this.formControl.id = this.formControl.key; // TODO: temporary hack, replace 'id' with 'key'
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
       this.data[this.formControl.id] = this.formControl.defaultValue;
     }
+  }
+
+  get labelWidth(): number {
+    if (!!this.defaults && !!this.defaults.label && !!this.defaults.label.width) {
+      return this.defaults.label.width;
+    }
+    return BaseFormControl.DEFAULT_LABEL_WIDTH;
+  }
+
+  get labelTextAlign(): string {
+    if (!!this.defaults && !!this.defaults.label && !!this.defaults.label.textAlign) {
+      return this.defaults.label.textAlign;
+    }
+    return BaseFormControl.DEFAULT_LABEL_ALIGN;
+  }
+
+  get controlWidth(): number {
+    if (!!this.defaults && !!this.defaults.control && !!this.defaults.control.width) {
+      return this.defaults.control.width;
+    }
+    return BaseFormControl.DEFAULT_CONTROL_WIDTH;
   }
 
   public translate(value: string): string {
@@ -56,11 +84,11 @@ export class BaseFormControl implements OnInit {
 
   public min() {
     return this.evaluateConstraint('min');
-  };
+  }
 
   public max() {
     return this.evaluateConstraint('max');
-  };
+  }
 
   private evaluateConstraint(name: string): string | number | boolean {
     if (!this.formControl.constraints || !this.formControl.constraints[<any>name]) {
@@ -74,6 +102,6 @@ export class BaseFormControl implements OnInit {
     } else if (typeof constraintExpression === 'boolean') {
       return constraintExpression;
     }
-  };
+  }
 
 }

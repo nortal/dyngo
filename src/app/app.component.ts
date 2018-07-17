@@ -11,7 +11,7 @@ import {DemoService} from './demo.service';
 export class AppComponent implements OnInit {
 
   public form: FormioForm;
-  public formData: any = {};
+  public formData: any = {severance: 100500};
 
   public structureJson: string;
   public structureError: string;

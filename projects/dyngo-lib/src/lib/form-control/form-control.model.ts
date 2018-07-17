@@ -9,11 +9,13 @@ export class FormControl {
   label?: string;
   defaultValue?: any;
 
+  key?: string;
   values?: any;
   html?: any;
   layout?: any;
   data?: any;
   columns?: any[];
   components?: any[];
+  componentDefaults?: object;
 
 }
