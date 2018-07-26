@@ -10,7 +10,7 @@
     <input
       type="text" class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
       placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"
-      minlength="{{min()}}" maxlength="{{max()}}" #model="ngModel"
+      minlength="{{min()}}" maxlength="{{max()}}" #model="ngModel" kendoTextBox
     >
 
     <div class="input-group-btn" *ngIf="formControl.description">

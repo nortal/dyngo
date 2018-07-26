@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {BaseFormControl} from '../base-form-control';
 
 @Component({
@@ -6,6 +6,11 @@ import {BaseFormControl} from '../base-form-control';
   styleUrls: ['./input.control.css'],
   templateUrl: './number-input.control.html',
 })
-export class NumberInputControl extends BaseFormControl {
+export class NumberInputControl extends BaseFormControl  {
+
+  setDefaultValue(value: any): void {
+    this.data[this.formControl.id] = Number(this.formControl.defaultValue);
+  }
+
 
 }

@@ -7,11 +7,8 @@
 
   <div class="input-group col-md-{{controlWidth}}">
 
-    <input
-      type="number" class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
-      placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"
-      min="{{min()}}" max="{{max()}}" #model="ngModel"
-    >
+    <kendo-numerictextbox [(ngModel)]="data[formControl.id]" #model="ngModel"
+                          [disabled]="isDisabled()"></kendo-numerictextbox>
 
     <div class="input-group-btn" *ngIf="formControl.description">
       <button class="btn btn-outline-secondary" type="button">?</button>

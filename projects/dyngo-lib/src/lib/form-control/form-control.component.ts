@@ -9,7 +9,7 @@ export class FormControlComponent {
 
   @Input('dgFormControl') formControl: FormControl;
   @Input('dgFormName') formName: string;
-  @Input() defaults: object;
+  @Input() defaults: any;
 
   public constructor() {
   }
@@ -20,11 +20,5 @@ export class FormControlComponent {
     }
     return this.defaults;
   }
-
-  // getColumnRange(): number[] {
-  //   if (this.formControl.type === 'columns') { // FIXME constant
-  //     return Array(this.formControl['columns'].length).fill(0).map((x, i) => i);
-  //   }
-  // }
 
 }

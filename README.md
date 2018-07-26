@@ -128,9 +128,12 @@ Translations are defined at the root of form definition object as a key-object p
 Translated values can contain expressions (*{{expression}}*) that are evaluated in runtime.
 
 ## Custom additions
-* Column component
+* Component defaults that are applied to child components (used in 'container'-type components)
 ```json
-"childDefaults": {
-  "width": 6 // bootstrap grid units
+"componentDefaults": {
+  "label": {"width": 7, "textAlign": "right"},
+  "control": {"width": 4},
+  "selectTextOnFocus": true,
 }
 ```
+

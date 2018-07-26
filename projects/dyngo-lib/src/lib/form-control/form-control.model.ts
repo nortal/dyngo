@@ -17,5 +17,6 @@ export class FormControl {
   columns?: any[];
   components?: any[];
   componentDefaults?: object;
+  disabled?: boolean;
 
 }

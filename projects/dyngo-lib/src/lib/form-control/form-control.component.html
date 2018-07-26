@@ -7,25 +7,10 @@
     </dg-form-control>
   </div>
 
-  <div *ngSwitchCase="'columns'">
-    <div class="form-group row" *ngFor="let c of formControl.columns[0].components; let i = index">
-      <div class="col-md-{{formControl.columns[0].width}}">
-        <dg-form-control
-          [dgFormControl]="formControl.columns[0].components[i]"
-          [dgFormName]="formName"
-          [defaults]="mergedDefaults"
-          *ngIf="formControl.columns[0].components[i]"
-        >
-        </dg-form-control>
-      </div>
-      <div class="col-md-{{formControl.columns[0].width}}">
-        <dg-form-control
-          [dgFormControl]="formControl.columns[1].components[i]"
-          [dgFormName]="formName"
-          [defaults]="defaults"
-          *ngIf="formControl.columns[1].components[i]"
-        ></dg-form-control>
-      </div>
+  <div class="form-group row" *ngSwitchCase="'columns'">
+    <div class="col-md-{{col.width}}" *ngFor="let col of formControl.columns">
+      <dg-form-control [dgFormControl]="c" [dgFormName]="formName"
+                       [defaults]="mergedDefaults" *ngFor="let c of col.components"></dg-form-control>
     </div>
   </div>
 
@@ -44,6 +29,10 @@
                    [dgFormControl]="formControl" [dgFormName]="formName">
 
   </dg-number-input>
+
+  <dg-hidden-input *ngSwitchCase="'hidden'" [defaults]="defaults" [dgFormControl]="formControl"
+                   [dgFormName]="formName"></dg-hidden-input>
+
   <dg-text-area *ngSwitchCase="'textarea'" [defaults]="defaults" [dgFormControl]="formControl"
                 [dgFormName]="formName"></dg-text-area>
   <dg-checkbox *ngSwitchCase="'selectboxes'" [defaults]="defaults" [dgFormControl]="formControl"

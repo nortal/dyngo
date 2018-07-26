@@ -24,8 +24,8 @@ export const SCH_FORM: any = {
     'input': false,
     'label': 'Columns',
     'componentDefaults': {
-      'label': {'width': 6, 'textAlign': 'right'},
-      'control': {'width': 6}
+      'label': {'width': 7, 'textAlign': 'right'},
+      'control': {'width': 4}
     },
     'columns': [{
       'pull': 0,
@@ -35,7 +35,7 @@ export const SCH_FORM: any = {
       'components': [{
         'key': 'employeeId',
         'tags': [],
-        'type': 'textfield',
+        'type': 'hidden',
         'input': true,
         'label': 'EmployeeID',
         'hidden': false,
@@ -84,6 +84,7 @@ export const SCH_FORM: any = {
         'unique': true,
         'lockKey': true,
         'multiple': false,
+        'disabled': true,
         'validate': {
           'custom': '',
           'pattern': '',

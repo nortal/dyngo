@@ -1,8 +1,13 @@
 {
   "name": "dyngo-lib",
-  "version": "2.2.3",
+  "version": "2.2.3-b4",
   "peerDependencies": {
     "@angular/common": "^6.0.3",
-    "@angular/core": "^6.0.3"
+    "@angular/core": "^6.0.3",
+    "@progress/kendo-angular-intl": "^1.4.0",
+    "@progress/kendo-angular-l10n": "^1.1.0",
+    "@progress/kendo-angular-inputs": "^3.2.0",
+    "@progress/kendo-angular-dateinputs": "^3.4.4",
+    "@progress/kendo-theme-default": "latest"
   }
 }

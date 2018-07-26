@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormService } from '../form/form.service';
-import { FormControl } from './form-control.model';
-import { TranslationService } from '../form/translation.service';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {FormService} from '../form/form.service';
+import {FormControl} from './form-control.model';
+import {TranslationService} from '../form/translation.service';
 
 @Component({
   selector: 'dg-base-form-control',
@@ -15,7 +15,7 @@ export class BaseFormControl implements OnInit {
 
   @Input('dgFormControl') public formControl: FormControl;
   @Input('dgFormName') formName: string;
-  @Input() defaults: object;
+  @Input() defaults: any;
   data: any;
   lang: string;
 
@@ -28,8 +28,12 @@ export class BaseFormControl implements OnInit {
     this.lang = 'en'; // form.lang;
     this.formControl.id = this.formControl.key; // TODO: temporary hack, replace 'id' with 'key'
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
-      this.data[this.formControl.id] = this.formControl.defaultValue;
+      this.setDefaultValue(this.formControl.defaultValue);
     }
+  }
+
+  setDefaultValue(value: any): void {
+    this.data[this.formControl.id] = Number(this.formControl.defaultValue);
   }
 
   get labelWidth(): number {
@@ -74,8 +78,8 @@ export class BaseFormControl implements OnInit {
   //   });
   // }
 
-  public isDisabled() {
-    return this.evaluateConstraint('disabled');
+  public isDisabled(): boolean {
+    return this.formControl.disabled;
   }
 
   public isRequired() {
@@ -88,6 +92,13 @@ export class BaseFormControl implements OnInit {
 
   public max() {
     return this.evaluateConstraint('max');
+  }
+
+  onClick(event: Event): void {
+    if (!!this.defaults && this.defaults.selectTextOnFocus) {
+      const inputElem = <HTMLInputElement>event.target;
+      inputElem.select();
+    }
   }
 
   private evaluateConstraint(name: string): string | number | boolean {
