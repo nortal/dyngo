@@ -14,11 +14,4 @@ export class FormControlComponent {
   public constructor() {
   }
 
-  get mergedDefaults(): object {
-    if (!!this.formControl.componentDefaults) {
-      return {...this.formControl.componentDefaults, ...this.defaults};
-    }
-    return this.defaults;
-  }
-
 }

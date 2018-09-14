@@ -127,13 +127,17 @@ Translations are defined at the root of form definition object as a key-object p
 ```
 Translated values can contain expressions (*{{expression}}*) that are evaluated in runtime.
 
-## Custom additions
-* Component defaults that are applied to child components (used in 'container'-type components)
-```json
-"componentDefaults": {
-  "label": {"width": 7, "textAlign": "right"},
-  "control": {"width": 4},
-  "selectTextOnFocus": true,
-}
+###
+## Running
+```
+ ng serve --port 4300
 ```
 
+## Build & publish
+First, increase version number in projects/dyngo-lib/package.json, then
+```
+ rm -rf dist
+ ng build dyngo-lib
+ cd dist/dyngo-lib
+ npm publish
+```

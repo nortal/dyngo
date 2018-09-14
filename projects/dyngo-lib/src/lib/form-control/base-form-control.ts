@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from '../form/form.service';
 import {FormControl} from './form-control.model';
 import {TranslationService} from '../form/translation.service';
@@ -37,24 +37,26 @@ export class BaseFormControl implements OnInit {
   }
 
   get labelWidth(): number {
-    if (!!this.defaults && !!this.defaults.label && !!this.defaults.label.width) {
-      return this.defaults.label.width;
+    if (!this.formControl.labelWidth) {
+      return BaseFormControl.DEFAULT_LABEL_WIDTH;
     }
-    return BaseFormControl.DEFAULT_LABEL_WIDTH;
+    // calculate bootstrap units
+    return Math.round(12 * this.formControl.labelWidth / 100.0);
   }
 
   get labelTextAlign(): string {
-    if (!!this.defaults && !!this.defaults.label && !!this.defaults.label.textAlign) {
-      return this.defaults.label.textAlign;
+    if (!this.formControl.labelPosition) {
+      return BaseFormControl.DEFAULT_LABEL_ALIGN;
     }
-    return BaseFormControl.DEFAULT_LABEL_ALIGN;
+    return this.formControl.labelPosition.split('-')[1];
   }
 
   get controlWidth(): number {
-    if (!!this.defaults && !!this.defaults.control && !!this.defaults.control.width) {
-      return this.defaults.control.width;
+    if (!this.formControl.labelWidth) {
+      return BaseFormControl.DEFAULT_CONTROL_WIDTH;
     }
-    return BaseFormControl.DEFAULT_CONTROL_WIDTH;
+    // calculate bootstrap units
+    return Math.round(12 * (100 - this.formControl.labelWidth) / 100.0);
   }
 
   public translate(value: string): string {
@@ -92,13 +94,6 @@ export class BaseFormControl implements OnInit {
 
   public max() {
     return this.evaluateConstraint('max');
-  }
-
-  onClick(event: Event): void {
-    if (!!this.defaults && this.defaults.selectTextOnFocus) {
-      const inputElem = <HTMLInputElement>event.target;
-      inputElem.select();
-    }
   }
 
   private evaluateConstraint(name: string): string | number | boolean {

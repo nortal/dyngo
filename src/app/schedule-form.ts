@@ -23,10 +23,6 @@ export const SCH_FORM: any = {
     'type': 'columns',
     'input': false,
     'label': 'Columns',
-    'componentDefaults': {
-      'label': {'width': 7, 'textAlign': 'right'},
-      'control': {'width': 4}
-    },
     'columns': [{
       'pull': 0,
       'push': 0,
