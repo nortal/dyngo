@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from '../form/form.service';
 import {FormControl} from './form-control.model';
 import {TranslationService} from '../form/translation.service';
+import {IntlService} from "@progress/kendo-angular-intl";
 
 @Component({
   selector: 'dg-base-form-control',
@@ -19,7 +20,7 @@ export class BaseFormControl implements OnInit {
   data: any;
   lang: string;
 
-  public constructor(private formService: FormService, private translationService: TranslationService) {
+  public constructor(private formService: FormService, protected intlService: IntlService, private translationService: TranslationService) {
   }
 
   public ngOnInit(): void {
