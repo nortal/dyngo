@@ -17,6 +17,7 @@ export class FormControl {
   columns?: any[];
   components?: any[];
   disabled?: boolean;
+  hidden?: boolean;
 
   labelWidth?: number;
   labelPosition?: string;

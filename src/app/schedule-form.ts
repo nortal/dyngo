@@ -31,10 +31,10 @@ export const SCH_FORM: any = {
       'components': [{
         'key': 'employeeId',
         'tags': [],
-        'type': 'hidden',
+        'type': 'textfield',
         'input': true,
         'label': 'EmployeeID',
-        'hidden': false,
+        'hidden': true,
         'prefix': '',
         'suffix': '',
         'unique': true,
