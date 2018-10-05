@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from './form.service';
-import {NgForm} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {FormioForm} from '../model';
 
 @Component({
@@ -14,18 +14,30 @@ export class FormComponent implements OnInit {
   form: FormioForm;
   public data: any;
 
+  fGroup: FormGroup;
+
   public constructor(private formService: FormService) {
   }
 
   public ngOnInit(): void {
     this.form = this.formService.getForm(this.name);
     this.data = this.form.data;
+    this.fGroup = new FormGroup({});
+    // this.fGroup.patchValue(this.data);
   }
 
-  public onSubmit(df: NgForm): void {
+  public onSubmit(): void {
     // if (this.form.submitCallback) {
     //   this.form.submitCallback();
     // }
+  }
+
+  public isValid(): boolean {
+    return this.fGroup.valid;
+  }
+
+  public getValue(): any {
+    return this.fGroup.value;
   }
 
 }

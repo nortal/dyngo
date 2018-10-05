@@ -31,7 +31,8 @@ export class DemoService {
     const form: FormioForm = SCH_FORM;
     // const form: FormioForm = SCH_FORM;
     form.data = formData;
-    form.data['employedTo'] = '2018-09-27T21:00:00.000Z';
+    form.readonly = false;
+    form.data['employedTo'] = new Date();
     this.formService.registerForm('demoForm', form);
     return of(form);
   }

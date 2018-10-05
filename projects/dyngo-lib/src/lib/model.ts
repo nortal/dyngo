@@ -52,6 +52,7 @@ export interface FormioForm {
   submissionAccess?: AccessSetting[];
 
   data?: object;
+  readonly?: boolean;
 }
 
 export interface AlertsOptions {

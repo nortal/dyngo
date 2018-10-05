@@ -1,9 +1,8 @@
-<form (ngSubmit)="onSubmit(df)" #df="ngForm" novalidate>
-  <!--<dg-container [dgContainer]="form.rootContainer" [dgFormName]="name"></dg-container>-->
+<form (ngSubmit)="onSubmit()" [formGroup]="fGroup">
+
   <div *ngFor="let component of form.components">
-    <dg-form-control [dgFormControl]="component" [dgFormName]="name"></dg-form-control>
+    <dg-form-control [dgFormControl]="component" [dgFormName]="name" [fGroup]="fGroup">
+    </dg-form-control>
   </div>
+
 </form>
-
-<!--*ngIf="isControlVisible(component)"-->
-

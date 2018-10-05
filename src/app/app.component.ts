@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { FormioForm } from 'projects/dyngo-lib/src/public_api';
+import {FormioForm} from 'projects/dyngo-lib/src/public_api';
 import {DemoService} from './demo.service';
 
 
@@ -11,7 +11,7 @@ import {DemoService} from './demo.service';
 export class AppComponent implements OnInit {
 
   public form: FormioForm;
-  public formData: any = {severance: 100500};
+  public formData: any = {severance: 100500, employeeCode: 'FOOBAR', employeeId: 'BAZ', calculationMethod: 'XXX'};
 
   public structureJson: string;
   public structureError: string;

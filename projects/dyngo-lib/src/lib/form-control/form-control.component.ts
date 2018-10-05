@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from './form-control.model';
+import {Component, Input} from '@angular/core';
+import {DyngoFormControl} from './form-control.model';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'dg-form-control',
@@ -7,9 +8,10 @@ import { FormControl } from './form-control.model';
 })
 export class FormControlComponent {
 
-  @Input('dgFormControl') formControl: FormControl;
+  @Input('dgFormControl') formControl: DyngoFormControl;
   @Input('dgFormName') formName: string;
   @Input() defaults: any;
+  @Input() fGroup: FormGroup;
 
   public constructor() {
   }

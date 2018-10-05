@@ -2,47 +2,47 @@
 
   <div *ngSwitchCase="'container'" class="container">
     <dg-form-control [dgFormControl]="component" [dgFormName]="formName"
-                     [defaults]="defaults"
+                     [defaults]="defaults" [fGroup]="fGroup"
                      *ngFor="let component of formControl.components">
     </dg-form-control>
   </div>
 
   <div class="form-group row" *ngSwitchCase="'columns'">
     <div class="col-md-{{col.width}}" *ngFor="let col of formControl.columns">
-      <dg-form-control [dgFormControl]="c" [dgFormName]="formName"
+      <dg-form-control [dgFormControl]="c" [dgFormName]="formName" [fGroup]="fGroup"
                        [defaults]="defaults" *ngFor="let c of col.components"></dg-form-control>
     </div>
   </div>
 
-  <dg-header *ngSwitchCase="'header'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-header>
-  <dg-static-text *ngSwitchCase="'content'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-static-text>
+  <!--<dg-header *ngSwitchCase="'header'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-header>-->
+  <!--<dg-static-text *ngSwitchCase="'content'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-static-text>-->
 
   <dg-text-input *ngSwitchCase="'textfield'" [defaults]="defaults" [dgFormControl]="formControl"
-                 [dgFormName]="formName"></dg-text-input>
+                 [dgFormName]="formName" [fGroup]="fGroup"></dg-text-input>
 
-  <dg-text-input *ngSwitchCase="'email'" [defaults]="defaults" [dgFormControl]="formControl"
-                 [dgFormName]="formName"></dg-text-input>
-  <dg-text-input *ngSwitchCase="'phoneNumber'" [defaults]="defaults" [dgFormControl]="formControl"
-                 [dgFormName]="formName"></dg-text-input>
+  <!--<dg-text-input *ngSwitchCase="'email'" [defaults]="defaults" [dgFormControl]="formControl"-->
+                 <!--[dgFormName]="formName"></dg-text-input>-->
+  <!--<dg-text-input *ngSwitchCase="'phoneNumber'" [defaults]="defaults" [dgFormControl]="formControl"-->
+                 <!--[dgFormName]="formName"></dg-text-input>-->
 
-  <dg-number-input *ngSwitchCase="'number'" [defaults]="defaults"
+  <dg-number-input *ngSwitchCase="'number'" [defaults]="defaults" [fGroup]="fGroup"
                    [dgFormControl]="formControl" [dgFormName]="formName">
 
   </dg-number-input>
 
-  <dg-hidden-input *ngSwitchCase="'hidden'" [defaults]="defaults" [dgFormControl]="formControl"
-                   [dgFormName]="formName"></dg-hidden-input>
+  <!--<dg-hidden-input *ngSwitchCase="'hidden'" [defaults]="defaults" [dgFormControl]="formControl"-->
+                   <!--[dgFormName]="formName"></dg-hidden-input>-->
 
-  <dg-text-area *ngSwitchCase="'textarea'" [defaults]="defaults" [dgFormControl]="formControl"
-                [dgFormName]="formName"></dg-text-area>
-  <dg-checkbox *ngSwitchCase="'selectboxes'" [defaults]="defaults" [dgFormControl]="formControl"
-               [dgFormName]="formName"></dg-checkbox>
-  <dg-select *ngSwitchCase="'select'" [defaults]="defaults" [dgFormControl]="formControl"
-             [dgFormName]="formName"></dg-select>
+  <!--<dg-text-area *ngSwitchCase="'textarea'" [defaults]="defaults" [dgFormControl]="formControl"-->
+                <!--[dgFormName]="formName"></dg-text-area>-->
+  <!--<dg-checkbox *ngSwitchCase="'selectboxes'" [defaults]="defaults" [dgFormControl]="formControl"-->
+               <!--[dgFormName]="formName"></dg-checkbox>-->
+  <!--<dg-select *ngSwitchCase="'select'" [defaults]="defaults" [dgFormControl]="formControl"-->
+             <!--[dgFormName]="formName"></dg-select>-->
   <dg-radio *ngSwitchCase="'radio'" [defaults]="defaults" [dgFormControl]="formControl"
-            [dgFormName]="formName"></dg-radio>
+            [dgFormName]="formName" [fGroup]="fGroup"></dg-radio>
   <dg-date-input *ngSwitchCase="'datetime'" [defaults]="defaults" [dgFormControl]="formControl"
-                 [dgFormName]="formName"></dg-date-input>
+                 [dgFormName]="formName" [fGroup]="fGroup"></dg-date-input>
 
   <div *ngSwitchDefault>
     <div class="alert alert-warning">Unsupported form control of type: <strong>{{formControl.type}}</strong></div>

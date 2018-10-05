@@ -1,4 +1,4 @@
-<div class="form-group row" [hidden]="formControl.hidden">
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
 
   <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
          [ngStyle]="{'text-align': labelTextAlign}">
@@ -6,19 +6,16 @@
   </label>
 
   <div class="input-group col-md-{{controlWidth}}">
-
-    <kendo-numerictextbox [(ngModel)]="data[formControl.id]" #model="ngModel"
-                          [disabled]="isDisabled()"></kendo-numerictextbox>
-
+    <kendo-numerictextbox [formControlName]="formControl.id"></kendo-numerictextbox>
     <div class="input-group-btn" *ngIf="formControl.description">
       <button class="btn btn-outline-secondary" type="button">?</button>
     </div>
 
-    <div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">
-      <div [hidden]="!model.errors.required">{{translate("error.required")}}</div>
-      <div [hidden]="!model.errors.minlength">{{translate("error.min")}}</div>
-      <div [hidden]="!model.errors.maxlength">{{translate("error.max")}}</div>
-    </div>
+    <!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">-->
+    <!--<div [hidden]="!model.errors.required">{{translate("error.required")}}</div>-->
+    <!--<div [hidden]="!model.errors.minError">{{translate("error.min")}}</div>-->
+    <!--<div [hidden]="!model.errors.maxError">{{translate("error.max")}}</div>-->
+    <!--</div>-->
 
   </div>
 

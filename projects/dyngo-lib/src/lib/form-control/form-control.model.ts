@@ -1,4 +1,4 @@
-export class FormControl {
+export class DyngoFormControl {
 
   id: string;
   type: string;
@@ -8,6 +8,8 @@ export class FormControl {
   constraints?: { [key: string]: any };
   label?: string;
   defaultValue?: any;
+
+  validate?: ValidateConstraints;
 
   key?: string;
   values?: any;
@@ -22,4 +24,10 @@ export class FormControl {
   labelWidth?: number;
   labelPosition?: string;
 
+}
+
+export class ValidateConstraints {
+  required: boolean;
+  min: any;
+  max: any;
 }

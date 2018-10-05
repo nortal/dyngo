@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Container} from './container.model';
 import {FormService} from '../form/form.service';
-import {FormControl} from '../form-control/form-control.model';
+import {DyngoFormControl} from '../form-control/form-control.model';
 
 @Component({
   selector: 'dg-container',
@@ -19,7 +19,7 @@ export class ContainerComponent implements OnInit {
     this.data = this.formService.getForm(this.formName).data;
   }
 
-  public isControlVisible(formControl: FormControl): boolean {
+  public isControlVisible(formControl: DyngoFormControl): boolean {
     const visibilityExpression: string = formControl.constraints ? formControl.constraints['visible'] : undefined;
     return this.formService.evaluateExpression(visibilityExpression, this.data);
   }

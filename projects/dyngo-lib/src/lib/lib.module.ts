@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ContainerComponent} from './container/containter.component';
 import {FormComponent} from './form/form.component';
 import {BaseFormControl} from './form-control/base-form-control';
@@ -25,7 +25,7 @@ import {InputsModule} from '@progress/kendo-angular-inputs';
 
 @NgModule({
   imports: [
-    CommonModule, FormsModule,
+    CommonModule, FormsModule, ReactiveFormsModule,
     DateInputsModule, InputsModule
   ],
   declarations: [

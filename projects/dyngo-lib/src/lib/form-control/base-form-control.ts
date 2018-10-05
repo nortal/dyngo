@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from '../form/form.service';
-import {FormControl} from './form-control.model';
 import {TranslationService} from '../form/translation.service';
-import {IntlService} from "@progress/kendo-angular-intl";
+import {IntlService} from '@progress/kendo-angular-intl';
+import {FormControl, FormGroup, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {DyngoFormControl} from './form-control.model';
 
 @Component({
   selector: 'dg-base-form-control',
@@ -14,9 +15,10 @@ export class BaseFormControl implements OnInit {
   static DEFAULT_LABEL_ALIGN = 'left';
   static DEFAULT_CONTROL_WIDTH = 8;
 
-  @Input('dgFormControl') public formControl: FormControl;
+  @Input('dgFormControl') public formControl: DyngoFormControl;
   @Input('dgFormName') formName: string;
   @Input() defaults: any;
+  @Input() fGroup: FormGroup;
   data: any;
   lang: string;
 
@@ -31,6 +33,17 @@ export class BaseFormControl implements OnInit {
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
       this.setDefaultValue(this.formControl.defaultValue);
     }
+    const control = new FormControl({value: this.data[this.formControl.id], disabled: this.isDisabled()},
+      Validators.compose(this.getValidators()));
+    this.fGroup.addControl(this.formControl.id, control);
+  }
+
+  getValidators(): ValidatorFn[] {
+    const validators: ValidatorFn[] = [];
+    if (this.isRequired()) {
+      validators.push(Validators.required);
+    }
+    return validators;
   }
 
   setDefaultValue(value: any): void {
@@ -60,7 +73,7 @@ export class BaseFormControl implements OnInit {
     return Math.round(12 * (100 - this.formControl.labelWidth) / 100.0);
   }
 
-  public translate(value: string): string {
+  public translate(value: string, params?: any): string {
     return value; // TODO
   }
 
@@ -82,19 +95,28 @@ export class BaseFormControl implements OnInit {
   // }
 
   public isDisabled(): boolean {
-    return this.formControl.disabled;
+    const form = this.formService.getForm(this.formName);
+    return form.readonly || this.formControl.disabled;
   }
 
   public isRequired() {
-    return this.evaluateConstraint('required');
+    return this.formControl.validate.required;
   }
 
   public min() {
-    return this.evaluateConstraint('min');
+    if (!!this.formControl.validate && this.formControl.validate.min !== '') {
+      return this.formControl.validate.min;
+    }
+    // TODO
+    // return this.evaluateConstraint('min');
   }
 
   public max() {
-    return this.evaluateConstraint('max');
+    if (!!this.formControl.validate && this.formControl.validate.max !== '') {
+      return this.formControl.validate.max;
+    }
+    // TODO
+    // return this.evaluateConstraint('max');
   }
 
   private evaluateConstraint(name: string): string | number | boolean {

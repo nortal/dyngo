@@ -1,4 +1,4 @@
-<div class="form-group row" [hidden]="formControl.hidden">
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
 
   <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
          [ngStyle]="{'text-align': labelTextAlign}">

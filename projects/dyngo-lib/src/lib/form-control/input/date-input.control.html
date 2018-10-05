@@ -1,4 +1,4 @@
-<div class="form-group row" [hidden]="formControl.hidden">
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
 
   <label [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
          [ngStyle]="{'text-align': labelTextAlign}">
@@ -7,11 +7,11 @@
 
   <div class="input-group col-md-{{controlWidth}}">
 
-    <kendo-datepicker [(value)]="data[formControl.id]"></kendo-datepicker>
+    <kendo-datepicker [formControlName]="formControl.id" [format]="'dd/MM/yyyy'"></kendo-datepicker>
 
-    <div class="input-group-btn" *ngIf="formControl.description">
-      <button class="btn btn-outline-secondary" type="button">?</button>
-    </div>
+    <!--<div class="input-group-btn" *ngIf="formControl.description">-->
+    <!--<button class="btn btn-outline-secondary" type="button">?</button>-->
+    <!--</div>-->
 
   </div>
 

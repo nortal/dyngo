@@ -1,4 +1,5 @@
-<div class="form-group row" [hidden]="formControl.hidden">
+<ng-container [formGroup]="fGroup">
+<div class="form-group row" [hidden]="false && formControl.hidden" >
 
   <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
          [ngStyle]="{'text-align': labelTextAlign}">
@@ -7,26 +8,26 @@
 
   <div class="input-group col-md-{{controlWidth}}">
 
-    <input
-      type="text" class="form-control" id="{{formControl.id}}" [(ngModel)]="data[formControl.id]"
-      placeholder="{{translate(formControl.placeholder)}}" [disabled]="isDisabled()" [required]="isRequired()"
-      minlength="{{min()}}" maxlength="{{max()}}" #model="ngModel" kendoTextBox
+    <input [formControlName]="formControl.id"
+      type="text" class="form-control" placeholder="{{translate(formControl.placeholder)}}"
+      minlength="{{min()}}" maxlength="{{max()}}" kendoTextBox
     >
 
-    <div class="input-group-btn" *ngIf="formControl.description">
-      <button class="btn btn-outline-secondary" type="button">?
-      </button>
-    </div>
+    <!--<div class="input-group-btn" *ngIf="formControl.description">-->
+      <!--<button class="btn btn-outline-secondary" type="button">?-->
+      <!--</button>-->
+    <!--</div>-->
 
-    <div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">
-      <div [hidden]="!model.errors.required">{{translate("error.required")}}</div>
-      <div [hidden]="!model.errors.minlength">{{translate("error.minlength")}}</div>
-      <div [hidden]="!model.errors.maxlength">{{translate("error.maxlength")}}</div>
-    </div>
+    <!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">-->
+      <!--<div [hidden]="!model.errors.required">{{translate("error.required")}}</div>-->
+      <!--<div [hidden]="!model.errors.minlength">{{translate("error.minlength")}}</div>-->
+      <!--<div [hidden]="!model.errors.maxlength">{{translate("error.maxlength")}}</div>-->
+    <!--</div>-->
 
   </div>
 
 </div>
+</ng-container>
 
 <!--<div class="form-group row">-->
 <!--<label for="{{formControl.key}}" class="col-sm-4 col-lg-3 col-form-label">{{translate(formControl.label)}}</label>-->
