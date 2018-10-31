@@ -14,7 +14,6 @@ export class NumberInputControl extends BaseFormControl {
   }
 
   getValidators(): ValidatorFn[] {
-    console.log(this.formControl.validate);
     const validators = super.getValidators();
     if (this.min() !== undefined) {
       validators.push(Validators.min(this.min()));

@@ -1,6 +1,6 @@
 {
   "name": "dyngo-lib",
-  "version": "2.2.8-b4",
+  "version": "2.2.11",
   "peerDependencies": {
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",

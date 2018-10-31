@@ -21,7 +21,7 @@ export class FormComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form = this.formService.getForm(this.name);
-    this.data = this.form.data;
+    this.data = this.form.data || {};
     this.fGroup = new FormGroup({});
     // this.fGroup.patchValue(this.data);
   }
@@ -36,8 +36,20 @@ export class FormComponent implements OnInit {
     return this.fGroup.valid;
   }
 
+  public isDirty(): boolean {
+    return this.fGroup.dirty;
+  }
+
+  public isTouched(): boolean {
+    return this.fGroup.touched;
+  }
+
   public getValue(): any {
     return this.fGroup.value;
+  }
+
+  public patchValue(value: { [key: string]: any }): void {
+    this.fGroup.patchValue(value);
   }
 
 }

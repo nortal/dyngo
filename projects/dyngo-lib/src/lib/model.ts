@@ -51,7 +51,7 @@ export interface FormioForm {
   access?: AccessSetting[];
   submissionAccess?: AccessSetting[];
 
-  data?: object;
+  data?: object; // TODO: remove it and use patchValue() only
   readonly?: boolean;
 }
 

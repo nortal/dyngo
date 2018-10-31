@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormioForm} from 'projects/dyngo-lib/src/public_api';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormComponent, FormioForm} from 'projects/dyngo-lib/src/public_api';
 import {DemoService} from './demo.service';
 
 
@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
 
   public dictionaryJson: string;
   public dictionaryError: string;
+
+  @ViewChild('dgForm') dgForm: FormComponent;
 
   constructor(private demoService: DemoService) {
 
@@ -51,6 +53,10 @@ export class AppComponent implements OnInit {
     // } catch (e) {
     //   this.dictionaryError = e;
     // }
+  }
+
+  submit(): void {
+    console.log('submitted', this.dgForm.getValue());
   }
 
 
