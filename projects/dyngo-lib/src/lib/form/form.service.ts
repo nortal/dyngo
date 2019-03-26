@@ -21,7 +21,7 @@ export class FormService {
 
   public getForm(formName: string): FormioForm {
     if (!this.forms[formName]) {
-      console.log('Form "' + formName + '" is not registered!');
+      console.error('Form "' + formName + '" is not registered!');
     }
     return this.forms[formName];
   }
@@ -33,7 +33,7 @@ export class FormService {
     if (!this.elementTypes[type]) {
       this.elementTypes[type] = element;
     }
-  };
+  }
 
   public evaluateExpression(expression: string, data: any): any {
     if (!expression) {

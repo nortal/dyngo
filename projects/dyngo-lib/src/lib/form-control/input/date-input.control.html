@@ -7,11 +7,12 @@
 
   <div class="input-group col-md-{{controlWidth}}">
 
+    <div class="dg-control-previous-value" *ngIf="formattedPreviousValue">{{formattedPreviousValue}}</div>
     <kendo-datepicker [formControlName]="formControl.id" [format]="'dd/MM/yyyy'"></kendo-datepicker>
-
-    <!--<div class="input-group-btn" *ngIf="formControl.description">-->
-    <!--<button class="btn btn-outline-secondary" type="button">?</button>-->
-    <!--</div>-->
+    <div class="input-group-btn" *ngIf="formControl.description">
+      <button class="btn btn-outline-secondary" type="button">?</button>
+    </div>
+    <div class="dg-control-value-diff" *ngIf="formattedDiff">{{formattedDiff}}</div>
 
   </div>
 

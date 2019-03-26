@@ -10,9 +10,6 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 
-
-
-
 @NgModule({
   declarations: [
     AppComponent

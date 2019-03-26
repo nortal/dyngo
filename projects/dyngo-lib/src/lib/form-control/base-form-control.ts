@@ -19,7 +19,12 @@ export class BaseFormControl implements OnInit {
   @Input('dgFormName') formName: string;
   @Input() defaults: any;
   @Input() fGroup: FormGroup;
-  data: any;
+  data: { [key: string]: any };
+  previousData: { [key: string]: any };
+  diffFormatter?: (control: DyngoFormControl, oldValue: any, newValue: any) => string;
+  previousValueFormatter?: (control: DyngoFormControl, value: any) => string;
+  formattedPreviousValue: string;
+  formattedDiff: string;
   lang: string;
 
   public constructor(private formService: FormService, protected intlService: IntlService, private translationService: TranslationService) {
@@ -28,6 +33,9 @@ export class BaseFormControl implements OnInit {
   public ngOnInit(): void {
     const form = this.formService.getForm(this.formName);
     this.data = form.data;
+    this.previousData = form.previousData;
+    this.diffFormatter = form.diffFormatter;
+    this.previousValueFormatter = form.previousValueFormatter;
     this.lang = 'en'; // form.lang;
     this.formControl.id = this.formControl.key; // TODO: temporary hack, replace 'id' with 'key'
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
@@ -35,6 +43,13 @@ export class BaseFormControl implements OnInit {
     }
     const control = new FormControl({value: this.data[this.formControl.id], disabled: this.isDisabled()},
       Validators.compose(this.getValidators()));
+    if (!!this.previousData && !!this.diffFormatter) {
+      this.formattedDiff = this.calculateAndFormatDiff(this.data[this.formControl.key]);
+      control.valueChanges.subscribe(newValue => this.formattedDiff = this.calculateAndFormatDiff(newValue));
+    }
+    if (!!this.previousData && !!this.previousValueFormatter) {
+      this.formattedPreviousValue = this.formatPreviousValue();
+    }
     this.fGroup.addControl(this.formControl.id, control);
   }
 
@@ -47,7 +62,15 @@ export class BaseFormControl implements OnInit {
   }
 
   setDefaultValue(value: any): void {
-    this.data[this.formControl.id] = Number(this.formControl.defaultValue);
+    this.data[this.formControl.id] = this.formControl.defaultValue;
+  }
+
+  formatPreviousValue(): string {
+    return this.previousValueFormatter(this.formControl, this.previousData[this.formControl.id]);
+  }
+
+  calculateAndFormatDiff(newValue: any): string {
+    return this.diffFormatter(this.formControl, this.previousData[this.formControl.id], newValue);
   }
 
   get labelWidth(): number {

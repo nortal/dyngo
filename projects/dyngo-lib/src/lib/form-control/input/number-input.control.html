@@ -6,10 +6,12 @@
   </label>
 
   <div class="input-group col-md-{{controlWidth}}">
+    <div class="dg-control-previous-value" *ngIf="formattedPreviousValue">{{formattedPreviousValue}}</div>
     <kendo-numerictextbox [formControlName]="formControl.id"></kendo-numerictextbox>
     <div class="input-group-btn" *ngIf="formControl.description">
       <button class="btn btn-outline-secondary" type="button">?</button>
     </div>
+    <div class="dg-control-value-diff" *ngIf="formattedDiff">{{formattedDiff}}</div>
 
     <!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">-->
     <!--<div [hidden]="!model.errors.required">{{translate("error.required")}}</div>-->

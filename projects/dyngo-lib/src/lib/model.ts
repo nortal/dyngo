@@ -1,3 +1,5 @@
+import {DyngoFormControl} from "./form-control/form-control.model";
+
 export interface ConditionalOptions {
   show?: string;
   when?: any;
@@ -51,7 +53,10 @@ export interface FormioForm {
   access?: AccessSetting[];
   submissionAccess?: AccessSetting[];
 
-  data?: object; // TODO: remove it and use patchValue() only
+  data?: {[key: string]: any}; // TODO: remove it and use patchValue() only
+  previousData?: {[key: string]: any};
+  diffFormatter?: (control: DyngoFormControl, oldValue: any, newValue: any) => string;
+  previousValueFormatter?: (control: DyngoFormControl, value: any) => string;
   readonly?: boolean;
 }
 

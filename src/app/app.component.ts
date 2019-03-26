@@ -7,11 +7,11 @@ import {DemoService} from './demo.service';
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-
 export class AppComponent implements OnInit {
 
   public form: FormioForm;
-  public formData: any = {severance: 100500, employeeCode: 'FOOBAR', employeeId: 'BAZ', calculationMethod: 'XXX'};
+  public formData: {[key: string]: any} = {severance: 100500, employeeCode: 'FOOBAR', employeeId: 'BAZ', calculationMethod: 'XXX', employedFrom: new Date()};
+  public previousData: {[key: string]: any} = {severance: 876230, resident: 'yes', employeeCode: 'BAZQUX', commission: 0, employedFrom: new Date('2018/12/7')};
 
   public structureJson: string;
   public structureError: string;
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.demoService.initWithBuiltInForm(this.formData)
+    this.demoService.initWithBuiltInForm(this.formData, this.previousData)
       .subscribe(f => this.form = f);
     // this.form.submitCallback = () => console.log('submit callback called');
     // this.structureJson = this.toPrettyJson(this.form.rootContainer);
