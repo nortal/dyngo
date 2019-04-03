@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from './form.service';
 import {FormGroup} from '@angular/forms';
 import {FormioForm} from '../model';
+import {DyngoFormControl} from '../form-control/form-control.model';
 
 @Component({
   selector: 'dg-form',
@@ -50,6 +51,10 @@ export class FormComponent implements OnInit {
 
   public patchValue(value: { [key: string]: any }): void {
     this.fGroup.patchValue(value);
+  }
+
+  public isControlVisible(formControl: DyngoFormControl): boolean {
+    return this.formService.isControlVisible(this.form, formControl, this.data);
   }
 
 }

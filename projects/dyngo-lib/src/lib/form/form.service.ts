@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {FormioForm} from '../model';
+import {DyngoFormControl} from '../form-control/form-control.model';
 
 @Injectable()
 export class FormService {
@@ -53,6 +54,17 @@ export class FormService {
     } catch (e) {
       console.error('Failed to evaluate expression', expression, e.message);
     }
+  }
+
+  public isControlVisible(form: FormioForm, formControl: DyngoFormControl, data: any): boolean {
+    if (form.conditional) {
+      const displayOptions = form.conditional(formControl, data);
+      if (!displayOptions) {
+        return true;
+      }
+      return displayOptions.show;
+    }
+    return true;
   }
 
 }

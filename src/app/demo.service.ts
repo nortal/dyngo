@@ -2,13 +2,12 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {FormService} from 'projects/dyngo-lib/src/lib/form/form.service';
-import {FormioForm} from 'projects/dyngo-lib/src/lib/model';
+import {DisplayOptions, FormioForm} from 'projects/dyngo-lib/src/lib/model';
 // import {FORM} from '../form';
 // import {FormioForm} from '../../dyngo-lib/src/model';
 import {Observable, of} from 'rxjs';
-import {FORM} from 'src/app/form';
 import {SCH_FORM} from 'src/app/schedule-form';
-import {DyngoFormControl} from "../../projects/dyngo-lib/src/lib/form-control/form-control.model";
+import {DyngoFormControl} from '../../projects/dyngo-lib/src/lib/form-control/form-control.model';
 
 // import {SCH_FORM} from '../schedule-form';
 
@@ -35,6 +34,7 @@ export class DemoService {
     form.previousData = previousData;
     form.diffFormatter = this.formatDiff;
     form.previousValueFormatter = this.formatPreviousValue;
+    form.conditional = this.conditional;
     form.readonly = false;
     this.formService.registerForm('demoForm', form);
     return of(form);
@@ -65,6 +65,12 @@ export class DemoService {
     }
     if (control.type === 'number') {
       return `Adjusted: ${newValue - oldValue}`;
+    }
+  }
+
+  private conditional(control: DyngoFormControl, formData: any): DisplayOptions {
+    if (control.key === 'severance') {
+      return Object.assign(new DisplayOptions(), {showDiff: false});
     }
   }
 

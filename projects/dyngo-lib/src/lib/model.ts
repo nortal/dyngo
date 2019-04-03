@@ -1,4 +1,4 @@
-import {DyngoFormControl} from "./form-control/form-control.model";
+import {DyngoFormControl} from './form-control/form-control.model';
 
 export interface ConditionalOptions {
   show?: string;
@@ -57,7 +57,14 @@ export interface FormioForm {
   previousData?: {[key: string]: any};
   diffFormatter?: (control: DyngoFormControl, oldValue: any, newValue: any) => string;
   previousValueFormatter?: (control: DyngoFormControl, value: any) => string;
+  conditional?: (control: DyngoFormControl, formData: any) => DisplayOptions;
   readonly?: boolean;
+}
+
+export class DisplayOptions {
+  show ? = true;
+  showDiff ? = true;
+  showPreviousValue ? = true;
 }
 
 export interface AlertsOptions {

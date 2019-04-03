@@ -2,8 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormService} from '../form/form.service';
 import {TranslationService} from '../form/translation.service';
 import {IntlService} from '@progress/kendo-angular-intl';
-import {FormControl, FormGroup, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {DyngoFormControl} from './form-control.model';
+import {DisplayOptions} from '../model';
 
 @Component({
   selector: 'dg-base-form-control',
@@ -26,6 +27,7 @@ export class BaseFormControl implements OnInit {
   formattedPreviousValue: string;
   formattedDiff: string;
   lang: string;
+  displayOptions: DisplayOptions;
 
   public constructor(private formService: FormService, protected intlService: IntlService, private translationService: TranslationService) {
   }
@@ -40,6 +42,9 @@ export class BaseFormControl implements OnInit {
     this.formControl.id = this.formControl.key; // TODO: temporary hack, replace 'id' with 'key'
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
       this.setDefaultValue(this.formControl.defaultValue);
+    }
+    if (!!form.conditional) {
+      this.displayOptions = form.conditional(this.formControl, this.data);
     }
     const control = new FormControl({value: this.data[this.formControl.id], disabled: this.isDisabled()},
       Validators.compose(this.getValidators()));
@@ -66,11 +71,15 @@ export class BaseFormControl implements OnInit {
   }
 
   formatPreviousValue(): string {
-    return this.previousValueFormatter(this.formControl, this.previousData[this.formControl.id]);
+    if (!this.displayOptions || this.displayOptions.showPreviousValue) {
+      return this.previousValueFormatter(this.formControl, this.previousData[this.formControl.id]);
+    }
   }
 
   calculateAndFormatDiff(newValue: any): string {
-    return this.diffFormatter(this.formControl, this.previousData[this.formControl.id], newValue);
+    if (!this.displayOptions || this.displayOptions.showDiff) {
+      return this.diffFormatter(this.formControl, this.previousData[this.formControl.id], newValue);
+    }
   }
 
   get labelWidth(): number {

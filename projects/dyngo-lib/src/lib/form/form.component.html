@@ -1,7 +1,7 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="fGroup">
 
   <div *ngFor="let component of form.components">
-    <dg-form-control [dgFormControl]="component" [dgFormName]="name" [fGroup]="fGroup">
+    <dg-form-control [dgFormControl]="component" [dgFormName]="name" [fGroup]="fGroup" *ngIf="isControlVisible(component)">
     </dg-form-control>
   </div>
 

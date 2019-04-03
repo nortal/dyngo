@@ -1,16 +1,20 @@
 <ng-container [ngSwitch]="formControl.type">
 
   <div *ngSwitchCase="'container'" class="container">
-    <dg-form-control [dgFormControl]="component" [dgFormName]="formName"
-                     [defaults]="defaults" [fGroup]="fGroup"
-                     *ngFor="let component of formControl.components">
-    </dg-form-control>
+    <ng-container *ngFor="let component of formControl.components">
+      <dg-form-control [dgFormControl]="component" [dgFormName]="formName"
+                       [defaults]="defaults" [fGroup]="fGroup"
+                       *ngIf="isControlVisible(component)">
+      </dg-form-control>
+    </ng-container>
   </div>
 
   <div class="form-group row" *ngSwitchCase="'columns'">
     <div class="col-md-{{col.width}}" *ngFor="let col of formControl.columns">
-      <dg-form-control [dgFormControl]="c" [dgFormName]="formName" [fGroup]="fGroup"
-                       [defaults]="defaults" *ngFor="let c of col.components"></dg-form-control>
+      <ng-container *ngFor="let c of col.components">
+        <dg-form-control [dgFormControl]="c" [dgFormName]="formName" [fGroup]="fGroup"
+                         [defaults]="defaults" *ngIf="isControlVisible(c)"></dg-form-control>
+      </ng-container>
     </div>
   </div>
 
