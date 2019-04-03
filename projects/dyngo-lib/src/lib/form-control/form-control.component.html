@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="formControl.type">
+<div [ngSwitch]="formControl.type" [className]="'dg-control-'+formControl.key">
 
   <div *ngSwitchCase="'container'" class="container">
     <ng-container *ngFor="let component of formControl.components">
@@ -52,4 +52,4 @@
     <div class="alert alert-warning">Unsupported form control of type: <strong>{{formControl.type}}</strong></div>
   </div>
 
-</ng-container>
+</div>
