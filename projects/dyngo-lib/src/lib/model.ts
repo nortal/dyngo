@@ -57,14 +57,30 @@ export interface FormioForm {
   previousData?: {[key: string]: any};
   diffFormatter?: (control: DyngoFormControl, oldValue: any, newValue: any) => string;
   previousValueFormatter?: (control: DyngoFormControl, value: any) => string;
-  conditional?: (control: DyngoFormControl, formData: any) => DisplayOptions;
+  displayOptions?: (control: DyngoFormControl, formData: any) => DisplayOptions;
   readonly?: boolean;
 }
 
 export class DisplayOptions {
-  show ? = true;
+  showInput ? = true;
   showDiff ? = true;
   showPreviousValue ? = true;
+
+
+  constructor(showInput?: boolean, showDiff?: boolean, showPreviousValue?: boolean) {
+    this.showInput = showInput;
+    this.showDiff = showDiff;
+    this.showPreviousValue = showPreviousValue;
+  }
+
+  public static hideAll(): DisplayOptions {
+    return new DisplayOptions(false, false, false);
+  }
+
+  public isVisible(): boolean {
+    return this.showInput || this.showDiff || this.showPreviousValue;
+  }
+
 }
 
 export interface AlertsOptions {

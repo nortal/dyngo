@@ -7,7 +7,8 @@
 
   <div class="input-group col-md-{{controlWidth}}">
     <div class="dg-control-previous-value" *ngIf="formattedPreviousValue">{{formattedPreviousValue}}</div>
-    <kendo-numerictextbox [formControlName]="formControl.id"></kendo-numerictextbox>
+    <kendo-numerictextbox [formControlName]="formControl.id" *ngIf="!displayOptions || displayOptions.showInput">
+    </kendo-numerictextbox>
     <div class="input-group-btn" *ngIf="formControl.description">
       <button class="btn btn-outline-secondary" type="button">?</button>
     </div>

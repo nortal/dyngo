@@ -57,12 +57,9 @@ export class FormService {
   }
 
   public isControlVisible(form: FormioForm, formControl: DyngoFormControl, data: any): boolean {
-    if (form.conditional) {
-      const displayOptions = form.conditional(formControl, data);
-      if (!displayOptions) {
-        return true;
-      }
-      return displayOptions.show;
+    if (form.displayOptions) {
+      const displayOptions = form.displayOptions(formControl, data);
+      return !displayOptions || displayOptions.isVisible();
     }
     return true;
   }

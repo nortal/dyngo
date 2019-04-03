@@ -34,7 +34,7 @@ export class DemoService {
     form.previousData = previousData;
     form.diffFormatter = this.formatDiff;
     form.previousValueFormatter = this.formatPreviousValue;
-    form.conditional = this.conditional;
+    form.displayOptions = this.conditional;
     form.readonly = false;
     this.formService.registerForm('demoForm', form);
     return of(form);
@@ -70,7 +70,7 @@ export class DemoService {
 
   private conditional(control: DyngoFormControl, formData: any): DisplayOptions {
     if (control.key === 'severance') {
-      return Object.assign(new DisplayOptions(), {showDiff: false});
+      return Object.assign(new DisplayOptions(), {showInput: false, showDiff: false});
     }
   }
 

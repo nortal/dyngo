@@ -43,8 +43,8 @@ export class BaseFormControl implements OnInit {
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
       this.setDefaultValue(this.formControl.defaultValue);
     }
-    if (!!form.conditional) {
-      this.displayOptions = form.conditional(this.formControl, this.data);
+    if (!!form.displayOptions) {
+      this.displayOptions = form.displayOptions(this.formControl, this.data);
     }
     const control = new FormControl({value: this.data[this.formControl.id], disabled: this.isDisabled()},
       Validators.compose(this.getValidators()));
