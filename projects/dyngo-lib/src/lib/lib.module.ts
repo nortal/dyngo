@@ -17,7 +17,6 @@ import {StaticTextControl} from './form-control/static/static-text.control';
 import {SelectControl} from './form-control/select/select.control';
 import {RadioControl} from './form-control/select/radio.control';
 import {CheckboxControl} from './form-control/select/checkbox.control';
-import {TextAreaControl} from './form-control/input/text-area-control.component';
 import {HiddenInputControl} from './form-control/input/hidden-input.control';
 import {DateInputsModule} from '@progress/kendo-angular-dateinputs';
 import {InputsModule} from '@progress/kendo-angular-inputs';
@@ -30,7 +29,7 @@ import {InputsModule} from '@progress/kendo-angular-inputs';
   ],
   declarations: [
     FormComponent, ContainerComponent, FormControlComponent, BaseFormControl,
-    TextInputControl, NumberInputControl, DateInputControl, TextAreaControl,
+    TextInputControl, NumberInputControl, DateInputControl,
     SelectControl, CheckboxControl, RadioControl,
     HeaderControl, StaticTextControl, HiddenInputControl,
     ChecklistDirective

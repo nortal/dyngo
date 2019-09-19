@@ -18,31 +18,14 @@
     </div>
   </div>
 
-  <!--<dg-header *ngSwitchCase="'header'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-header>-->
-  <!--<dg-static-text *ngSwitchCase="'content'" [dgFormControl]="formControl" [dgFormName]="formName"></dg-static-text>-->
-
   <dg-text-input *ngSwitchCase="'textfield'" [defaults]="defaults" [dgFormControl]="formControl"
                  [dgFormName]="formName" [fGroup]="fGroup"></dg-text-input>
-
-  <!--<dg-text-input *ngSwitchCase="'email'" [defaults]="defaults" [dgFormControl]="formControl"-->
-                 <!--[dgFormName]="formName"></dg-text-input>-->
-  <!--<dg-text-input *ngSwitchCase="'phoneNumber'" [defaults]="defaults" [dgFormControl]="formControl"-->
-                 <!--[dgFormName]="formName"></dg-text-input>-->
 
   <dg-number-input *ngSwitchCase="'number'" [defaults]="defaults" [fGroup]="fGroup"
                    [dgFormControl]="formControl" [dgFormName]="formName">
 
   </dg-number-input>
 
-  <!--<dg-hidden-input *ngSwitchCase="'hidden'" [defaults]="defaults" [dgFormControl]="formControl"-->
-                   <!--[dgFormName]="formName"></dg-hidden-input>-->
-
-  <!--<dg-text-area *ngSwitchCase="'textarea'" [defaults]="defaults" [dgFormControl]="formControl"-->
-                <!--[dgFormName]="formName"></dg-text-area>-->
-  <!--<dg-checkbox *ngSwitchCase="'selectboxes'" [defaults]="defaults" [dgFormControl]="formControl"-->
-               <!--[dgFormName]="formName"></dg-checkbox>-->
-  <!--<dg-select *ngSwitchCase="'select'" [defaults]="defaults" [dgFormControl]="formControl"-->
-             <!--[dgFormName]="formName"></dg-select>-->
   <dg-radio *ngSwitchCase="'radio'" [defaults]="defaults" [dgFormControl]="formControl"
             [dgFormName]="formName" [fGroup]="fGroup"></dg-radio>
   <dg-date-input *ngSwitchCase="'datetime'" [defaults]="defaults" [dgFormControl]="formControl"

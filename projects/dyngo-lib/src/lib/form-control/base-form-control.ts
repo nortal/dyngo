@@ -38,7 +38,7 @@ export class BaseFormControl implements OnInit {
     this.previousData = form.previousData;
     this.diffFormatter = form.diffFormatter;
     this.previousValueFormatter = form.previousValueFormatter;
-    this.lang = 'en'; // form.lang;
+    this.lang = 'en'; // TODO: use real value when translation mechanism is ready
     this.formControl.id = this.formControl.key; // TODO: temporary hack, replace 'id' with 'key'
     if (!this.data[this.formControl.id] && !!this.formControl.defaultValue) {
       this.setDefaultValue(this.formControl.defaultValue);
@@ -109,23 +109,6 @@ export class BaseFormControl implements OnInit {
     return value; // TODO
   }
 
-  // public translate(localizedValue: { [key: string]: any }): string {
-  //   const translatedValue = this.translationService.translate(this.formName, localizedValue, this.lang);
-  //   if (!translatedValue) {
-  //     return;
-  //   }
-  //   return translatedValue.replace(/{{([^}]*)}}/g, (match, group) => {
-  //     if (group == 'max()') {
-  //       return <string>this.max();
-  //     }
-  //     if (group == 'min()') {
-  //       return <string>this.min();
-  //     }
-  //     // Is it required? Or returning just group would be enough?
-  //     return this.formService.evaluateExpression(group, this.data);
-  //   });
-  // }
-
   public isDisabled(): boolean {
     const form = this.formService.getForm(this.formName);
     return form.readonly || this.formControl.disabled;
@@ -139,16 +122,12 @@ export class BaseFormControl implements OnInit {
     if (!!this.formControl.validate && this.formControl.validate.min !== '') {
       return this.formControl.validate.min;
     }
-    // TODO
-    // return this.evaluateConstraint('min');
   }
 
   public max() {
     if (!!this.formControl.validate && this.formControl.validate.max !== '') {
       return this.formControl.validate.max;
     }
-    // TODO
-    // return this.evaluateConstraint('max');
   }
 
   private evaluateConstraint(name: string): string | number | boolean {

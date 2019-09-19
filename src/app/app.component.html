@@ -1,65 +1,21 @@
 <div class="container">
 
   <div class="card card mt-5">
-    <h5 class="card-header">Dynamic form definition
-      <span class="float-right">
-          edit:&nbsp;
-          <input type="checkbox" [(ngModel)]="editStructure">&nbsp;structure
-          <input type="checkbox" [(ngModel)]="editDictionary">&nbsp;dictionary
-        </span>
-    </h5>
-    <div class="card-body" *ngIf="editStructure || editDictionary">
-
-      <div class="container" *ngIf="editStructure">
-        <div class="alert alert-danger" role="alert" *ngIf="structureError">
-          Failed to update form structure: {{structureError}}
-        </div>
-        <div class="form-group">
-          <label for="structureJson">Structure</label>
-          <textarea
-            class="form-control" id="structureJson" cols="50" rows="30"
-            [(ngModel)]="structureJson"
-          ></textarea>
-        </div>
-        <a href="#" class="btn btn-primary" (click)="updateFormStructure()">Update structure</a>
-      </div>
-
-      <div class="container" *ngIf="editDictionary">
-        <div class="alert alert-danger" role="alert" *ngIf="dictionaryError">
-          Failed to update form dictionary: {{dictionaryError}}
-        </div>
-        <div class="form-group">
-          <label for="dictionaryJson">Dictionary</label>
-          <textarea
-            class="form-control" id="dictionaryJson" cols="50" rows="10"
-            [(ngModel)]="dictionaryJson"
-          ></textarea>
-        </div>
-        <a href="#" class="btn btn-primary" (click)="updateDictionary()">Update dictionary</a>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="card card mt-5">
     <h5 class="card-header">Dynamic form demo</h5>
     <div class="card-body" *ngIf="form">
 
       <dg-form name="demoForm" #dgForm></dg-form>
-      <button type="button" class="btn btn-primary" (click)="submit()"
-              [disabled]="!dgForm.isValid()">Submit
-      </button>
+      <button type="button" class="btn btn-primary" (click)="submit()" [disabled]="!dgForm.isValid()">Submit</button>
 
-      <pre>Touched: {{dgForm.isTouched()}}</pre>
-      <pre>Dirty: {{dgForm.isDirty()}}</pre>
-      <pre>Value: {{dgForm.getValue() | json}}</pre>
-    </div>
-  </div>
-
-  <div class="card mt-5 mb-5">
-    <h5 class="card-header">Form data</h5>
-    <div class="card-body">
+      <div class="card mt-5 mb-5">
+        <h5 class="card-header">Form status</h5>
+        <div class="card-body">
+          <pre>Touched: {{dgForm.isTouched()}}</pre>
+          <pre>Dirty: {{dgForm.isDirty()}}</pre>
+          <pre>Valid: {{dgForm.isValid()}}</pre>
+          <pre>Value: {{dgForm.getValue() | json}}</pre>
+        </div>
+      </div>
 
     </div>
   </div>

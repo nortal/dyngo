@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {FormService} from './form.service';
 
 @Injectable()
 export class TranslationService {
 
-  constructor(private formService: FormService) {}
+  constructor() {}
 
   public translate(formName: string, value: any, lang: string): string {
     if (typeof value === 'string') {
@@ -17,13 +16,13 @@ export class TranslationService {
     if (!!translations) {
       return translations[lang] || '## MISSING TRANSLATION ##';
     }
-  };
+  }
 
   private lookupInDictionary(formName: string, key: string, lang: string): string {
-    const dictionary = {}; // this.formService.getForm(formName).dictionary;
+    const dictionary = {}; // TODO: obtain dictionary
     if (!!dictionary && !!dictionary[key]) {
       return (<any>dictionary[key])[lang] || '## MISSING TRANSLATION ##';
     }
-  };
+  }
 
 }

@@ -1,4 +1,4 @@
-export const SCH_FORM: any = {
+export const DEMO_FORM: any = {
     'type': 'form',
     'tags': [],
     'owner': '5b3e3b5c760bdadd58da823a',

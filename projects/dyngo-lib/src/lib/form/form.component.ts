@@ -24,13 +24,9 @@ export class FormComponent implements OnInit {
     this.form = this.formService.getForm(this.name);
     this.data = this.form.data || {};
     this.fGroup = new FormGroup({});
-    // this.fGroup.patchValue(this.data);
   }
 
   public onSubmit(): void {
-    // if (this.form.submitCallback) {
-    //   this.form.submitCallback();
-    // }
   }
 
   public isValid(): boolean {
