@@ -1,0 +1,31 @@
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
+
+  <label [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
+    {{translate(formControl.label)}}
+  </label>
+
+  <div class="input-group col-md-{{controlWidth}}">
+
+    <select id="{{formControl.id}}" name="{{formControl.id}}" class="form-control" [(ngModel)]="data[formControl.id]"
+            #model="ngModel" [disabled]="isDisabled()" [required]="isRequired()">
+      <option value=""></option>
+      <option *ngFor="let option of formControl.data.values" [value]="option.value">
+        {{translate(option.label)}}
+      </option>
+    </select>
+
+    <div class="input-group-btn" *ngIf="formControl.description">
+      <button class="btn btn-outline-secondary" type="button">?
+      </button>
+    </div>
+
+    <div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">
+      <div [hidden]="!model.errors.required">{{translate("error.required_select")}}</div>
+    </div>
+
+  </div>
+
+</div>
+
+

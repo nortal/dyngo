@@ -1,0 +1,25 @@
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
+
+  <label for="{{formControl.id}}" [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
+    {{translate(formControl.label)}}
+  </label>
+
+  <div class="input-group col-md-{{controlWidth}}">
+    <div class="dg-control-previous-value" *ngIf="formattedPreviousValue">{{formattedPreviousValue}}</div>
+    <kendo-numerictextbox [formControlName]="formControl.id" *ngIf="!displayOptions || displayOptions.showInput" [spinners]="false" [step]="0" [decimals]="2">
+    </kendo-numerictextbox>
+    <div class="input-group-btn" *ngIf="formControl.description">
+      <button class="btn btn-outline-secondary" type="button">?</button>
+    </div>
+    <div class="dg-control-value-diff" *ngIf="formattedDiff">{{formattedDiff}}</div>
+
+    <!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="invalid-feedback">-->
+    <!--<div [hidden]="!model.errors.required">{{translate("error.required")}}</div>-->
+    <!--<div [hidden]="!model.errors.minError">{{translate("error.min")}}</div>-->
+    <!--<div [hidden]="!model.errors.maxError">{{translate("error.max")}}</div>-->
+    <!--</div>-->
+
+  </div>
+
+</div>

@@ -1,0 +1,28 @@
+<div class="form-group row" [hidden]="formControl.hidden" [formGroup]="fGroup">
+
+  <label [ngClass]="{'required': isRequired()}" class="col-form-label col-md-{{labelWidth}}"
+         [ngStyle]="{'text-align': labelTextAlign}">
+    {{translate(formControl.label)}}
+  </label>
+
+  <div class="input-group col-md-{{controlWidth}}">
+    <div class="dg-control-previous-value" *ngIf="formattedPreviousValue">{{formattedPreviousValue}}</div>
+    <div class="form-check-group">
+      <div *ngFor="let option of formControl.values; let idx = index"
+           class="form-check" [ngClass]="{'form-check-inline': formControl.layout?.orientation == 'horizontal'}">
+        <input class="form-check-input" type="radio" name="{{formControl.id}}"
+               id="{{formControl.id + '-' + idx}}"
+               [value]="option.value" [formControlName]="formControl.id">
+        <label class="form-check-label" for="{{formControl.id + '-' + idx}}">
+          {{translate(option.label)}}
+        </label>
+      </div>
+    </div>
+    <div class="dg-control-value-diff" *ngIf="formattedDiff">{{formattedDiff}}</div>
+  </div>
+
+</div>
+
+<!--<div *ngIf="model.errors && (model.dirty || model.touched)" class="alert alert-danger">-->
+<!--<div [hidden]="!model.errors.required">{{translate("error.required_select")}}</div>-->
+<!--</div>-->

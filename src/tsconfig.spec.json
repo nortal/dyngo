@@ -3,18 +3,14 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
-    "target": "es5",
-    "baseUrl": "",
     "types": [
       "jasmine",
       "node"
-    ],
-    "paths": {
-      "@dyngo": [ "../dist/dyngo-lib" ]
-    }
+    ]
   },
   "files": [
-    "test.ts"
+    "test.ts",
+    "polyfills.ts"
   ],
   "include": [
     "**/*.spec.ts",

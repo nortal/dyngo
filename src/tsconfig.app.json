@@ -1,21 +1,12 @@
 {
   "extends": "../tsconfig.json",
-  "angularCompilerOptions": {
-    "paths": {
-      "@dyngo": [ "../dyngo-lib/src/public_api.ts" ]
-    }
-  },
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "baseUrl": "",
-    "types": [],
-    "paths": {
-      "@dyngo": [ "../dyngo-lib/src/public_api.ts" ]
-    }
+    "types": []
   },
   "exclude": [
-    "test.ts",
+    "src/test.ts",
     "**/*.spec.ts"
   ]
 }

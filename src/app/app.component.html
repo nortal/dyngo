@@ -44,17 +44,23 @@
 
   <div class="card card mt-5">
     <h5 class="card-header">Dynamic form demo</h5>
-    <div class="card-body">
+    <div class="card-body" *ngIf="form">
 
-      <dg-form name="demoForm" lang="en" *ngIf="form"></dg-form>
-      <!--<a href="#" class="btn btn-primary">Submit</a>-->
+      <dg-form name="demoForm" #dgForm></dg-form>
+      <button type="button" class="btn btn-primary" (click)="submit()"
+              [disabled]="!dgForm.isValid()">Submit
+      </button>
+
+      <pre>Touched: {{dgForm.isTouched()}}</pre>
+      <pre>Dirty: {{dgForm.isDirty()}}</pre>
+      <pre>Value: {{dgForm.getValue() | json}}</pre>
     </div>
   </div>
 
   <div class="card mt-5 mb-5">
     <h5 class="card-header">Form data</h5>
     <div class="card-body">
-      <pre>{{formData | json}}</pre>
+
     </div>
   </div>
 
